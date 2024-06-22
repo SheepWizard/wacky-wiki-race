@@ -31,7 +31,7 @@ export default function LandingPage() {
               name="user-name"
               placeholder={ref.current}
               value={userName}
-              onChange={(e) => setUserName(e.currentTarget.value)}
+              onInput={(e) => setUserName(e.currentTarget.value)}
             />
           </label>
         </div>
@@ -39,7 +39,7 @@ export default function LandingPage() {
           <input
             placeholder="Lobby code"
             value={roomCode}
-            onChange={(e) => setRoomCode(e.currentTarget.value)}
+            onInput={(e) => setRoomCode(e.currentTarget.value)}
           />
           <button disabled={!roomCode} onClick={handleJoinLobby}>
             Join lobby

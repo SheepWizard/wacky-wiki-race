@@ -22,6 +22,7 @@ export default function GamePage({ room }: RoomPageProps) {
   const [loading, setLoading] = useState(true);
   // add loading and try catch
   // Remove external links
+  //Cat–dog relationship doesnt end game
   useEffect(() => {
     const current = ref.current;
     if (!current) {
@@ -39,6 +40,15 @@ export default function GamePage({ room }: RoomPageProps) {
             return;
           }
           if (!(target instanceof HTMLAnchorElement)) {
+            return;
+          }
+          if (!target.href.includes("/wiki/")) {
+            const span = document.createElement("span");
+            span.innerHTML = target.innerHTML;
+            try {
+              //find better solution
+              target.replaceWith(span);
+            } catch {}
             return;
           }
           const tokens = target.href.split("/");
@@ -77,6 +87,8 @@ export default function GamePage({ room }: RoomPageProps) {
           top: 0,
           zIndex: 5,
           paddingInline: 20,
+          marginBottom: 30,
+          boxShadow: "0px 10px 92px -15px rgba(0,0,0,0.75)",
         }}
       >
         <Timer />
