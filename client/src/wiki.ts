@@ -6,3 +6,14 @@ export async function getWikiPage(pageTitle: string) {
 
   return data.parse.text["*"];
 }
+
+export async function getRandomWikiPage(): Promise<string> {
+  const result = await fetch(
+    `https://en.wikipedia.org/w/api.php?action=query&list=random&rnnamespace=0&rnlimit=1&format=json&origin=*`
+  );
+  const data = await result.json();
+  const titles = data.query.random.map((x: any) =>
+    x.title.replaceAll(" ", "_")
+  );
+  return titles[0];
+}

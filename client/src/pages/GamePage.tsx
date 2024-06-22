@@ -19,6 +19,7 @@ export default function GamePage({ room }: RoomPageProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [currentWiki, setCurrentWiki] = useState(room.start);
   // add loading and try catch
+  // Remove external links
   useEffect(() => {
     const current = ref.current;
     if (!current) {

@@ -44,7 +44,28 @@ h6 {
   isolation: isolate;
 }
 
-body {
-  width: min(1660px, 100% - 6em);
+input,
+label {
+  display: block;
+}
+
+.min-width {
+  width: min(800px, 100% - 6em);
   margin-inline: auto;
+}
+
+.landing-page {
+  background-color: rgb(195, 195, 195);
+  height: 100vh;
+}
+
+.landing-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2em;
+}
+
+.bold {
+  font-weight: bold;
 }

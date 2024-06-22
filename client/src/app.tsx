@@ -23,7 +23,7 @@ export function App() {
   });
 
   if (!isConnected) {
-    return "Not connected";
+    return <div> "Not connected"</div>;
   }
 
   if (!room) {
@@ -41,4 +41,6 @@ export function App() {
   if (room.state === "endGame") {
     return <EndGamePage room={room} />;
   }
+
+  return <div />;
 }
