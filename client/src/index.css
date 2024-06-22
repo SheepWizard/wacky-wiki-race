@@ -50,7 +50,7 @@ label {
 }
 
 .min-width {
-  width: min(800px, 100% - 6em);
+  width: min(800px, 100% - 4em);
   margin-inline: auto;
 }
 

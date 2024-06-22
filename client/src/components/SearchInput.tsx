@@ -1,38 +1,39 @@
 import { TargetedEvent } from "preact/compat";
-import { useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 
 interface SearchInputProps {
   value: string;
   onChange: (value: string) => void;
+  onSearchTextChange: (searchTerm: string) => void;
   searchItems: string[];
+  loading?: boolean;
 }
 
 export default function SearchInput({
   value,
   onChange,
   searchItems,
+  onSearchTextChange,
+  loading,
 }: SearchInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchText, setSearchText] = useState("");
   const [searching, setSearching] = useState(false);
-
+  //maybe add debounce
   const handleOnFocus = () => {
     setSearching(true);
   };
 
-  const handleOnBlur = () => {
-    setSearching(false);
-    setSearchText("");
-  };
-
-  const handleOnChange = (e: TargetedEvent<HTMLInputElement>) => {
+  const handleInputOnChange = (e: TargetedEvent<HTMLInputElement>) => {
+    console.log("change");
     setSearchText(e.currentTarget.value);
+    onSearchTextChange(e.currentTarget.value);
   };
 
   const handleItemClick = (item: string) => {
-    console.log("thing", item);
     onChange(item);
-    inputRef.current?.blur();
+    setSearchText("");
+    setSearching(false);
   };
 
   const inputValue = searching ? searchText : value;
@@ -44,18 +45,19 @@ export default function SearchInput({
           ref={inputRef}
           value={inputValue}
           type="text"
-          onChange={handleOnChange}
+          onInput={handleInputOnChange}
           onFocus={handleOnFocus}
-          onBlur={handleOnBlur}
         />
       </div>
       {searching && (
         <ul>
-          {searchItems.map((item, index) => (
-            <li key={index} onClick={() => handleItemClick(item)}>
-              {item}
-            </li>
-          ))}
+          {loading
+            ? "Loading"
+            : searchItems.map((item, index) => (
+                <li key={index} onClick={() => handleItemClick(item)}>
+                  {item.replaceAll("_", " ")}
+                </li>
+              ))}
         </ul>
       )}
     </div>

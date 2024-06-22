@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { Room } from "../types";
 import { getWikiPage } from "../wiki";
 import { socket } from "../socket";
+import Timer from "../components/Timer";
 
 interface RoomPageProps {
   room: Room;
@@ -18,6 +19,7 @@ function scrollToTop() {
 export default function GamePage({ room }: RoomPageProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [currentWiki, setCurrentWiki] = useState(room.start);
+  const [loading, setLoading] = useState(true);
   // add loading and try catch
   // Remove external links
   useEffect(() => {
@@ -51,14 +53,52 @@ export default function GamePage({ room }: RoomPageProps) {
     };
 
     const displayWiki = async () => {
+      setLoading(true);
       const data = await getWikiPage(currentWiki);
       current.innerHTML = data;
       scrollToTop();
       anchorClickListen();
+      setLoading(false);
     };
 
     displayWiki();
-  }, [currentWiki]);
+  }, [currentWiki, room.id]);
 
-  return <div ref={ref}>Game</div>;
+  return (
+    <div>
+      <div
+        style={{
+          height: 60,
+          backgroundColor: "lightblue",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          position: "sticky",
+          top: 0,
+          zIndex: 5,
+          paddingInline: 20,
+        }}
+      >
+        <Timer />
+        <div>{room.end.replaceAll("_", " ")}</div>
+        <div />
+      </div>
+      {loading && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          Loading
+        </div>
+      )}
+      <div
+        class="min-width"
+        style={{ display: loading ? "none" : "block" }}
+        ref={ref}
+      />
+    </div>
+  );
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "preact/hooks";
 import { socket } from "../socket";
 import { Room } from "../types";
 import { getRandomWikiPage } from "../wiki";
-import SearchInput from "../components/SearchInput";
+import { WikiSearchInput } from "../components/WikiSearchInput";
 
 interface LobbyPageProps {
   room: Room;
@@ -32,7 +32,21 @@ export default function LobbyPage({ room }: LobbyPageProps) {
     };
 
     getRandom();
-  }, []);
+  }, [room.id]);
+
+  useEffect(() => {
+    if (!isRoomOwner) {
+      return;
+    }
+    socket.emit("room:set:start", room.id, start);
+  }, [start, room.id]);
+
+  useEffect(() => {
+    if (!isRoomOwner) {
+      return;
+    }
+    socket.emit("room:set:end", room.id, end);
+  }, [end, room.id]);
 
   const handleStartGame = () => {
     socket.emit("room:play", room.id);
@@ -45,18 +59,14 @@ export default function LobbyPage({ room }: LobbyPageProps) {
     ? end.replaceAll("_", " ")
     : room.end.replaceAll("_", " ");
 
-  console.log(startValue);
-
   return (
     <div>
       <div>{room.id}</div>
-      <input value={startValue} />
-      <input value={endValue} />
-      <SearchInput
+      <WikiSearchInput
         value={startValue}
         onChange={(value) => setStart(value)}
-        searchItems={["test", "test2"]}
       />
+      <WikiSearchInput value={endValue} onChange={(value) => setEnd(value)} />
       {room.users.map((user) => user.userName)}
 
       {isRoomOwner && (

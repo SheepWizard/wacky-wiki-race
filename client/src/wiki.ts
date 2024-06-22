@@ -17,3 +17,15 @@ export async function getRandomWikiPage(): Promise<string> {
   );
   return titles[0];
 }
+
+export async function searchWikiPage(searchTerm: string): Promise<string[]> {
+  const result = await fetch(
+    `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${searchTerm}&utf8=&format=json&origin=*`
+  );
+  const data = await result.json();
+  const titles = data.query.search.map((x: any) =>
+    x.title.replaceAll(" ", "_")
+  );
+
+  return titles;
+}
