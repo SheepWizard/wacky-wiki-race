@@ -23,7 +23,8 @@ export function App() {
   });
 
   if (!isConnected) {
-    return <div> "Not connected"</div>;
+    console.log("No connected");
+    // return <div> "Not connected"</div>;
   }
 
   if (!room) {

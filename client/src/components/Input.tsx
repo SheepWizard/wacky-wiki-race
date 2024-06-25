@@ -5,9 +5,15 @@ interface InputProps {
   value: string;
   onChange: (value: string) => void;
   labelValue?: string;
+  placeholder?: string;
 }
 
-export default function Input({ value, onChange, labelValue }: InputProps) {
+export default function Input({
+  value,
+  onChange,
+  placeholder,
+  labelValue,
+}: InputProps) {
   return (
     <div
       class={vstack({ gap: "2px", width: "100%", alignItems: "flex-start" })}
@@ -24,6 +30,7 @@ export default function Input({ value, onChange, labelValue }: InputProps) {
           width: "100%",
         })}
         value={value}
+        placeholder={placeholder}
         onInput={(e) => onChange(e.currentTarget.value)}
       />
     </div>

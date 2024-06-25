@@ -13,7 +13,7 @@ export default function Title() {
         textAlign: "center",
       })}
     >
-      <h1>WACKY WACKY RACES</h1>
+      <h1>WACKY WIKI RACES</h1>
     </div>
   );
 }

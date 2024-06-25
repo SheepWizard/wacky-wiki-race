@@ -1,7 +1,6 @@
 import { useRef, useState } from "preact/hooks";
 import { getFunnyName } from "../util/funnyNames";
 import { socket } from "../socket";
-import { css } from "../../styled-system/css";
 import { center, flex } from "../../styled-system/patterns";
 import Title from "../components/Title";
 import Input from "../components/Input";
@@ -52,6 +51,7 @@ export default function LandingPage() {
           value={roomCode}
           onChange={setRoomCode}
           labelValue="Lobby code"
+          placeholder={ref.current}
         />
         <div
           class={flex({
@@ -68,42 +68,15 @@ export default function LandingPage() {
           <Input
             value={userName}
             onChange={setUserName}
-            labelValue="Username"
+            labelValue="Lobby code"
           />
           <Button onClick={handleJoinLobby} disabled={!roomCode} stretch>
             Join lobby
           </Button>
         </div>
-        <Button onClick={handleJoinLobby} stretch>
+        <Button onClick={handleCreateLobby} stretch>
           Create lobby
         </Button>
-        {/* <div class="min-width landing-content">
-          <h1 class={css({ fontWeight: "bold", color: "red.300" })}>
-            Wacky Wiki Race
-          </h1>
-          <div>
-            <label for="user-name">
-              Do you like cheese?
-              <input
-                name="user-name"
-                placeholder={ref.current}
-                value={userName}
-                onInput={(e) => setUserName(e.currentTarget.value)}
-              />
-            </label>
-          </div>
-          <div>
-            <input
-              placeholder="Lobby code"
-              value={roomCode}
-              onInput={(e) => setRoomCode(e.currentTarget.value)}
-            />
-            <button disabled={!roomCode} onClick={handleJoinLobby}>
-              Join lobby
-            </button>
-          </div>
-          <button onClick={handleCreateLobby}>Create Lobby</button>
-        </div> */}
       </div>
     </div>
   );
