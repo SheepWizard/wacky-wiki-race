@@ -2,9 +2,10 @@ import { useRef, useState } from "preact/hooks";
 import { getFunnyName } from "../util/funnyNames";
 import { socket } from "../socket";
 import { css } from "../../styled-system/css";
-import { center } from "../../styled-system/patterns";
+import { center, flex } from "../../styled-system/patterns";
 import Title from "../components/Title";
 import Input from "../components/Input";
+import Button from "../components/Button";
 
 export default function LandingPage() {
   const ref = useRef(getFunnyName());
@@ -47,7 +48,35 @@ export default function LandingPage() {
         })}
       >
         <Title />
-        <Input value={userName} onChange={setUserName} labelValue="Username" />
+        <Input
+          value={roomCode}
+          onChange={setRoomCode}
+          labelValue="Lobby code"
+        />
+        <div
+          class={flex({
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            width: "100%",
+            gap: 4,
+            flexWrap: "wrap",
+            "& > *": {
+              flex: "1 1 200px",
+            },
+          })}
+        >
+          <Input
+            value={userName}
+            onChange={setUserName}
+            labelValue="Username"
+          />
+          <Button onClick={handleJoinLobby} disabled={!roomCode} stretch>
+            Join lobby
+          </Button>
+        </div>
+        <Button onClick={handleJoinLobby} stretch>
+          Create lobby
+        </Button>
         {/* <div class="min-width landing-content">
           <h1 class={css({ fontWeight: "bold", color: "red.300" })}>
             Wacky Wiki Race
