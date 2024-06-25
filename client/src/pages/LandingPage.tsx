@@ -1,6 +1,10 @@
 import { useRef, useState } from "preact/hooks";
 import { getFunnyName } from "../util/funnyNames";
 import { socket } from "../socket";
+import { css } from "../../styled-system/css";
+import { center } from "../../styled-system/patterns";
+import Title from "../components/Title";
+import Input from "../components/Input";
 
 export default function LandingPage() {
   const ref = useRef(getFunnyName());
@@ -21,31 +25,56 @@ export default function LandingPage() {
   };
 
   return (
-    <div class="landing-page">
-      <div class="min-width landing-content">
-        <h1 class="bold">Wacky Wiki Race</h1>
-        <div>
-          <label for="user-name">
-            Do you like cheese?
+    <div
+      class={center({
+        width: "min(800px, 100% - 16px)",
+        marginInline: "auto",
+        height: "100%",
+      })}
+    >
+      <div
+        class={center({
+          bg: "ww-green",
+          rounded: "br-12",
+          border: "solid 2px",
+          borderColor: "ww-black",
+          flexGrow: 1,
+          flexDir: "column",
+          gap: 12, // change me
+          shadow: "ww-thicc",
+          paddingX: 4,
+          paddingY: 8,
+        })}
+      >
+        <Title />
+        <Input value={userName} onChange={setUserName} labelValue="Username" />
+        {/* <div class="min-width landing-content">
+          <h1 class={css({ fontWeight: "bold", color: "red.300" })}>
+            Wacky Wiki Race
+          </h1>
+          <div>
+            <label for="user-name">
+              Do you like cheese?
+              <input
+                name="user-name"
+                placeholder={ref.current}
+                value={userName}
+                onInput={(e) => setUserName(e.currentTarget.value)}
+              />
+            </label>
+          </div>
+          <div>
             <input
-              name="user-name"
-              placeholder={ref.current}
-              value={userName}
-              onInput={(e) => setUserName(e.currentTarget.value)}
+              placeholder="Lobby code"
+              value={roomCode}
+              onInput={(e) => setRoomCode(e.currentTarget.value)}
             />
-          </label>
-        </div>
-        <div>
-          <input
-            placeholder="Lobby code"
-            value={roomCode}
-            onInput={(e) => setRoomCode(e.currentTarget.value)}
-          />
-          <button disabled={!roomCode} onClick={handleJoinLobby}>
-            Join lobby
-          </button>
-        </div>
-        <button onClick={handleCreateLobby}>Create Lobby</button>
+            <button disabled={!roomCode} onClick={handleJoinLobby}>
+              Join lobby
+            </button>
+          </div>
+          <button onClick={handleCreateLobby}>Create Lobby</button>
+        </div> */}
       </div>
     </div>
   );
