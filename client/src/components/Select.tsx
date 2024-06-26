@@ -54,10 +54,14 @@ export default function Select({
     // Switch to this when its out
     // https://developer.chrome.com/blog/anchor-positioning-api
 
+    const windowHeight = window.innerHeight;
     const inputBox = input.getBoundingClientRect();
     popover.style.left = `${inputBox.left}px`;
     popover.style.top = `${inputBox.bottom}px`;
     popover.style.width = `${inputBox.width}px`;
+
+    const offset = windowHeight - inputBox.bottom;
+    popover.style.maxHeight = `${offset}px`;
   };
 
   const handleInputOnChange = (e: TargetedEvent<HTMLInputElement>) => {
