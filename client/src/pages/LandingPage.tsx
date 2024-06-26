@@ -5,6 +5,7 @@ import { center, flex } from "../../styled-system/patterns";
 import Title from "../components/Title";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import GreenBox from "../components/GreenBox";
 
 export default function LandingPage() {
   const ref = useRef(getFunnyName());
@@ -25,59 +26,40 @@ export default function LandingPage() {
   };
 
   return (
-    <div
-      class={center({
-        width: "min(800px, 100% - 16px)",
-        marginInline: "auto",
-        height: "100%",
-      })}
-    >
+    <GreenBox>
+      <Title />
+      <Input
+        value={roomCode}
+        onChange={setRoomCode}
+        labelValue="Friendly name"
+        placeholder={ref.current}
+        max={20}
+      />
       <div
-        class={center({
-          bg: "ww-green",
-          rounded: "br-12",
-          border: "solid 2px",
-          borderColor: "ww-black",
-          flexGrow: 1,
-          flexDir: "column",
-          gap: 12, // change me
-          shadow: "ww-thicc",
-          paddingX: 4,
-          paddingY: 8,
+        class={flex({
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          width: "100%",
+          gap: 4,
+          flexWrap: "wrap",
+          "& > *": {
+            flex: "1 1 200px",
+          },
         })}
       >
-        <Title />
         <Input
-          value={roomCode}
-          onChange={setRoomCode}
+          value={userName}
+          onChange={setUserName}
           labelValue="Lobby code"
-          placeholder={ref.current}
+          max={24}
         />
-        <div
-          class={flex({
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            width: "100%",
-            gap: 4,
-            flexWrap: "wrap",
-            "& > *": {
-              flex: "1 1 200px",
-            },
-          })}
-        >
-          <Input
-            value={userName}
-            onChange={setUserName}
-            labelValue="Lobby code"
-          />
-          <Button onClick={handleJoinLobby} disabled={!roomCode} stretch>
-            Join lobby
-          </Button>
-        </div>
-        <Button onClick={handleCreateLobby} stretch>
-          Create lobby
+        <Button onClick={handleJoinLobby} disabled={!roomCode} stretch>
+          Join lobby
         </Button>
       </div>
-    </div>
+      <Button onClick={handleCreateLobby} stretch>
+        Create lobby
+      </Button>
+    </GreenBox>
   );
 }

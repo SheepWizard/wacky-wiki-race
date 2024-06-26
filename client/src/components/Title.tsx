@@ -11,6 +11,7 @@ export default function Title() {
         shadow: "ww-mid",
         p: 6,
         textAlign: "center",
+        width: "100%",
       })}
     >
       <h1>WACKY WIKI RACES</h1>

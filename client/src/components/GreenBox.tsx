@@ -1,0 +1,41 @@
+import { ComponentChildren } from "preact";
+import { center } from "../../styled-system/patterns";
+
+interface GreenBoxProps {
+  children: ComponentChildren;
+}
+
+export default function GreenBox({ children }: GreenBoxProps) {
+  return (
+    <div
+      class={center({
+        width: "min(800px, 100% - 16px)",
+        marginInline: "auto",
+        height: "100%",
+      })}
+    >
+      <div
+        class={center({
+          bg: "ww-green",
+          rounded: "br-12",
+          border: "solid 2px",
+          borderColor: "ww-black",
+          flexGrow: 1,
+          shadow: "ww-thicc",
+          paddingY: 8,
+        })}
+      >
+        <div
+          class={center({
+            width: "min(600px, 100% - 16px)",
+            marginInline: "auto",
+            flexDir: "column",
+            gap: 12,
+          })}
+        >
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}

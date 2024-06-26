@@ -3,6 +3,9 @@ import { socket } from "../socket";
 import { Room } from "../types";
 import { getRandomWikiPage } from "../wiki";
 import { WikiSearchInput } from "../components/WikiSearchInput";
+import GreenBox from "../components/GreenBox";
+import Title from "../components/Title";
+import Button from "../components/Button";
 
 interface LobbyPageProps {
   room: Room;
@@ -60,8 +63,8 @@ export default function LobbyPage({ room }: LobbyPageProps) {
     : room.end.replaceAll("_", " ");
 
   return (
-    <div>
-      <div>{room.id}</div>
+    <GreenBox>
+      <Title />
       <WikiSearchInput
         value={startValue}
         onChange={(value) => setStart(value)}
@@ -70,10 +73,11 @@ export default function LobbyPage({ room }: LobbyPageProps) {
       {room.users.map((user) => user.userName)}
 
       {isRoomOwner && (
-        <button
+        <Button
           onClick={handleStartGame}
-        >{`Start game ${room.users.length}/100`}</button>
+          stretch
+        >{`Start game ${room.users.length}/100`}</Button>
       )}
-    </div>
+    </GreenBox>
   );
 }

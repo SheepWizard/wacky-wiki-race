@@ -1,5 +1,5 @@
 import { TargetedEvent } from "preact/compat";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useRef, useState } from "preact/hooks";
 
 interface SearchInputProps {
   value: string;
