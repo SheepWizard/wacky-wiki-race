@@ -1,8 +1,7 @@
-import { JSX, TargetedEvent } from "preact/compat";
-import { useRef, useState } from "preact/hooks";
+import { TargetedEvent } from "preact/compat";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { css, cva } from "../../styled-system/css";
 import { flex } from "../../styled-system/patterns";
-import { useOutsideClick } from "../util/outsideClickHook";
 
 interface SearchInputProps {
   id: string;
@@ -38,12 +37,13 @@ export default function Select({
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchText, setSearchText] = useState("");
   const [searching, setSearching] = useState(false);
-  useOutsideClick(inputRef, () => {
-    popoverRef.current?.hidePopover();
-  });
+  const [selectIndex, setSelectedIndex] = useState(0);
+  const selectedIndexRef = useRef(selectIndex);
+
   //maybe add debounce
   const handleOnFocus = () => {
     setSearching(true);
+    setSelectedIndex(0);
 
     const popover = popoverRef.current;
     const input = inputRef.current;
@@ -69,12 +69,60 @@ export default function Select({
     onSearchTextChange(e.currentTarget.value);
   };
 
-  const handleItemClick = (item: string) => {
-    onChange(item);
-    setSearchText("");
+  const handleOnBlur = () => {
     setSearching(false);
     popoverRef.current?.hidePopover();
   };
+
+  const handleItemClick = (item: string) => {
+    onChange(item);
+    setSearchText("");
+  };
+
+  useEffect(() => {
+    selectedIndexRef.current = selectIndex;
+  }, [selectIndex]);
+
+  useEffect(() => {
+    const input = inputRef.current;
+
+    if (!searching || !input) {
+      return;
+    }
+    const handleKeyPress = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case "ArrowDown":
+          setSelectedIndex((val) => {
+            if (val >= searchItems.length - 1) {
+              return 0;
+            }
+            return val + 1;
+          });
+          break;
+        case "ArrowUp":
+          setSelectedIndex((val) => {
+            if (val === 0) {
+              val = searchItems.length;
+            }
+            return val - 1;
+          });
+          break;
+        case "Enter":
+          const selected = searchItems[selectedIndexRef.current];
+          if (!selected) {
+            return;
+          }
+          handleItemClick(selected);
+          input.blur();
+      }
+    };
+
+    document.addEventListener("keyup", handleKeyPress);
+
+    return () => {
+      document.removeEventListener("keyup", handleKeyPress);
+    };
+  }, [searching, searchItems]);
 
   const inputValue = searching ? searchText : value;
   const noItems = searchItems.length === 0;
@@ -88,7 +136,7 @@ export default function Select({
         type="text"
         onInput={handleInputOnChange}
         onFocus={handleOnFocus}
-        onBlur={() => setSearching(false)}
+        onBlur={handleOnBlur}
       />
 
       <div
@@ -112,10 +160,14 @@ export default function Select({
             searchItems.map((item, index) => (
               <li
                 key={index}
-                onClick={() => handleItemClick(item)}
+                onMouseDown={() => handleItemClick(item)}
+                data-selected={selectIndex === index}
                 class={css({
                   rounded: "br-12",
                   padding: 1,
+                  "&[data-selected=true]": {
+                    bg: "ww-grey",
+                  },
                   _hover: {
                     bg: "ww-grey",
                   },
