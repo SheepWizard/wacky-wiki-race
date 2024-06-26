@@ -9,7 +9,7 @@ export default function GreenBox({ children }: GreenBoxProps) {
   return (
     <div
       class={center({
-        width: "min(800px, 100% - 16px)",
+        width: "min(700px, 100% - 16px)",
         marginInline: "auto",
         height: "100%",
       })}

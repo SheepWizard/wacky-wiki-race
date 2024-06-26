@@ -1,7 +1,7 @@
 import { useRef, useState } from "preact/hooks";
 import { getFunnyName } from "../util/funnyNames";
 import { socket } from "../socket";
-import { center, flex } from "../../styled-system/patterns";
+import { flex } from "../../styled-system/patterns";
 import Title from "../components/Title";
 import Input from "../components/Input";
 import Button from "../components/Button";

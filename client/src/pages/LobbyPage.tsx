@@ -66,10 +66,15 @@ export default function LobbyPage({ room }: LobbyPageProps) {
     <GreenBox>
       <Title />
       <WikiSearchInput
+        id="start"
         value={startValue}
         onChange={(value) => setStart(value)}
       />
-      <WikiSearchInput value={endValue} onChange={(value) => setEnd(value)} />
+      <WikiSearchInput
+        id="end"
+        value={endValue}
+        onChange={(value) => setEnd(value)}
+      />
       {room.users.map((user) => user.userName)}
 
       {isRoomOwner && (

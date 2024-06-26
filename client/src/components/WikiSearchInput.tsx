@@ -1,13 +1,14 @@
 import { useState } from "preact/hooks";
-import SearchInput from "./SearchInput";
+import Select from "./Select";
 import { searchWikiPage } from "../wiki";
 
 interface WikiSearchInputProps {
+  id: string;
   value: string;
   onChange: (value: string) => void;
 }
 
-export function WikiSearchInput({ value, onChange }: WikiSearchInputProps) {
+export function WikiSearchInput({ id, value, onChange }: WikiSearchInputProps) {
   const [searchList, setSearchList] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +24,8 @@ export function WikiSearchInput({ value, onChange }: WikiSearchInputProps) {
   };
 
   return (
-    <SearchInput
+    <Select
+      id={id}
       value={value}
       onChange={(value) => {
         onChange(value);
