@@ -36,7 +36,7 @@ export default function Input({
       <input
         ref={ref}
         class={css({
-          border: "solid 4px",
+          border: "solid 2px",
           borderColor: "ww-black",
           rounded: "br-12",
           bg: "ww-white",
