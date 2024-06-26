@@ -1,15 +1,15 @@
 import { TargetedEvent } from "preact/compat";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { css, cva } from "../../styled-system/css";
-import { flex } from "../../styled-system/patterns";
+import { flex, vstack } from "../../styled-system/patterns";
 
 interface SearchInputProps {
-  id: string;
   value: string;
   onChange: (value: string) => void;
   onSearchTextChange: (searchTerm: string) => void;
   searchItems: string[];
   loading?: boolean;
+  labelValue?: string;
 }
 
 const input = cva({
@@ -26,12 +26,12 @@ const input = cva({
 });
 
 export default function Select({
-  id,
   value,
   onChange,
   searchItems,
   onSearchTextChange,
   loading,
+  labelValue,
 }: SearchInputProps) {
   const popoverRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -84,6 +84,14 @@ export default function Select({
   }, [selectIndex]);
 
   useEffect(() => {
+    const popover = popoverRef.current;
+    if (!popover) {
+      return;
+    }
+    popover.scrollTo();
+  }, [selectIndex]);
+
+  useEffect(() => {
     const input = inputRef.current;
 
     if (!searching || !input) {
@@ -128,56 +136,60 @@ export default function Select({
   const noItems = searchItems.length === 0;
 
   return (
-    <div class={flex({ flexDir: "column", width: "100%" })}>
-      <input
-        class={input()}
-        ref={inputRef}
-        value={inputValue}
-        type="text"
-        onInput={handleInputOnChange}
-        onFocus={handleOnFocus}
-        onBlur={handleOnBlur}
-      />
+    <div
+      class={vstack({ gap: "2px", width: "100%", alignItems: "flex-start" })}
+    >
+      {labelValue && <p class={css({ ml: 1 })}>{labelValue}</p>}
+      <div class={flex({ flexDir: "column", width: "100%" })}>
+        <input
+          class={input()}
+          ref={inputRef}
+          value={inputValue}
+          type="text"
+          onInput={handleInputOnChange}
+          onFocus={handleOnFocus}
+          onBlur={handleOnBlur}
+        />
 
-      <div
-        id={`select-popover.${id}`}
-        ref={popoverRef}
-        popover="manual"
-        class={css({
-          backgroundColor: "ww-white",
-          border: "solid 2px",
-          borderColor: "ww-black",
-          rounded: "br-12",
-          padding: 3,
-        })}
-      >
-        <ul>
-          {loading ? (
-            "Loading"
-          ) : noItems ? (
-            <p class={css({ color: "ww-grey" })}>Search</p>
-          ) : (
-            searchItems.map((item, index) => (
-              <li
-                key={index}
-                onMouseDown={() => handleItemClick(item)}
-                data-selected={selectIndex === index}
-                class={css({
-                  rounded: "br-12",
-                  padding: 1,
-                  "&[data-selected=true]": {
-                    bg: "ww-grey",
-                  },
-                  _hover: {
-                    bg: "ww-grey",
-                  },
-                })}
-              >
-                <p>{item.replaceAll("_", " ")}</p>
-              </li>
-            ))
-          )}
-        </ul>
+        <div
+          ref={popoverRef}
+          popover="manual"
+          class={css({
+            backgroundColor: "ww-white",
+            border: "solid 2px",
+            borderColor: "ww-black",
+            rounded: "br-12",
+            padding: 3,
+          })}
+        >
+          <ul>
+            {loading ? (
+              "Loading"
+            ) : noItems ? (
+              <p class={css({ color: "ww-grey" })}>Search</p>
+            ) : (
+              searchItems.map((item, index) => (
+                <li
+                  key={index}
+                  onMouseDown={() => handleItemClick(item)}
+                  data-selected={selectIndex === index}
+                  class={css({
+                    rounded: "br-12",
+                    padding: 1,
+                    "&[data-selected=true]": {
+                      bg: "ww-grey",
+                    },
+                    _hover: {
+                      bg: "ww-grey",
+                    },
+                  })}
+                >
+                  <p>{item.replaceAll("_", " ")}</p>
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
       </div>
     </div>
   );

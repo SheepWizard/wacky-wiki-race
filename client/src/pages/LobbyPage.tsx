@@ -66,12 +66,12 @@ export default function LobbyPage({ room }: LobbyPageProps) {
     <GreenBox>
       <Title />
       <WikiSearchInput
-        id="start"
+        labelValue="Start"
         value={startValue}
         onChange={(value) => setStart(value)}
       />
       <WikiSearchInput
-        id="end"
+        labelValue="Finish"
         value={endValue}
         onChange={(value) => setEnd(value)}
       />

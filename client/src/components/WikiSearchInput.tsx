@@ -3,12 +3,16 @@ import Select from "./Select";
 import { searchWikiPage } from "../wiki";
 
 interface WikiSearchInputProps {
-  id: string;
   value: string;
   onChange: (value: string) => void;
+  labelValue?: string;
 }
 
-export function WikiSearchInput({ id, value, onChange }: WikiSearchInputProps) {
+export function WikiSearchInput({
+  value,
+  onChange,
+  labelValue,
+}: WikiSearchInputProps) {
   const [searchList, setSearchList] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -25,12 +29,12 @@ export function WikiSearchInput({ id, value, onChange }: WikiSearchInputProps) {
 
   return (
     <Select
-      id={id}
       value={value}
       onChange={(value) => {
         onChange(value);
         setSearchList([]);
       }}
+      labelValue={labelValue}
       searchItems={searchList}
       onSearchTextChange={handleSearchTextChange}
       loading={loading}
