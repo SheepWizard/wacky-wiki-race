@@ -3,6 +3,7 @@ import { Room } from "../types";
 import { getWikiPage } from "../wiki";
 import { socket } from "../socket";
 import Timer from "../components/Timer";
+import { css } from "../../styled-system/css";
 
 interface RoomPageProps {
   room: Room;
@@ -15,6 +16,12 @@ function scrollToTop() {
     behavior: "instant",
   });
 }
+
+const searchHide = css({
+  "&:before": {
+    content: "attr(data-text)",
+  },
+});
 
 export default function GamePage({ room }: RoomPageProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -33,6 +40,9 @@ export default function GamePage({ room }: RoomPageProps) {
       const atags = document.querySelectorAll("a");
 
       for (let node of atags) {
+        node.setAttribute("data-text", node.innerText);
+        node.classList.add(searchHide);
+        node.innerHTML = "";
         node.addEventListener("click", async (e) => {
           e.preventDefault();
           const target = e.target;
@@ -51,6 +61,7 @@ export default function GamePage({ room }: RoomPageProps) {
             } catch {}
             return;
           }
+
           const tokens = target.href.split("/");
           const pageTitle = tokens.pop();
           if (!pageTitle) {

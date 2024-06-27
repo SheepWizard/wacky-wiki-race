@@ -35,6 +35,10 @@ const globalCss = defineGlobalStyles({
   "*:focus": {
     outline: "none",
   },
+  // temp
+  a: {
+    color: "red",
+  },
 });
 
 export default defineConfig({
