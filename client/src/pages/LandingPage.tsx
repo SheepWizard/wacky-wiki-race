@@ -6,6 +6,7 @@ import Title from "../components/Title";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import GreenBox from "../components/GreenBox";
+import TextScroll from "../components/TextScroll";
 
 export default function LandingPage() {
   const ref = useRef(getFunnyName());
@@ -26,40 +27,43 @@ export default function LandingPage() {
   };
 
   return (
-    <GreenBox>
-      <Title />
-      <Input
-        value={roomCode}
-        onChange={setRoomCode}
-        labelValue="Friendly name"
-        placeholder={ref.current}
-        max={20}
-      />
-      <div
-        class={flex({
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          width: "100%",
-          gap: 4,
-          flexWrap: "wrap",
-          "& > *": {
-            flex: "1 1 200px",
-          },
-        })}
-      >
+    <>
+      {/* <TextScroll /> */}
+      <GreenBox>
+        <Title />
         <Input
           value={userName}
           onChange={setUserName}
-          labelValue="Lobby code"
-          max={24}
+          labelValue="Friendly name"
+          placeholder={ref.current}
+          max={20}
         />
-        <Button onClick={handleJoinLobby} disabled={!roomCode} stretch>
-          Join lobby
+        <div
+          class={flex({
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            width: "100%",
+            gap: 4,
+            flexWrap: "wrap",
+            "& > *": {
+              flex: "1 1 200px",
+            },
+          })}
+        >
+          <Input
+            value={roomCode}
+            onChange={setRoomCode}
+            labelValue="Lobby code"
+            max={24}
+          />
+          <Button onClick={handleJoinLobby} disabled={!roomCode} stretch>
+            Join lobby
+          </Button>
+        </div>
+        <Button onClick={handleCreateLobby} stretch>
+          Create lobby
         </Button>
-      </div>
-      <Button onClick={handleCreateLobby} stretch>
-        Create lobby
-      </Button>
-    </GreenBox>
+      </GreenBox>
+    </>
   );
 }

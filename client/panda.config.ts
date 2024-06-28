@@ -1,4 +1,8 @@
-import { defineConfig, defineGlobalStyles } from "@pandacss/dev";
+import {
+  defineConfig,
+  defineGlobalStyles,
+  defineKeyframes,
+} from "@pandacss/dev";
 
 const globalCss = defineGlobalStyles({
   body: {
@@ -35,10 +39,6 @@ const globalCss = defineGlobalStyles({
   "*:focus": {
     outline: "none",
   },
-  // temp
-  a: {
-    color: "red",
-  },
 });
 
 export default defineConfig({
@@ -54,6 +54,24 @@ export default defineConfig({
   // Useful for theme customization
   theme: {
     extend: {
+      keyframes: {
+        scrollBackwards: {
+          "0%": {
+            transform: "translateX(-90%)",
+          },
+          "100%": {
+            transform: "translateX(-0%)",
+          },
+        },
+        scrollForward: {
+          "0%": {
+            transform: "translateX(0%)",
+          },
+          "100%": {
+            transform: "translateX(-100%)",
+          },
+        },
+      },
       tokens: {
         colors: {
           ["ww-green"]: { value: "#E0FFD2" },
@@ -68,6 +86,7 @@ export default defineConfig({
         },
         radii: {
           ["br-12"]: { value: "12px" },
+          ["br-25"]: { value: "25px" },
         },
         shadows: {
           ["ww-thicc"]: {

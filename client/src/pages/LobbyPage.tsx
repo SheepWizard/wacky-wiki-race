@@ -6,6 +6,9 @@ import { WikiSearchInput } from "../components/WikiSearchInput";
 import GreenBox from "../components/GreenBox";
 import Title from "../components/Title";
 import Button from "../components/Button";
+import { flex } from "../../styled-system/patterns";
+import { css } from "../../styled-system/css";
+import NameTag from "../components/NameTag";
 
 interface LobbyPageProps {
   room: Room;
@@ -65,6 +68,36 @@ export default function LobbyPage({ room }: LobbyPageProps) {
   return (
     <GreenBox>
       <Title />
+      <div
+        class={flex({
+          justifyContent: "space-between",
+          gap: 4,
+          width: "100%",
+          alignItems: "center",
+          flexWrap: "wrap",
+          "& > *": {
+            flex: "1 1 250px",
+          },
+        })}
+      >
+        <p class={css({ overflowWrap: "anywhere" })}>{room.id}</p>
+        <Button onClick={() => {}}>Invite Friend</Button>
+      </div>
+      <ul
+        class={flex({
+          gap: 1,
+          width: "100%",
+          overflow: "scroll",
+          scrollbarWidth: "none",
+          justifyContent: "center",
+        })}
+      >
+        {room.users.map((user) => (
+          <li>
+            <NameTag name={user.userName} self={false} />
+          </li>
+        ))}
+      </ul>
       <WikiSearchInput
         labelValue="Start"
         value={startValue}
@@ -75,7 +108,6 @@ export default function LobbyPage({ room }: LobbyPageProps) {
         value={endValue}
         onChange={(value) => setEnd(value)}
       />
-      {room.users.map((user) => user.userName)}
 
       {isRoomOwner && (
         <Button

@@ -4,6 +4,7 @@ import { getWikiPage } from "../wiki";
 import { socket } from "../socket";
 import Timer from "../components/Timer";
 import { css } from "../../styled-system/css";
+import { center, flex } from "../../styled-system/patterns";
 
 interface RoomPageProps {
   room: Room;
@@ -88,7 +89,7 @@ export default function GamePage({ room }: RoomPageProps) {
   return (
     <div>
       <div
-        style={{
+        class={flex({
           height: 60,
           backgroundColor: "lightblue",
           display: "flex",
@@ -100,24 +101,15 @@ export default function GamePage({ room }: RoomPageProps) {
           paddingInline: 20,
           marginBottom: 30,
           boxShadow: "0px 10px 92px -15px rgba(0,0,0,0.75)",
-        }}
+        })}
       >
         <Timer />
         <div>{room.end.replaceAll("_", " ")}</div>
         <div />
       </div>
-      {loading && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          Loading
-        </div>
-      )}
+      {loading && <div class={center()}>Loading</div>}
       <div
+        id="game-div"
         class="min-width"
         style={{ display: loading ? "none" : "block" }}
         ref={ref}
