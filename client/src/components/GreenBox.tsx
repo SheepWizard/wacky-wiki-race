@@ -12,6 +12,7 @@ export default function GreenBox({ children }: GreenBoxProps) {
         width: "min(700px, 100% - 16px)",
         marginInline: "auto",
         height: "100%",
+        overflowY: "auto",
       })}
     >
       <div

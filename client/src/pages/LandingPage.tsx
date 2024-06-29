@@ -28,7 +28,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div class={css({ bg: "ww-yellow", h: "lvh" })}>
+    <div class={css({ bg: "ww-yellow", h: "lvh", overflow: "hidden" })}>
       <GreenBox>
         <Title />
         <Input

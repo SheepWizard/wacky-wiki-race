@@ -70,7 +70,13 @@ export default function LobbyPage({ room }: LobbyPageProps) {
     : room.end.replaceAll("_", " ");
 
   return (
-    <div class={css({ bg: "ww-yellow", h: "lvh" })}>
+    <div
+      class={css({
+        bg: "ww-yellow",
+        h: "lvh",
+        overflow: "hidden",
+      })}
+    >
       <GreenBox>
         <Title />
         <div

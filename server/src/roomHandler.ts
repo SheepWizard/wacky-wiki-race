@@ -156,7 +156,16 @@ function handleRoomLobby(socket: Socket, roomId: string) {
     return;
   }
 
-  if (room.state === "lobby") {
+  if (room.state !== "endGame") {
+    return;
+  }
+
+  const user = getUserById(socket.id);
+  if (!user) {
+    return;
+  }
+
+  if (room.roomOwnerId !== user.id) {
     return;
   }
 

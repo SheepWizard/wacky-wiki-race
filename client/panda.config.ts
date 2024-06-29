@@ -27,6 +27,9 @@ const globalCss = defineGlobalStyles({
   h1: {
     fontSize: 48,
   },
+  h2: {
+    fontSize: 32,
+  },
   p: {
     fontSize: 20,
   },

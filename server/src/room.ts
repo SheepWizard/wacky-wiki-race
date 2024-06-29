@@ -97,6 +97,6 @@ export function checkWin(
 export function resetRoom(socket: Socket, room: Room) {
   room.state = "lobby";
   room.winnerUserId = "";
-  room.users.map((x) => ({ ...x, route: [] }));
+  room.users = room.users.map((x) => ({ ...x, route: [] }));
   socket.nsp.to(room.id).emit("room:update", room);
 }
