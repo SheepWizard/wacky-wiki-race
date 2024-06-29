@@ -100,7 +100,7 @@ export function handleRoomSetStart(
   if (room.roomOwnerId !== user.id) {
     return;
   }
-
+  start = start.replace(/\u00AD/g, "");
   roomSetStart(socket, room, start);
 }
 
@@ -122,7 +122,8 @@ function handleRoomSetEnd(socket: Socket, roomId: string, end: string) {
   if (room.roomOwnerId !== user.id) {
     return;
   }
-
+  end = end.replace(/\u00AD/g, "");
+  console.log(end);
   roomSetEnd(socket, room, end);
 }
 
@@ -145,7 +146,7 @@ function handleUserRoute(socket: Socket, roomId: string, route: string) {
   if (!found) {
     return;
   }
-
+  route = route.replace(/\u00AD/g, "");
   addToUserRoute(user, route);
   checkWin(socket, room, user, route);
 }
