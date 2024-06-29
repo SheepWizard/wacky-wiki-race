@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { Room } from "../types";
 import { getWikiPage } from "../wiki";
 import { socket } from "../socket";
 import Timer from "../components/Timer";
 import { css } from "../../styled-system/css";
-import { center, flex } from "../../styled-system/patterns";
+import { center, flex, vstack } from "../../styled-system/patterns";
+import Button from "../components/Button";
+import { anchorClickListen } from "../util/wikiFormatter";
 
 interface RoomPageProps {
   room: Room;
@@ -28,68 +30,40 @@ export default function GamePage({ room }: RoomPageProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [currentWiki, setCurrentWiki] = useState(room.start);
   const [loading, setLoading] = useState(true);
-  // add loading and try catch
+  const [error, setError] = useState(false);
+
   // Remove external links
   //Cat–dog relationship doesnt end game
-  useEffect(() => {
+
+  const displayWiki = useCallback(async () => {
     const current = ref.current;
     if (!current) {
       return;
     }
-
-    const anchorClickListen = () => {
-      const atags = document.querySelectorAll("a");
-
-      for (let node of atags) {
-        node.setAttribute("data-text", node.innerText);
-        node.classList.add(searchHide);
-        node.innerHTML = "";
-        node.addEventListener("click", async (e) => {
-          e.preventDefault();
-          const target = e.target;
-          if (!target) {
-            return;
-          }
-          if (!(target instanceof HTMLAnchorElement)) {
-            return;
-          }
-          if (!target.href.includes("/wiki/")) {
-            const span = document.createElement("span");
-            span.innerHTML = target.innerHTML;
-            try {
-              //find better solution
-              target.replaceWith(span);
-            } catch {}
-            return;
-          }
-
-          const tokens = target.href.split("/");
-          const pageTitle = tokens.pop();
-          if (!pageTitle) {
-            return;
-          }
-          socket.emit("room:user:route", room.id, pageTitle);
-          setCurrentWiki(pageTitle);
-        });
-      }
-    };
-
-    const displayWiki = async () => {
-      setLoading(true);
-      try {
-        const data = await getWikiPage(currentWiki);
-        current.innerHTML = data;
-      } catch {
-        // add a retry button
-      } finally {
-        scrollToTop();
-        anchorClickListen();
-        setLoading(false);
-      }
-    };
-
-    displayWiki();
+    setLoading(true);
+    try {
+      const data = await getWikiPage(currentWiki);
+      current.innerHTML = data;
+      anchorClickListen((pageTitle: string) => {
+        socket.emit("room:user:route", room.id, pageTitle);
+        setCurrentWiki(pageTitle);
+      });
+    } catch {
+      setError(true);
+    } finally {
+      scrollToTop();
+      setLoading(false);
+    }
   }, [currentWiki, room.id]);
+
+  const handleTryAgain = () => {
+    setError(false);
+    displayWiki();
+  };
+
+  useEffect(() => {
+    displayWiki();
+  }, [displayWiki]);
 
   return (
     <div>
@@ -114,7 +88,12 @@ export default function GamePage({ room }: RoomPageProps) {
         <div />
       </div>
       {loading && <div class={center()}>Loading</div>}
-
+      {error && (
+        <div class={vstack({ gap: 2 })}>
+          <p>Something went wrong 😭</p>
+          <Button onClick={handleTryAgain}>Try again</Button>
+        </div>
+      )}
       <div
         data-loading={loading}
         class={css({
