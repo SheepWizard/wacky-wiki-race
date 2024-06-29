@@ -17,6 +17,13 @@ export async function anchorClickListen(callback: (pageTitle: string) => void) {
     // node.classList.add(searchHide);
     // node.innerHTML = "";
 
+    if (node.href.includes("#")) {
+      hideLink(node);
+      disableLink(node);
+      continue;
+    }
+
+    // Find better way of checking wiki link
     if (!node.href.includes("/wiki/")) {
       hideLink(node);
       disableLink(node);

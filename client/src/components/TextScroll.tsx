@@ -10,7 +10,7 @@ const scrollWrapper = css({
   aspectRatio: "1/1",
   position: "absolute",
   display: "flex",
-  gap: "200px",
+  gap: "100px",
   alignItems: "flex-start",
   justifyContent: "flex-start",
   flexDirection: "column",
@@ -19,20 +19,19 @@ const scrollWrapper = css({
   // zIndex: -1,
 });
 
-const textScroll = {
+const textScroll = css({
   display: "flex",
-  gap: 80,
+  gap: 20,
   alignItems: "center",
-};
+});
 
-const backgroundText = {
+const backgroundText = css({
   color: "#000000",
   opacity: "5%",
   textAlign: "center",
   fontSize: 64,
-  flexGrow: 1,
-  flexShrink: 1,
-};
+  textWrap: "nowrap",
+});
 
 export default function TextScroll() {
   return (
@@ -46,14 +45,13 @@ export default function TextScroll() {
               animationName:
                 index % 2 === 0 ? "scrollBackwards" : "scrollForward",
               animationDuration: `${randomInteger(wikipediaArticles.length * 16, wikipediaArticles.length * 18)}s`,
-            }}
-            class={css(textScroll, {
               animationTimingFunction: "linear",
               animationIterationCount: "infinite",
-            })}
+            }}
+            class={textScroll}
           >
             {wikipediaArticles.map((title, index2) => (
-              <div key={index2} class={css(backgroundText)}>
+              <div key={index2} class={backgroundText}>
                 {title}
               </div>
             ))}

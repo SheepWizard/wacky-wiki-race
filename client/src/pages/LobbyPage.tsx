@@ -25,16 +25,20 @@ export default function LobbyPage({ room }: LobbyPageProps) {
     }
 
     const getRandom = async () => {
-      //add try catch
-      const randomStartPromise = getRandomWikiPage();
-      const randomEndPromise = getRandomWikiPage();
+      try {
+        const randomStartPromise = getRandomWikiPage();
 
-      const results = await Promise.all([randomStartPromise, randomEndPromise]);
+        const randomEndPromise = getRandomWikiPage();
+        const results = await Promise.all([
+          randomStartPromise,
+          randomEndPromise,
+        ]);
 
-      setStart(results[0]);
-      setEnd(results[1]);
-      socket.emit("room:set:start", room.id, results[0]);
-      socket.emit("room:set:end", room.id, results[1]);
+        setStart(results[0]);
+        setEnd(results[1]);
+        socket.emit("room:set:start", room.id, results[0]);
+        socket.emit("room:set:end", room.id, results[1]);
+      } catch {}
     };
 
     getRandom();
@@ -66,55 +70,57 @@ export default function LobbyPage({ room }: LobbyPageProps) {
     : room.end.replaceAll("_", " ");
 
   return (
-    <GreenBox>
-      <Title />
-      <div
-        class={flex({
-          justifyContent: "space-between",
-          gap: 4,
-          width: "100%",
-          alignItems: "center",
-          flexWrap: "wrap",
-          "& > *": {
-            flex: "1 1 250px",
-          },
-        })}
-      >
-        <p class={css({ overflowWrap: "anywhere" })}>{room.id}</p>
-        <Button onClick={() => {}}>Invite Friend</Button>
-      </div>
-      <ul
-        class={flex({
-          gap: 1,
-          width: "100%",
-          overflow: "scroll",
-          scrollbarWidth: "none",
-          justifyContent: "center",
-        })}
-      >
-        {room.users.map((user) => (
-          <li>
-            <NameTag name={user.userName} self={false} />
-          </li>
-        ))}
-      </ul>
-      <WikiSearchInput
-        labelValue="Start"
-        value={startValue}
-        onChange={(value) => setStart(value)}
-      />
-      <WikiSearchInput
-        labelValue="Finish"
-        value={endValue}
-        onChange={(value) => setEnd(value)}
-      />
+    <div class={css({ bg: "ww-yellow", h: "lvh" })}>
+      <GreenBox>
+        <Title />
+        <div
+          class={flex({
+            justifyContent: "space-between",
+            gap: 4,
+            width: "100%",
+            alignItems: "center",
+            flexWrap: "wrap",
+            "& > *": {
+              flex: "1 1 250px",
+            },
+          })}
+        >
+          <p class={css({ overflowWrap: "anywhere" })}>{room.id}</p>
+          <Button onClick={() => {}}>Invite Friend</Button>
+        </div>
+        <ul
+          class={flex({
+            gap: 1,
+            width: "100%",
+            overflow: "scroll",
+            scrollbarWidth: "none",
+            justifyContent: "center",
+          })}
+        >
+          {room.users.map((user) => (
+            <li>
+              <NameTag name={user.userName} self={false} />
+            </li>
+          ))}
+        </ul>
+        <WikiSearchInput
+          labelValue="Start"
+          value={startValue}
+          onChange={(value) => setStart(value)}
+        />
+        <WikiSearchInput
+          labelValue="Finish"
+          value={endValue}
+          onChange={(value) => setEnd(value)}
+        />
 
-      {isRoomOwner && (
-        <Button
-          onClick={handleStartGame}
-          stretch
-        >{`Start game ${room.users.length}/100`}</Button>
-      )}
-    </GreenBox>
+        {isRoomOwner && (
+          <Button
+            onClick={handleStartGame}
+            stretch
+          >{`Start game ${room.users.length}/100`}</Button>
+        )}
+      </GreenBox>
+    </div>
   );
 }

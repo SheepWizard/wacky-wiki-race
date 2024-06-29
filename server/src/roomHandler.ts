@@ -123,7 +123,6 @@ function handleRoomSetEnd(socket: Socket, roomId: string, end: string) {
     return;
   }
   end = end.replace(/\u00AD/g, "");
-  console.log(end);
   roomSetEnd(socket, room, end);
 }
 

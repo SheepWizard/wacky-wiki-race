@@ -7,6 +7,7 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import GreenBox from "../components/GreenBox";
 import TextScroll from "../components/TextScroll";
+import { css } from "../../styled-system/css";
 
 export default function LandingPage() {
   const ref = useRef(getFunnyName());
@@ -27,8 +28,7 @@ export default function LandingPage() {
   };
 
   return (
-    <>
-      {/* <TextScroll /> */}
+    <div class={css({ bg: "ww-yellow", h: "lvh" })}>
       <GreenBox>
         <Title />
         <Input
@@ -64,6 +64,6 @@ export default function LandingPage() {
           Create lobby
         </Button>
       </GreenBox>
-    </>
+    </div>
   );
 }
