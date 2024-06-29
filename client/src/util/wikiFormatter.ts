@@ -1,10 +1,28 @@
-export function anchorClickListen(callback: (pageTitle: string) => void) {
+function hideLink(node: HTMLAnchorElement) {
+  node.classList.add("link-hide");
+  node.style.color = "black";
+}
+
+function disableLink(node: HTMLAnchorElement) {
+  node.addEventListener("click", (e) => {
+    e.preventDefault();
+  });
+}
+
+export async function anchorClickListen(callback: (pageTitle: string) => void) {
   const atags = document.querySelectorAll("a");
 
   for (let node of atags) {
-    // node.setAttribute("data-text", node.innerText);
+    // node.setAttribute("data-link-remove", node.innerText);
     // node.classList.add(searchHide);
     // node.innerHTML = "";
+
+    if (!node.href.includes("/wiki/")) {
+      hideLink(node);
+      disableLink(node);
+      continue;
+    }
+
     node.addEventListener("click", async (e) => {
       e.preventDefault();
       const target = e.target;
@@ -14,22 +32,13 @@ export function anchorClickListen(callback: (pageTitle: string) => void) {
       if (!(target instanceof HTMLAnchorElement)) {
         return;
       }
-      if (!target.href.includes("/wiki/")) {
-        const span = document.createElement("span");
-        span.innerHTML = target.innerHTML;
-        try {
-          //find better solution
-          target.replaceWith(span);
-        } catch {}
-        return;
-      }
 
       const tokens = target.href.split("/");
       const pageTitle = tokens.pop();
       if (!pageTitle) {
         return;
       }
-      callback(decodeURI(pageTitle));
+      callback(decodeURIComponent(pageTitle));
     });
   }
 }

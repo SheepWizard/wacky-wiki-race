@@ -20,7 +20,7 @@ export function App() {
     return () => {
       socket.off("room:update", handleRoomUpdate);
     };
-  });
+  }, []);
 
   if (!isConnected) {
     console.log("No connected");

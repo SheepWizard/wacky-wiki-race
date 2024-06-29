@@ -20,12 +20,6 @@ function scrollToTop() {
   });
 }
 
-const searchHide = css({
-  "&:before": {
-    content: "attr(data-text)",
-  },
-});
-
 export default function GamePage({ room }: RoomPageProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [currentWiki, setCurrentWiki] = useState(room.start);
@@ -44,7 +38,8 @@ export default function GamePage({ room }: RoomPageProps) {
     try {
       const data = await getWikiPage(currentWiki);
       current.innerHTML = data;
-      anchorClickListen((pageTitle: string) => {
+      await anchorClickListen((pageTitle: string) => {
+        console.log(pageTitle);
         socket.emit("room:user:route", room.id, pageTitle);
         setCurrentWiki(pageTitle);
       });
