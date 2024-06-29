@@ -76,11 +76,16 @@ export default function GamePage({ room }: RoomPageProps) {
 
     const displayWiki = async () => {
       setLoading(true);
-      const data = await getWikiPage(currentWiki);
-      current.innerHTML = data;
-      scrollToTop();
-      anchorClickListen();
-      setLoading(false);
+      try {
+        const data = await getWikiPage(currentWiki);
+        current.innerHTML = data;
+      } catch {
+        // add a retry button
+      } finally {
+        scrollToTop();
+        anchorClickListen();
+        setLoading(false);
+      }
     };
 
     displayWiki();
@@ -90,8 +95,8 @@ export default function GamePage({ room }: RoomPageProps) {
     <div>
       <div
         class={flex({
-          height: 60,
-          backgroundColor: "lightblue",
+          height: 28,
+          backgroundColor: "ww-yellow",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -99,8 +104,9 @@ export default function GamePage({ room }: RoomPageProps) {
           top: 0,
           zIndex: 5,
           paddingInline: 20,
-          marginBottom: 30,
-          boxShadow: "0px 10px 92px -15px rgba(0,0,0,0.75)",
+          marginBottom: 3,
+          borderBottom: "solid 2px",
+          borderColor: "ww-black",
         })}
       >
         <Timer />
@@ -108,12 +114,36 @@ export default function GamePage({ room }: RoomPageProps) {
         <div />
       </div>
       {loading && <div class={center()}>Loading</div>}
+
       <div
-        id="game-div"
-        class="min-width"
-        style={{ display: loading ? "none" : "block" }}
-        ref={ref}
-      />
+        data-loading={loading}
+        class={css({
+          width: "min(1200px, 100% - 4em)",
+          marginInline: "auto",
+          "&[data-loading=true]": {
+            display: "none",
+          },
+        })}
+      >
+        <h1
+          class={css({
+            wordBreak: "break-word",
+            wordWrap: "break-word",
+            fontFamily:
+              "Linux Libertine, Georgia, Times, 'Source Serif Pro', serif",
+            lineHeight: "1.375",
+            fontSize: "1.7em",
+            mb: 2,
+          })}
+        >
+          {currentWiki.replaceAll("_", " ")}
+        </h1>
+        <div
+          class="wiki-css"
+          style={{ display: loading ? "none" : "block" }}
+          ref={ref}
+        />
+      </div>
     </div>
   );
 }
