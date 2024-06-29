@@ -6,7 +6,6 @@ import Title from "../components/Title";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import GreenBox from "../components/GreenBox";
-import TextScroll from "../components/TextScroll";
 import { css } from "../../styled-system/css";
 
 export default function LandingPage() {
