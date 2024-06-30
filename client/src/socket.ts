@@ -24,7 +24,7 @@ export type MySocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 const URL =
   import.meta.env.NODE_ENV === "production"
     ? "https://wiki-api.sheepwizard.com"
-    : "http://localhost:3001";
+    : "https://wiki-api.sheepwizard.com";
 
 export const socket: MySocket = io(URL);
 socket.auth = {
