@@ -11,14 +11,35 @@ import {
   roomSetStart,
 } from "./room";
 import { MySocket } from "./socket";
+import z from "zod";
 
 function handleRoomCreate(socket: MySocket, userName: string) {
+  const validator = z.string().max(25);
+  const result = validator.safeParse(userName);
+  if (!result.success) {
+    //add error
+    return;
+  }
+
   const user = createUser(socket.data.userId, userName);
   const room = createRoom(user);
   addUserToRoom(socket, room, user);
 }
 
 function handleRoomJoin(socket: MySocket, roomId: string, userName: string) {
+  const validator = z.object({
+    roomId: z.string(),
+    userName: z.string().max(25),
+  });
+  const result = validator.safeParse({
+    roomId,
+    userName,
+  });
+  if (!result.success) {
+    //add error
+    return;
+  }
+
   const room = getRoomById(roomId);
   if (!room) {
     // add error
@@ -55,6 +76,13 @@ function handleRoomLeave(socket: MySocket) {
 }
 
 function handleRoomPlay(socket: MySocket, roomId: string) {
+  const validator = z.string();
+  const result = validator.safeParse(roomId);
+  if (!result.success) {
+    //add error
+    return;
+  }
+
   const room = getRoomById(roomId);
   if (!room) {
     return;
@@ -83,6 +111,19 @@ export function handleRoomSetStart(
   roomId: string,
   start: string
 ) {
+  const validator = z.object({
+    roomId: z.string(),
+    start: z.string().max(500),
+  });
+  const result = validator.safeParse({
+    roomId,
+    start,
+  });
+  if (!result.success) {
+    //add error
+    return;
+  }
+
   const room = getRoomById(roomId);
   if (!room) {
     return;
@@ -105,6 +146,19 @@ export function handleRoomSetStart(
 }
 
 function handleRoomSetEnd(socket: MySocket, roomId: string, end: string) {
+  const validator = z.object({
+    roomId: z.string(),
+    end: z.string().max(500),
+  });
+  const result = validator.safeParse({
+    roomId,
+    end,
+  });
+  if (!result.success) {
+    //add error
+    return;
+  }
+
   const room = getRoomById(roomId);
   if (!room) {
     return;
@@ -127,6 +181,19 @@ function handleRoomSetEnd(socket: MySocket, roomId: string, end: string) {
 }
 
 function handleUserRoute(socket: MySocket, roomId: string, route: string) {
+  const validator = z.object({
+    roomId: z.string(),
+    route: z.string().max(500),
+  });
+  const result = validator.safeParse({
+    roomId,
+    route,
+  });
+  if (!result.success) {
+    //add error
+    return;
+  }
+
   const room = getRoomById(roomId);
   if (!room) {
     return;
@@ -151,6 +218,13 @@ function handleUserRoute(socket: MySocket, roomId: string, route: string) {
 }
 
 function handleRoomLobby(socket: MySocket, roomId: string) {
+  const validator = z.string();
+  const result = validator.safeParse(roomId);
+  if (!result.success) {
+    //add error
+    return;
+  }
+
   const room = getRoomById(roomId);
   if (!room) {
     return;
