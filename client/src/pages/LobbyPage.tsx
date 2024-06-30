@@ -62,12 +62,20 @@ export default function LobbyPage({ room }: LobbyPageProps) {
     socket.emit("room:play", room.id);
   };
 
+  const handleCopyInvite = async () => {
+    await navigator.clipboard.writeText(
+      `${window.location.href}?lobby=${room.id}`
+    );
+  };
+
   const startValue = isRoomOwner
     ? start.replaceAll("_", " ")
     : room.start.replaceAll("_", " ");
   const endValue = isRoomOwner
     ? end.replaceAll("_", " ")
     : room.end.replaceAll("_", " ");
+
+  const inputsDisabled = !isRoomOwner;
 
   return (
     <div
@@ -92,7 +100,7 @@ export default function LobbyPage({ room }: LobbyPageProps) {
           })}
         >
           <p class={css({ overflowWrap: "anywhere" })}>{room.id}</p>
-          <Button onClick={() => {}}>Invite Friend</Button>
+          <Button onClick={handleCopyInvite}>Invite Friend</Button>
         </div>
         <ul
           class={flex({
@@ -113,11 +121,13 @@ export default function LobbyPage({ room }: LobbyPageProps) {
           labelValue="Start"
           value={startValue}
           onChange={(value) => setStart(value)}
+          disabled={inputsDisabled}
         />
         <WikiSearchInput
           labelValue="Finish"
           value={endValue}
           onChange={(value) => setEnd(value)}
+          disabled={inputsDisabled}
         />
 
         {isRoomOwner && (

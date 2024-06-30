@@ -10,6 +10,7 @@ interface SearchInputProps {
   searchItems: string[];
   loading?: boolean;
   labelValue?: string;
+  disabled?: boolean;
 }
 
 const input = cva({
@@ -32,6 +33,7 @@ export default function Select({
   onSearchTextChange,
   loading,
   labelValue,
+  disabled,
 }: SearchInputProps) {
   const popoverRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -149,6 +151,7 @@ export default function Select({
           onInput={handleInputOnChange}
           onFocus={handleOnFocus}
           onBlur={handleOnBlur}
+          disabled={disabled}
         />
 
         <div

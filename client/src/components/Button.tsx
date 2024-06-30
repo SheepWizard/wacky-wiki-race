@@ -29,6 +29,12 @@ const button = cva({
         width: "100%",
       },
     },
+    state: {
+      disabled: {
+        bg: "ww-grey",
+        cursor: "default",
+      },
+    },
   },
 });
 
@@ -42,6 +48,7 @@ export default function Button({
     <button
       class={button({
         visual: stretch ? "stretch" : undefined,
+        state: disabled ? "disabled" : undefined,
       })}
       onClick={onClick}
       disabled={disabled}

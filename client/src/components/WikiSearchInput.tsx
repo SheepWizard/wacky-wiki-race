@@ -6,12 +6,14 @@ interface WikiSearchInputProps {
   value: string;
   onChange: (value: string) => void;
   labelValue?: string;
+  disabled?: boolean;
 }
 
 export function WikiSearchInput({
   value,
   onChange,
   labelValue,
+  disabled,
 }: WikiSearchInputProps) {
   const [searchList, setSearchList] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -38,6 +40,7 @@ export function WikiSearchInput({
       searchItems={searchList}
       onSearchTextChange={handleSearchTextChange}
       loading={loading}
+      disabled={disabled}
     />
   );
 }

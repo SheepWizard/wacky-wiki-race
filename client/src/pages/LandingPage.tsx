@@ -11,7 +11,11 @@ import { css } from "../../styled-system/css";
 export default function LandingPage() {
   const ref = useRef(getFunnyName());
   const [userName, setUserName] = useState("");
-  const [roomCode, setRoomCode] = useState("");
+  const [roomCode, setRoomCode] = useState(() => {
+    const windowUrl = window.location.search;
+    const params = new URLSearchParams(windowUrl);
+    return params.get("lobby") ?? "";
+  });
 
   const handleCreateLobby = () => {
     const name = userName ? userName : ref.current;
@@ -25,6 +29,8 @@ export default function LandingPage() {
     const name = userName ? userName : ref.current;
     socket.emit("room:join", roomCode, name);
   };
+
+  const lobbyButtonDisabled = !roomCode;
 
   return (
     <div class={css({ bg: "ww-yellow", h: "lvh", overflow: "hidden" })}>
@@ -55,7 +61,11 @@ export default function LandingPage() {
             labelValue="Lobby code"
             max={24}
           />
-          <Button onClick={handleJoinLobby} disabled={!roomCode} stretch>
+          <Button
+            onClick={handleJoinLobby}
+            disabled={lobbyButtonDisabled}
+            stretch
+          >
             Join lobby
           </Button>
         </div>
