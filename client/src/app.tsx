@@ -7,22 +7,12 @@ import EndGamePage from "./pages/EndGamePage";
 import { useIsSocketConnected } from "./util/connectionHook";
 import { socket } from "./socket";
 import { useSocketSession } from "./util/sessionHook";
+import { useRoom } from "./providers/RoomProvider";
 
 export function App() {
   const isConnected = useIsSocketConnected();
   useSocketSession();
-  const [room, setRoom] = useState<Room>();
-
-  const handleRoomUpdate = (room: Room) => {
-    setRoom(room);
-  };
-
-  useEffect(() => {
-    socket.on("room:update", handleRoomUpdate);
-    return () => {
-      socket.off("room:update", handleRoomUpdate);
-    };
-  }, []);
+  const { room } = useRoom();
 
   if (!isConnected) {
     console.log("No connected");

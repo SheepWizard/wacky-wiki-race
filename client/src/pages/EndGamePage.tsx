@@ -4,6 +4,7 @@ import { Room } from "../types";
 import { socket } from "../socket";
 import Button from "../components/Button";
 import { getUserId } from "../util/sessionHook";
+import { useRoom } from "../providers/RoomProvider";
 
 interface EndGamePageProps {
   room: Room;
@@ -11,9 +12,15 @@ interface EndGamePageProps {
 
 export default function EndGamePage({ room }: EndGamePageProps) {
   const isRoomOwner = room.roomOwnerId === getUserId();
+  const { setRoom } = useRoom();
 
   const handleNewGame = () => {
     socket.emit("room:lobby", room.id);
+  };
+
+  const handleRoomLeave = () => {
+    socket.emit("room:leave");
+    setRoom(undefined);
   };
 
   const winningUser = room.users.find((x) => x.id === room.winnerUserId);
@@ -48,6 +55,7 @@ export default function EndGamePage({ room }: EndGamePageProps) {
           );
         })}
         {isRoomOwner && <Button onClick={handleNewGame}>New game</Button>}
+        <Button onClick={handleRoomLeave}>Leave</Button>
       </div>
     </div>
   );

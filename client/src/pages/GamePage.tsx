@@ -7,6 +7,7 @@ import { css } from "../../styled-system/css";
 import { center, flex, vstack } from "../../styled-system/patterns";
 import Button from "../components/Button";
 import { anchorClickListen } from "../util/wikiFormatter";
+import { useRoom } from "../providers/RoomProvider";
 
 interface RoomPageProps {
   room: Room;
@@ -25,9 +26,7 @@ export default function GamePage({ room }: RoomPageProps) {
   const [currentWiki, setCurrentWiki] = useState(room.start);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-
-  // Remove external links
-  //Cat–dog relationship doesnt end game
+  const { setRoom } = useRoom();
 
   const displayWiki = useCallback(async () => {
     const current = ref.current;
@@ -50,14 +49,19 @@ export default function GamePage({ room }: RoomPageProps) {
     }
   }, [currentWiki, room.id]);
 
+  useEffect(() => {
+    displayWiki();
+  }, [displayWiki]);
+
   const handleTryAgain = () => {
     setError(false);
     displayWiki();
   };
 
-  useEffect(() => {
-    displayWiki();
-  }, [displayWiki]);
+  const handleRoomLeave = () => {
+    socket.emit("room:leave");
+    setRoom(undefined);
+  };
 
   return (
     <div>
@@ -79,7 +83,7 @@ export default function GamePage({ room }: RoomPageProps) {
       >
         <Timer />
         <div>{room.end.replaceAll("_", " ")}</div>
-        <div />
+        <Button onClick={handleRoomLeave}>Leave</Button>
       </div>
       {loading && <div class={center()}>Loading</div>}
       {error && (

@@ -10,6 +10,7 @@ import { flex, vstack } from "../../styled-system/patterns";
 import { css } from "../../styled-system/css";
 import NameTag from "../components/NameTag";
 import { getUserId } from "../util/sessionHook";
+import { useRoom } from "../providers/RoomProvider";
 
 interface LobbyPageProps {
   room: Room;
@@ -19,6 +20,7 @@ export default function LobbyPage({ room }: LobbyPageProps) {
   const isRoomOwner = room.roomOwnerId === getUserId();
   const [start, setStart] = useState("Cat");
   const [end, setEnd] = useState("Dog");
+  const { setRoom } = useRoom();
 
   useEffect(() => {
     if (!isRoomOwner) {
@@ -61,6 +63,11 @@ export default function LobbyPage({ room }: LobbyPageProps) {
 
   const handleStartGame = () => {
     socket.emit("room:play", room.id);
+  };
+
+  const handleRoomLeave = () => {
+    socket.emit("room:leave");
+    setRoom(undefined);
   };
 
   const handleCopyInvite = async () => {
@@ -144,6 +151,7 @@ export default function LobbyPage({ room }: LobbyPageProps) {
             stretch
           >{`Start game ${room.users.length}/100`}</Button>
         )}
+        <Button onClick={handleRoomLeave}>Leave</Button>
       </GreenBox>
     </div>
   );
