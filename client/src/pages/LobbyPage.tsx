@@ -122,7 +122,7 @@ export default function LobbyPage({ room }: LobbyPageProps) {
               width: "100%",
               overflow: "scroll",
               scrollbarWidth: "none",
-              justifyContent: "center",
+              justifyContent: "safe center",
             })}
           >
             {room.users.map((user) => (

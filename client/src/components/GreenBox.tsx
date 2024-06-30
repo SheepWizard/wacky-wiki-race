@@ -13,6 +13,7 @@ export default function GreenBox({ children }: GreenBoxProps) {
         marginInline: "auto",
         height: "100%",
         overflowY: "auto",
+        alignItems: "safe center",
       })}
     >
       <div
@@ -24,6 +25,7 @@ export default function GreenBox({ children }: GreenBoxProps) {
           flexGrow: 1,
           shadow: "ww-thicc",
           paddingY: 8,
+          overflowX: "hidden",
         })}
       >
         <div
