@@ -39,7 +39,6 @@ export default function GamePage({ room }: RoomPageProps) {
       const data = await getWikiPage(currentWiki);
       current.innerHTML = data;
       await anchorClickListen((pageTitle: string) => {
-        console.log(pageTitle);
         socket.emit("room:user:route", room.id, pageTitle);
         setCurrentWiki(pageTitle);
       });

@@ -1,6 +1,6 @@
 export async function getWikiPage(pageTitle: string) {
   const result = await fetch(
-    `https://en.wikipedia.org/w/api.php?action=parse&prop=text&page=${pageTitle}&format=json&disableeditsection=1&redirects=true&useskin=minerva&origin=*`
+    `https://en.wikipedia.org/w/api.php?action=parse&prop=text&page=${encodeURIComponent(pageTitle)}&format=json&disableeditsection=1&redirects=true&useskin=minerva&origin=*`
   );
   const data = await result.json();
 
@@ -20,7 +20,7 @@ export async function getRandomWikiPage(): Promise<string> {
 
 export async function searchWikiPage(searchTerm: string): Promise<string[]> {
   const result = await fetch(
-    `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${searchTerm}&utf8=&format=json&origin=*`
+    `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchTerm)}&utf8=&format=json&origin=*`
   );
   const data = await result.json();
   const titles = data.query.search.map((x: any) =>
