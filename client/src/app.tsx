@@ -1,11 +1,8 @@
-import { useEffect, useState } from "preact/hooks";
-import { Room } from "./types";
 import LandingPage from "./pages/LandingPage";
 import LobbyPage from "./pages/LobbyPage";
 import GamePage from "./pages/GamePage";
 import EndGamePage from "./pages/EndGamePage";
 import { useIsSocketConnected } from "./util/connectionHook";
-import { socket } from "./socket";
 import { useSocketSession } from "./util/sessionHook";
 import { useRoom } from "./providers/RoomProvider";
 

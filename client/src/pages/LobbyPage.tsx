@@ -72,7 +72,7 @@ export default function LobbyPage({ room }: LobbyPageProps) {
 
   const handleCopyInvite = async () => {
     await navigator.clipboard.writeText(
-      `${window.location.href}?lobby=${room.id}`
+      `${window.location.host}/?lobby=${room.id}`
     );
   };
 
