@@ -1,8 +1,18 @@
 import { Server } from "socket.io";
 import express from "express";
 import { createServer } from "node:http";
-import roomHandler from "./roomHandler";
-import { sessionMiddleware } from "./middleware/sessionMiddleware";
+import {
+  handleRoomCreate,
+  handleRoomJoin,
+  handleRoomLeave,
+  handleRoomLobby,
+  handleRoomPlay,
+  handleRoomReJoin,
+  handleRoomSetEnd,
+  handleRoomSetStart,
+  handleUserRoute,
+} from "./roomHandler";
+import { getSession, sessionMiddleware } from "./middleware/sessionMiddleware";
 import {
   ClientToServerEvents,
   ServerToClientEvents,
@@ -28,26 +38,24 @@ io.use(sessionMiddleware);
 io.on("connection", (socket) => {
   socket.emit("session", socket.data.sessionId, socket.data.userId);
 
-  const {
-    handleRoomCreate,
-    handleRoomJoin,
-    handleRoomLeave,
-    handleRoomPlay,
-    handleRoomSetStart,
-    handleRoomSetEnd,
-    handleUserRoute,
-    handleRoomLobby,
-  } = roomHandler(socket);
+  const session = getSession(socket.data.sessionId);
 
-  socket.on("room:create", handleRoomCreate);
-  socket.on("room:join", handleRoomJoin);
-  socket.on("room:play", handleRoomPlay);
-  socket.on("room:set:start", handleRoomSetStart);
-  socket.on("room:set:end", handleRoomSetEnd);
-  socket.on("room:user:route", handleUserRoute);
-  socket.on("room:lobby", handleRoomLobby);
-  socket.on("room:leave", handleRoomLeave);
-  socket.on("disconnect", handleRoomLeave);
+  if (session?.oldRoomId) {
+    handleRoomReJoin(socket, session.oldRoomId);
+    session.oldRoomId = undefined;
+  }
+
+  socket.on("room:create", (...input) => handleRoomCreate(socket, ...input));
+  socket.on("room:join", (...input) => handleRoomJoin(socket, ...input));
+  socket.on("room:play", (...input) => handleRoomPlay(socket, ...input));
+  socket.on("room:set:start", (...input) =>
+    handleRoomSetStart(socket, ...input)
+  );
+  socket.on("room:set:end", (...input) => handleRoomSetEnd(socket, ...input));
+  socket.on("room:user:route", (...input) => handleUserRoute(socket, ...input));
+  socket.on("room:lobby", (...input) => handleRoomLobby(socket, ...input));
+  socket.on("room:leave", () => handleRoomLeave(socket, false));
+  socket.once("disconnect", () => handleRoomLeave(socket, true));
 });
 
 server.listen(3001, () => {

@@ -1,11 +1,11 @@
 import { generate } from "short-uuid";
 import { clearRoutes, User } from "./user";
-import { Socket } from "socket.io";
 import { MySocket } from "./socket";
 
 export interface Room {
   id: string;
   users: User[];
+  disconnectedUsers: User[];
   state: "lobby" | "inGame" | "endGame";
   roomOwnerId: string;
   start: string;
@@ -23,6 +23,7 @@ export function createRoom(user: User) {
   const room: Room = {
     id: roomId,
     users: [],
+    disconnectedUsers: [],
     state: "lobby",
     roomOwnerId: user.id,
     start: "Dog",
@@ -43,9 +44,24 @@ export function addUserToRoom(socket: MySocket, room: Room, user: User) {
   socket.to(room.id).emit("room:update", room);
 }
 
-export function removeUserFromRoom(socket: MySocket, room: Room, user: User) {
+export function reAddUserToRoom(socket: MySocket, room: Room, user: User) {
+  room.disconnectedUsers = room.disconnectedUsers.filter(
+    (x) => x.id !== user.id
+  );
+  addUserToRoom(socket, room, user);
+}
+
+export function removeUserFromRoom(
+  socket: MySocket,
+  room: Room,
+  user: User,
+  disconnected: boolean
+) {
   const updatedUsers = room.users.filter((x) => x.id !== user.id);
   room.users = updatedUsers;
+  if (disconnected) {
+    room.disconnectedUsers.push(user);
+  }
   socket.leave(room.id);
 
   if (!room.users.length) {
@@ -98,6 +114,7 @@ export function checkWin(
 export function resetRoom(socket: MySocket, room: Room) {
   room.state = "lobby";
   room.winnerUserId = "";
+  room.disconnectedUsers = [];
   for (const user of room.users) {
     clearRoutes(user);
   }

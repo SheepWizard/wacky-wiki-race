@@ -1,9 +1,16 @@
-import { addToUserRoute, createUser, getUserById, removeUser } from "./user";
+import {
+  addToUserRoute,
+  addUser,
+  createUser,
+  getUserById,
+  removeUser,
+} from "./user";
 import {
   addUserToRoom,
   checkWin,
   createRoom,
   getRoomById,
+  reAddUserToRoom,
   removeUserFromRoom,
   resetRoom,
   roomPlay,
@@ -12,8 +19,9 @@ import {
 } from "./room";
 import { MySocket } from "./socket";
 import z from "zod";
+import { getSession } from "./middleware/sessionMiddleware";
 
-function handleRoomCreate(socket: MySocket, userName: string) {
+export function handleRoomCreate(socket: MySocket, userName: string) {
   const validator = z.string().max(25);
   const result = validator.safeParse(userName);
   if (!result.success) {
@@ -26,7 +34,37 @@ function handleRoomCreate(socket: MySocket, userName: string) {
   addUserToRoom(socket, room, user);
 }
 
-function handleRoomJoin(socket: MySocket, roomId: string, userName: string) {
+export function handleRoomReJoin(socket: MySocket, roomId: string) {
+  const room = getRoomById(roomId);
+  if (!room) {
+    // add error
+    console.log("No room");
+    return;
+  }
+
+  if (room.users.length >= 100) {
+    // add error
+    console.log("Too many users");
+    return;
+  }
+
+  const foundUser = room.disconnectedUsers.find(
+    (x) => x.id === socket.data.userId
+  );
+  if (!foundUser) {
+    console.log("User not found");
+    return;
+  }
+
+  addUser(foundUser);
+  reAddUserToRoom(socket, room, foundUser);
+}
+
+export function handleRoomJoin(
+  socket: MySocket,
+  roomId: string,
+  userName: string
+) {
   const validator = z.object({
     roomId: z.string(),
     userName: z.string().max(25),
@@ -60,7 +98,8 @@ function handleRoomJoin(socket: MySocket, roomId: string, userName: string) {
   addUserToRoom(socket, room, user);
 }
 
-function handleRoomLeave(socket: MySocket) {
+export function handleRoomLeave(socket: MySocket, disconnected: boolean) {
+  console.log("Disconnect");
   const user = getUserById(socket.data.userId);
   if (!user) {
     console.log("No user");
@@ -70,12 +109,22 @@ function handleRoomLeave(socket: MySocket) {
 
   const room = getRoomById(user.roomId ?? "");
   if (!room) {
+    console.log("No room");
     return;
   }
-  removeUserFromRoom(socket, room, user);
+
+  console.log("on disconnect", disconnected);
+  if (disconnected) {
+    const session = getSession(socket.data.sessionId);
+    if (session) {
+      session.oldRoomId = room.id;
+    }
+  }
+
+  removeUserFromRoom(socket, room, user, disconnected);
 }
 
-function handleRoomPlay(socket: MySocket, roomId: string) {
+export function handleRoomPlay(socket: MySocket, roomId: string) {
   const validator = z.string();
   const result = validator.safeParse(roomId);
   if (!result.success) {
@@ -145,7 +194,11 @@ export function handleRoomSetStart(
   roomSetStart(socket, room, start);
 }
 
-function handleRoomSetEnd(socket: MySocket, roomId: string, end: string) {
+export function handleRoomSetEnd(
+  socket: MySocket,
+  roomId: string,
+  end: string
+) {
   const validator = z.object({
     roomId: z.string(),
     end: z.string().max(500),
@@ -180,7 +233,11 @@ function handleRoomSetEnd(socket: MySocket, roomId: string, end: string) {
   roomSetEnd(socket, room, end);
 }
 
-function handleUserRoute(socket: MySocket, roomId: string, route: string) {
+export function handleUserRoute(
+  socket: MySocket,
+  roomId: string,
+  route: string
+) {
   const validator = z.object({
     roomId: z.string(),
     route: z.string().max(500),
@@ -217,7 +274,7 @@ function handleUserRoute(socket: MySocket, roomId: string, route: string) {
   checkWin(socket, room, user, route);
 }
 
-function handleRoomLobby(socket: MySocket, roomId: string) {
+export function handleRoomLobby(socket: MySocket, roomId: string) {
   const validator = z.string();
   const result = validator.safeParse(roomId);
   if (!result.success) {
@@ -244,21 +301,4 @@ function handleRoomLobby(socket: MySocket, roomId: string) {
   }
 
   resetRoom(socket, room);
-}
-
-export default function io(socket: MySocket) {
-  return {
-    handleRoomCreate: (userName: string) => handleRoomCreate(socket, userName),
-    handleRoomJoin: (roomId: string, userName: string) =>
-      handleRoomJoin(socket, roomId, userName),
-    handleRoomLeave: () => handleRoomLeave(socket),
-    handleRoomPlay: (roomId: string) => handleRoomPlay(socket, roomId),
-    handleRoomSetStart: (roomId: string, start: string) =>
-      handleRoomSetStart(socket, roomId, start),
-    handleRoomSetEnd: (roomId: string, end: string) =>
-      handleRoomSetEnd(socket, roomId, end),
-    handleUserRoute: (roomId: string, route: string) =>
-      handleUserRoute(socket, roomId, route),
-    handleRoomLobby: (roomId: string) => handleRoomLobby(socket, roomId),
-  };
 }

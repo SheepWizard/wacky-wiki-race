@@ -4,6 +4,7 @@ import { MySocket } from "../socket";
 interface SessionState {
   userId: string;
   lastUpdate: Date;
+  oldRoomId?: string;
 }
 
 const sessions: Map<string, SessionState> = new Map();
@@ -34,6 +35,10 @@ export function sessionMiddleware(
   });
 
   next();
+}
+
+export function getSession(id: string) {
+  return sessions.get(id);
 }
 
 const sessionStorageTime = 1000 * 60 * 60;

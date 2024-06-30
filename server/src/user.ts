@@ -21,6 +21,10 @@ export function removeUser(id: string) {
   users.delete(id);
 }
 
+export function addUser(user: User) {
+  users.set(user.id, user);
+}
+
 export function getUserById(id: string) {
   return users.get(id);
 }
