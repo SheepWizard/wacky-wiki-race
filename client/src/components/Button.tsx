@@ -22,6 +22,14 @@ const button = cva({
     padding: "10px",
     cursor: "pointer",
     height: 58,
+    _active: {
+      "&:not(&[disabled])": {
+        borderBottom: "solid 2px",
+      },
+    },
+    _focusVisible: {
+      outline: "solid blue",
+    },
   },
   variants: {
     visual: {

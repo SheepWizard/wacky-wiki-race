@@ -6,7 +6,7 @@ import { WikiSearchInput } from "../components/WikiSearchInput";
 import GreenBox from "../components/GreenBox";
 import Title from "../components/Title";
 import Button from "../components/Button";
-import { flex } from "../../styled-system/patterns";
+import { flex, vstack } from "../../styled-system/patterns";
 import { css } from "../../styled-system/css";
 import NameTag from "../components/NameTag";
 
@@ -88,41 +88,48 @@ export default function LobbyPage({ room }: LobbyPageProps) {
       <GreenBox>
         <Title />
         <div
-          class={flex({
-            justifyContent: "space-between",
-            gap: 4,
+          class={vstack({
+            gap: 6,
             width: "100%",
-            alignItems: "center",
-            flexWrap: "wrap",
-            "& > *": {
-              flex: "1 1 250px",
-            },
           })}
         >
-          <p class={css({ overflowWrap: "anywhere" })}>{room.id}</p>
-          <Button onClick={handleCopyInvite}>Invite Friend</Button>
+          <div
+            class={flex({
+              justifyContent: "space-between",
+              gap: 4,
+              width: "100%",
+              alignItems: "center",
+              flexWrap: "wrap",
+              "& > *": {
+                flex: "1 1 250px",
+              },
+            })}
+          >
+            <p class={css({ overflowWrap: "anywhere" })}>{room.id}</p>
+            <Button onClick={handleCopyInvite}>Invite Friend</Button>
+          </div>
+          <ul
+            class={flex({
+              gap: 1,
+              width: "100%",
+              overflow: "scroll",
+              scrollbarWidth: "none",
+              justifyContent: "center",
+            })}
+          >
+            {room.users.map((user) => (
+              <li>
+                <NameTag name={user.userName} self={false} />
+              </li>
+            ))}
+          </ul>
+          <WikiSearchInput
+            labelValue="Start"
+            value={startValue}
+            onChange={(value) => setStart(value)}
+            disabled={inputsDisabled}
+          />
         </div>
-        <ul
-          class={flex({
-            gap: 1,
-            width: "100%",
-            overflow: "scroll",
-            scrollbarWidth: "none",
-            justifyContent: "center",
-          })}
-        >
-          {room.users.map((user) => (
-            <li>
-              <NameTag name={user.userName} self={false} />
-            </li>
-          ))}
-        </ul>
-        <WikiSearchInput
-          labelValue="Start"
-          value={startValue}
-          onChange={(value) => setStart(value)}
-          disabled={inputsDisabled}
-        />
         <WikiSearchInput
           labelValue="Finish"
           value={endValue}
