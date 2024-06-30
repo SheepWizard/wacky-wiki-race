@@ -1,5 +1,5 @@
 import { generate } from "short-uuid";
-import { User } from "./user";
+import { clearRoutes, User } from "./user";
 import { Socket } from "socket.io";
 
 export interface Room {
@@ -97,6 +97,8 @@ export function checkWin(
 export function resetRoom(socket: Socket, room: Room) {
   room.state = "lobby";
   room.winnerUserId = "";
-  room.users = room.users.map((x) => ({ ...x, route: [] }));
+  for (const user of room.users) {
+    clearRoutes(user);
+  }
   socket.nsp.to(room.id).emit("room:update", room);
 }

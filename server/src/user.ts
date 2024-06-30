@@ -31,3 +31,7 @@ export function addToUserRoute(user: User, route: string) {
   }
   user.route.push(route);
 }
+
+export function clearRoutes(user: User) {
+  user.route = [];
+}
