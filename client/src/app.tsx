@@ -6,9 +6,11 @@ import GamePage from "./pages/GamePage";
 import EndGamePage from "./pages/EndGamePage";
 import { useIsSocketConnected } from "./util/connectionHook";
 import { socket } from "./socket";
+import { useSocketSession } from "./util/sessionHook";
 
 export function App() {
   const isConnected = useIsSocketConnected();
+  useSocketSession();
   const [room, setRoom] = useState<Room>();
 
   const handleRoomUpdate = (room: Room) => {

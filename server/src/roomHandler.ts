@@ -1,4 +1,3 @@
-import { Socket } from "socket.io";
 import { addToUserRoute, createUser, getUserById, removeUser } from "./user";
 import {
   addUserToRoom,
@@ -11,14 +10,15 @@ import {
   roomSetEnd,
   roomSetStart,
 } from "./room";
+import { MySocket } from "./socket";
 
-function handleRoomCreate(socket: Socket, userName: string) {
-  const user = createUser(socket.id, userName);
+function handleRoomCreate(socket: MySocket, userName: string) {
+  const user = createUser(socket.data.userId, userName);
   const room = createRoom(user);
   addUserToRoom(socket, room, user);
 }
 
-function handleRoomJoin(socket: Socket, roomId: string, userName: string) {
+function handleRoomJoin(socket: MySocket, roomId: string, userName: string) {
   const room = getRoomById(roomId);
   if (!room) {
     // add error
@@ -35,12 +35,12 @@ function handleRoomJoin(socket: Socket, roomId: string, userName: string) {
     return;
   }
 
-  const user = createUser(socket.id, userName);
+  const user = createUser(socket.data.userId, userName);
   addUserToRoom(socket, room, user);
 }
 
-function handleRoomLeave(socket: Socket) {
-  const user = getUserById(socket.id);
+function handleRoomLeave(socket: MySocket) {
+  const user = getUserById(socket.data.userId);
   if (!user) {
     console.log("No user");
     return;
@@ -54,7 +54,7 @@ function handleRoomLeave(socket: Socket) {
   removeUserFromRoom(socket, room, user);
 }
 
-function handleRoomPlay(socket: Socket, roomId: string) {
+function handleRoomPlay(socket: MySocket, roomId: string) {
   const room = getRoomById(roomId);
   if (!room) {
     return;
@@ -64,7 +64,7 @@ function handleRoomPlay(socket: Socket, roomId: string) {
     return;
   }
 
-  const user = getUserById(socket.id);
+  const user = getUserById(socket.data.userId);
   if (!user) {
     return;
   }
@@ -79,7 +79,7 @@ function handleRoomPlay(socket: Socket, roomId: string) {
 }
 
 export function handleRoomSetStart(
-  socket: Socket,
+  socket: MySocket,
   roomId: string,
   start: string
 ) {
@@ -92,7 +92,7 @@ export function handleRoomSetStart(
     return;
   }
 
-  const user = getUserById(socket.id);
+  const user = getUserById(socket.data.userId);
   if (!user) {
     return;
   }
@@ -104,7 +104,7 @@ export function handleRoomSetStart(
   roomSetStart(socket, room, start);
 }
 
-function handleRoomSetEnd(socket: Socket, roomId: string, end: string) {
+function handleRoomSetEnd(socket: MySocket, roomId: string, end: string) {
   const room = getRoomById(roomId);
   if (!room) {
     return;
@@ -114,7 +114,7 @@ function handleRoomSetEnd(socket: Socket, roomId: string, end: string) {
     return;
   }
 
-  const user = getUserById(socket.id);
+  const user = getUserById(socket.data.userId);
   if (!user) {
     return;
   }
@@ -126,7 +126,7 @@ function handleRoomSetEnd(socket: Socket, roomId: string, end: string) {
   roomSetEnd(socket, room, end);
 }
 
-function handleUserRoute(socket: Socket, roomId: string, route: string) {
+function handleUserRoute(socket: MySocket, roomId: string, route: string) {
   const room = getRoomById(roomId);
   if (!room) {
     return;
@@ -136,7 +136,7 @@ function handleUserRoute(socket: Socket, roomId: string, route: string) {
     return;
   }
 
-  const user = getUserById(socket.id);
+  const user = getUserById(socket.data.userId);
   if (!user) {
     return;
   }
@@ -150,7 +150,7 @@ function handleUserRoute(socket: Socket, roomId: string, route: string) {
   checkWin(socket, room, user, route);
 }
 
-function handleRoomLobby(socket: Socket, roomId: string) {
+function handleRoomLobby(socket: MySocket, roomId: string) {
   const room = getRoomById(roomId);
   if (!room) {
     return;
@@ -160,7 +160,7 @@ function handleRoomLobby(socket: Socket, roomId: string) {
     return;
   }
 
-  const user = getUserById(socket.id);
+  const user = getUserById(socket.data.userId);
   if (!user) {
     return;
   }
@@ -172,7 +172,7 @@ function handleRoomLobby(socket: Socket, roomId: string) {
   resetRoom(socket, room);
 }
 
-export default function io(socket: Socket) {
+export default function io(socket: MySocket) {
   return {
     handleRoomCreate: (userName: string) => handleRoomCreate(socket, userName),
     handleRoomJoin: (roomId: string, userName: string) =>

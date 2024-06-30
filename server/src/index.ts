@@ -2,17 +2,32 @@ import { Server } from "socket.io";
 import express from "express";
 import { createServer } from "node:http";
 import roomHandler from "./roomHandler";
+import { sessionMiddleware } from "./middleware/sessionMiddleware";
+import {
+  ClientToServerEvents,
+  ServerToClientEvents,
+  SocketData,
+} from "./socket";
 const app = express();
 
 const server = createServer(app);
-const io = new Server(server, {
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  any,
+  SocketData
+>(server, {
   cors: {
     origin: ["http://localhost:5173", "https://wiki.sheepwizard.com"], //change me
     methods: ["GET", "POST"],
   },
 });
 
+io.use(sessionMiddleware);
+
 io.on("connection", (socket) => {
+  socket.emit("session", socket.data.sessionId, socket.data.userId);
+
   const {
     handleRoomCreate,
     handleRoomJoin,

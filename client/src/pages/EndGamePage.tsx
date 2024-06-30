@@ -3,13 +3,14 @@ import { center, vstack } from "../../styled-system/patterns";
 import { Room } from "../types";
 import { socket } from "../socket";
 import Button from "../components/Button";
+import { getUserId } from "../util/sessionHook";
 
 interface EndGamePageProps {
   room: Room;
 }
 
 export default function EndGamePage({ room }: EndGamePageProps) {
-  const isRoomOwner = room.roomOwnerId === socket.id;
+  const isRoomOwner = room.roomOwnerId === getUserId();
 
   const handleNewGame = () => {
     socket.emit("room:lobby", room.id);

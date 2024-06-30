@@ -9,13 +9,14 @@ import Button from "../components/Button";
 import { flex, vstack } from "../../styled-system/patterns";
 import { css } from "../../styled-system/css";
 import NameTag from "../components/NameTag";
+import { getUserId } from "../util/sessionHook";
 
 interface LobbyPageProps {
   room: Room;
 }
 
 export default function LobbyPage({ room }: LobbyPageProps) {
-  const isRoomOwner = room.roomOwnerId === socket.id;
+  const isRoomOwner = room.roomOwnerId === getUserId();
   const [start, setStart] = useState("Cat");
   const [end, setEnd] = useState("Dog");
 

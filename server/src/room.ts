@@ -1,6 +1,7 @@
 import { generate } from "short-uuid";
 import { clearRoutes, User } from "./user";
 import { Socket } from "socket.io";
+import { MySocket } from "./socket";
 
 export interface Room {
   id: string;
@@ -33,7 +34,7 @@ export function createRoom(user: User) {
   return room;
 }
 
-export function addUserToRoom(socket: Socket, room: Room, user: User) {
+export function addUserToRoom(socket: MySocket, room: Room, user: User) {
   room.users.push(user);
   user.roomId = room.id;
   socket.join(room.id);
@@ -42,7 +43,7 @@ export function addUserToRoom(socket: Socket, room: Room, user: User) {
   socket.to(room.id).emit("room:update", room);
 }
 
-export function removeUserFromRoom(socket: Socket, room: Room, user: User) {
+export function removeUserFromRoom(socket: MySocket, room: Room, user: User) {
   const updatedUsers = room.users.filter((x) => x.id !== user.id);
   room.users = updatedUsers;
   socket.leave(room.id);
@@ -62,24 +63,24 @@ export function getRoomById(id: string) {
   return rooms.get(id);
 }
 
-export function roomPlay(socket: Socket, room: Room) {
+export function roomPlay(socket: MySocket, room: Room) {
   room.state = "inGame";
   room.startTime = new Date();
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
-export function roomSetStart(socket: Socket, room: Room, start: string) {
+export function roomSetStart(socket: MySocket, room: Room, start: string) {
   room.start = start;
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
-export function roomSetEnd(socket: Socket, room: Room, end: string) {
+export function roomSetEnd(socket: MySocket, room: Room, end: string) {
   room.end = end;
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
 export function checkWin(
-  socket: Socket,
+  socket: MySocket,
   room: Room,
   user: User,
   route: string
@@ -94,7 +95,7 @@ export function checkWin(
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
-export function resetRoom(socket: Socket, room: Room) {
+export function resetRoom(socket: MySocket, room: Room) {
   room.state = "lobby";
   room.winnerUserId = "";
   for (const user of room.users) {

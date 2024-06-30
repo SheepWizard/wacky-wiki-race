@@ -1,6 +1,5 @@
-import { io, Socket } from "socket.io-client";
-import { Room } from "./types";
-import { getSessionId } from "./util/sessionHook";
+import { Socket } from "socket.io";
+import { Room } from "./room";
 
 export interface ClientToServerEvents {
   "room:create": (userName: string) => void;
@@ -19,15 +18,14 @@ export interface ServerToClientEvents {
   session: (sessionId: string, userId: string) => void;
 }
 
-export type MySocket = Socket<ServerToClientEvents, ClientToServerEvents>;
+export interface SocketData {
+  sessionId: string;
+  userId: string;
+}
 
-const URL =
-  import.meta.env.NODE_ENV === "production"
-    ? "https://wiki-api.sheepwizard.com"
-    : "http://localhost:3001";
-
-export const socket: MySocket = io(URL);
-socket.auth = {
-  sessionId: getSessionId(),
-};
-socket.connect();
+export type MySocket = Socket<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  any,
+  SocketData
+>;
