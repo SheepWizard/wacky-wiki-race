@@ -17,6 +17,13 @@ export async function anchorClickListen(callback: (pageTitle: string) => void) {
     // node.classList.add(searchHide);
     // node.innerHTML = "";
 
+    if (node.href.match(/^.*\.[a-zA-Z\d]+$/)) {
+      console.log(node.href);
+      hideLink(node);
+      disableLink(node);
+      continue;
+    }
+
     if (node.href.includes("#")) {
       hideLink(node);
       disableLink(node);
