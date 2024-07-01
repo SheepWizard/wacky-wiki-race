@@ -5218,26 +5218,6 @@
   height: 1em;
 }
 
-.lang-en body,
-.lang-en html {
-  height: 100%;
-}
-
-.lang-en html {
-  font-size: 100%;
-  -webkit-text-size-adjust: none;
-}
-
-.lang-en body {
-  background-color: #fff;
-  color: #202122;
-  margin: 0;
-}
-
-.lang-en main {
-  display: block;
-}
-
 .lang-en .mw-body {
   border-top: 1px solid transparent;
   padding-bottom: 32px;
@@ -5291,7 +5271,6 @@
   background-position: left 0.5em center;
   background-repeat: no-repeat;
   background-size: 1.125em;
-  -webkit-appearance: none;
   width: 100%;
   margin-top: 0;
   height: 2.25em;
@@ -5411,7 +5390,7 @@
   padding-right: 16px;
 }
 
-.lang-en #mw-content-text > form > .oo-ui-fieldLayout > .oo-ui-fieldLayout-body,
+/* .lang-en #mw-content-text > form > .oo-ui-fieldLayout > .oo-ui-fieldLayout-body,
 .lang-en #mw-content-text > form > .oo-ui-widget,
 .lang-en .content,
 .lang-en .image-list,
@@ -5419,7 +5398,7 @@
 .lang-en .post-content,
 .lang-en .pre-content {
   margin: 0 16px;
-}
+} */
 
 .lang-en #mw-content-subtitle {
   margin-top: 10px;
@@ -6996,7 +6975,6 @@
   .lang-en .post-content,
   .lang-en .pre-content {
     max-width: 993.3px;
-    margin: 0 3.35em;
   }
 
   .lang-en .mw-content-ltr figure[typeof~="mw:File/Frame"],
@@ -7093,9 +7071,8 @@
   .lang-en .page-header-bar,
   .lang-en .post-content,
   .lang-en .pre-content {
-    margin-left: auto;
-    margin-right: auto;
-    width: 90%;
+    /* margin-left: auto;
+    margin-right: auto; */
     max-width: 993.3px;
   }
 }

@@ -111,7 +111,6 @@ export default function GamePage({ room }: RoomPageProps) {
             lineHeight: "1.375",
             fontSize: "1.7em",
             mb: 2,
-            paddingInline: "51px",
           })}
         >
           {currentWiki.replaceAll("_", " ")}
