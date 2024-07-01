@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { Room } from "../types";
 import { getWikiPage } from "../wiki";
-import { socket } from "../socket";
 import Timer from "../components/Timer";
 import { css } from "../../styled-system/css";
 import { center, flex, vstack } from "../../styled-system/patterns";
 import Button from "../components/Button";
 import { anchorClickListen } from "../util/wikiFormatter";
 import { useRoom } from "../providers/RoomProvider";
+import { useSocket } from "../providers/SessionProvider";
 
 interface RoomPageProps {
   room: Room;
@@ -22,6 +22,7 @@ function scrollToTop() {
 }
 
 export default function GamePage({ room }: RoomPageProps) {
+  const socket = useSocket();
   const ref = useRef<HTMLDivElement>(null);
   const [currentWiki, setCurrentWiki] = useState(room.start);
   const [loading, setLoading] = useState(true);

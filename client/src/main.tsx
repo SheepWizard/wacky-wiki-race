@@ -4,12 +4,15 @@ import "./wiki.css";
 import "./index.css";
 import { css } from "../styled-system/css/css";
 import RoomProvider from "./providers/RoomProvider.tsx";
+import SessionProvider from "./providers/SessionProvider.tsx";
 
 render(
   <div class={css({ h: "lvh" })}>
-    <RoomProvider>
-      <App />
-    </RoomProvider>
+    <SessionProvider>
+      <RoomProvider>
+        <App />
+      </RoomProvider>
+    </SessionProvider>
   </div>,
   document.getElementById("app")!
 );

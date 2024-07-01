@@ -1,7 +1,7 @@
 import { ComponentChildren, createContext } from "preact";
 import { Room } from "../types";
 import { useContext, useEffect, useState } from "preact/hooks";
-import { socket } from "../socket";
+import { useSocket } from "./SessionProvider";
 
 interface RoomContextProps {
   room?: Room;
@@ -16,6 +16,7 @@ interface RoomProviderProps {
 
 export default function RoomProvider({ children }: RoomProviderProps) {
   const [room, setRoom] = useState<Room>();
+  const socket = useSocket();
 
   const handleRoomUpdate = (room: Room) => {
     setRoom(room);

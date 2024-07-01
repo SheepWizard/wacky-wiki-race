@@ -1,14 +1,15 @@
 import { useRef, useState } from "preact/hooks";
 import { getFunnyName } from "../util/funnyNames";
-import { socket } from "../socket";
 import { flex } from "../../styled-system/patterns";
 import Title from "../components/Title";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import GreenBox from "../components/GreenBox";
 import { css } from "../../styled-system/css";
+import { useSocket } from "../providers/SessionProvider";
 
 export default function LandingPage() {
+  const socket = useSocket();
   const ref = useRef(getFunnyName());
   const [userName, setUserName] = useState("");
   const [roomCode, setRoomCode] = useState(() => {

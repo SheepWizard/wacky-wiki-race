@@ -1,7 +1,8 @@
 import { useEffect, useState } from "preact/hooks";
-import { socket } from "../socket";
+import { useSocket } from "../providers/SessionProvider";
 
 export function useIsSocketConnected() {
+  const socket = useSocket();
   const [isConnected, setIsConnected] = useState(socket.connected);
   useEffect(() => {
     function onConnect() {

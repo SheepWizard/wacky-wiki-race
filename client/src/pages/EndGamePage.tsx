@@ -1,17 +1,18 @@
 import { Fragment } from "preact/jsx-runtime";
 import { center, vstack } from "../../styled-system/patterns";
 import { Room } from "../types";
-import { socket } from "../socket";
 import Button from "../components/Button";
-import { getUserId } from "../util/sessionHook";
 import { useRoom } from "../providers/RoomProvider";
+import { useSession, useSocket } from "../providers/SessionProvider";
 
 interface EndGamePageProps {
   room: Room;
 }
 
 export default function EndGamePage({ room }: EndGamePageProps) {
-  const isRoomOwner = room.roomOwnerId === getUserId();
+  const socket = useSocket();
+  const { userId } = useSession();
+  const isRoomOwner = room.roomOwnerId === userId;
   const { setRoom } = useRoom();
 
   const handleNewGame = () => {

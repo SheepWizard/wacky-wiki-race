@@ -3,12 +3,10 @@ import LobbyPage from "./pages/LobbyPage";
 import GamePage from "./pages/GamePage";
 import EndGamePage from "./pages/EndGamePage";
 import { useIsSocketConnected } from "./util/connectionHook";
-import { useSocketSession } from "./util/sessionHook";
 import { useRoom } from "./providers/RoomProvider";
 
 export function App() {
   const isConnected = useIsSocketConnected();
-  useSocketSession();
   const { room } = useRoom();
 
   if (!isConnected) {
