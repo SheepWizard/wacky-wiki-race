@@ -18,7 +18,6 @@ export async function anchorClickListen(callback: (pageTitle: string) => void) {
     // node.innerHTML = "";
 
     if (node.href.match(/^.*\.[a-zA-Z\d]+$/)) {
-      console.log(node.href);
       hideLink(node);
       disableLink(node);
       continue;

@@ -107,20 +107,23 @@ export default function GamePage({ room }: RoomPageProps) {
           class={css({
             wordBreak: "break-word",
             wordWrap: "break-word",
-            fontFamily:
-              "Linux Libertine, Georgia, Times, 'Source Serif Pro', serif",
+            fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif",
             lineHeight: "1.375",
             fontSize: "1.7em",
             mb: 2,
+            paddingInline: "51px",
           })}
         >
           {currentWiki.replaceAll("_", " ")}
         </h1>
         <div
-          class="wiki-css"
+          class="wiki-css lang-en"
           style={{ display: loading ? "none" : "block" }}
-          ref={ref}
-        />
+        >
+          <div class="content">
+            <div ref={ref} />
+          </div>
+        </div>
       </div>
     </div>
   );
