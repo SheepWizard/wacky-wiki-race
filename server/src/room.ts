@@ -1,6 +1,6 @@
-import { generate } from "short-uuid";
 import { clearRoutes, User } from "./user";
 import { MySocket } from "./socket";
+import { customAlphabet } from "nanoid";
 
 export interface Room {
   id: string;
@@ -14,11 +14,15 @@ export interface Room {
   endTime: Date;
   winnerUserId?: string;
 }
+const nanoid = customAlphabet(
+  "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM",
+  8
+);
 
 export const rooms: Map<string, Room> = new Map();
 
 export function createRoom(user: User) {
-  const roomId = generate();
+  const roomId = nanoid();
 
   const room: Room = {
     id: roomId,

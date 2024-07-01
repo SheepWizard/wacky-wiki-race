@@ -1,4 +1,4 @@
-import { generate } from "short-uuid";
+import { customAlphabet } from "nanoid";
 import { MySocket } from "../socket";
 
 interface SessionState {
@@ -6,6 +6,11 @@ interface SessionState {
   lastUpdate: Date;
   oldRoomId?: string;
 }
+
+const nanoid = customAlphabet(
+  "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM",
+  16
+);
 
 const sessions: Map<string, SessionState> = new Map();
 
@@ -18,8 +23,8 @@ export function sessionMiddleware(
   const session = sessions.get(String(sessionId));
 
   if (!session) {
-    socket.data.sessionId = generate();
-    socket.data.userId = generate();
+    socket.data.sessionId = nanoid();
+    socket.data.userId = nanoid();
     sessions.set(socket.data.sessionId, {
       userId: socket.data.userId,
       lastUpdate: new Date(),
