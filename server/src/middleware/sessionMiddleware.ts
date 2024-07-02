@@ -1,5 +1,5 @@
 import { customAlphabet } from "nanoid";
-import { MySocket } from "../socket";
+import { MySocket } from "../socket.js";
 
 interface SessionState {
   userId: string;

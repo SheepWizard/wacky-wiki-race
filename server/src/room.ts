@@ -1,5 +1,5 @@
-import { clearRoutes, User } from "./user";
-import { MySocket } from "./socket";
+import { clearRoutes, User } from "./user.js";
+import { MySocket } from "./socket.js";
 import { customAlphabet } from "nanoid";
 
 export interface Room {

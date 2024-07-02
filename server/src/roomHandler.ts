@@ -4,7 +4,7 @@ import {
   createUser,
   getUserById,
   removeUser,
-} from "./user";
+} from "./user.js";
 import {
   addUserToRoom,
   checkWin,
@@ -16,10 +16,10 @@ import {
   roomPlay,
   roomSetEnd,
   roomSetStart,
-} from "./room";
-import { MySocket } from "./socket";
+} from "./room.js";
+import { MySocket } from "./socket.js";
 import z from "zod";
-import { getSession } from "./middleware/sessionMiddleware";
+import { getSession } from "./middleware/sessionMiddleware.js";
 
 export function handleRoomCreate(socket: MySocket, userName: string) {
   const validator = z.string().max(25);

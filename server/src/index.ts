@@ -11,13 +11,16 @@ import {
   handleRoomSetEnd,
   handleRoomSetStart,
   handleUserRoute,
-} from "./roomHandler";
-import { getSession, sessionMiddleware } from "./middleware/sessionMiddleware";
+} from "./roomHandler.js";
+import {
+  getSession,
+  sessionMiddleware,
+} from "./middleware/sessionMiddleware.js";
 import {
   ClientToServerEvents,
   ServerToClientEvents,
   SocketData,
-} from "./socket";
+} from "./socket.js";
 const app = express();
 
 const server = createServer(app);
