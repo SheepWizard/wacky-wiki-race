@@ -83,6 +83,7 @@ export default defineConfig({
           ["ww-white"]: { value: "#FFFFFF" },
           ["ww-grey"]: { value: "#BFBFBF" },
           ["ww-bright-green"]: { value: "#8CFFAB" },
+          ["ww-purple"]: { value: "#AB96FF" },
         },
         radii: {
           ["br-12"]: { value: "12px" },

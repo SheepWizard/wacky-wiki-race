@@ -40,6 +40,10 @@ const io = new Server<
 
 io.use(sessionMiddleware);
 
+io.engine.on("connection_error", (e) => {
+  console.log(e);
+});
+
 io.on("connection", (socket) => {
   socket.emit("session", socket.data.sessionId, socket.data.userId);
 

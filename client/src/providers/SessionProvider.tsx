@@ -39,10 +39,22 @@ export default function SessionProvider({ children }: SessionProviderProps) {
       setUserId(_userId);
     };
 
+    const handleConnectError = () => {
+      console.log("Error connecting");
+    };
+
+    const handleConnect = () => {
+      console.log("connect");
+    };
+
     socket.on("session", handleSession);
+    socket.on("connect", handleConnect);
+    socket.on("connect_error", handleConnectError);
 
     return () => {
       socket.off("session", handleSession);
+      socket.off("connect", handleConnect);
+      socket.off("connect_error", handleConnectError);
     };
   }, [socket]);
 

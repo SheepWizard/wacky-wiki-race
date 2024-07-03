@@ -5,6 +5,7 @@ interface ButtonProps {
   onClick: () => void;
   disabled?: boolean;
   stretch?: boolean;
+  style?: "default" | "secondary";
   children: ComponentChildren;
 }
 
@@ -41,6 +42,11 @@ const button = cva({
       disabled: {
         bg: "ww-grey",
         cursor: "default",
+      },
+    },
+    style: {
+      secondary: {
+        bg: "ww-purple",
       },
     },
   },

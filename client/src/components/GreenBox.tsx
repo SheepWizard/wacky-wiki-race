@@ -33,7 +33,7 @@ export default function GreenBox({ children }: GreenBoxProps) {
             width: "min(600px, 100% - 16px)",
             marginInline: "auto",
             flexDir: "column",
-            gap: 12,
+            gap: 6,
           })}
         >
           {children}

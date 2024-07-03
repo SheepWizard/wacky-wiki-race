@@ -5,17 +5,21 @@ import { WikiSearchInput } from "../components/WikiSearchInput";
 import GreenBox from "../components/GreenBox";
 import Title from "../components/Title";
 import Button from "../components/Button";
-import { flex, hstack, vstack } from "../../styled-system/patterns";
+import { center, flex, hstack, vstack } from "../../styled-system/patterns";
 import { css } from "../../styled-system/css";
 import NameTag from "../components/NameTag";
 import { useRoom } from "../providers/RoomProvider";
 import { useSession, useSocket } from "../providers/SessionProvider";
+import Dialog from "../components/Dialog";
+import { ToggleButton } from "../components/ToggleButton";
 
 interface LobbyPageProps {
   room: Room;
 }
 
 export default function LobbyPage({ room }: LobbyPageProps) {
+  const [showRulesDialog, setShowRulesDialog] = useState(false);
+  const [countriedToggle, setCountriesToggle] = useState(false);
   const { userId } = useSession();
   const socket = useSocket();
   const { setRoom } = useRoom();
@@ -77,80 +81,123 @@ export default function LobbyPage({ room }: LobbyPageProps) {
   const inputsDisabled = !isRoomOwner;
 
   return (
-    <div
-      class={css({
-        bg: "ww-yellow",
-        h: "lvh",
-        overflow: "hidden",
-      })}
-    >
-      <GreenBox>
-        <Title />
-        <div
-          class={vstack({
-            gap: 6,
-            width: "100%",
-          })}
-        >
+    <>
+      <div
+        class={css({
+          bg: "ww-yellow",
+          h: "lvh",
+          overflow: "hidden",
+        })}
+      >
+        <GreenBox>
+          <Title />
           <div
-            class={flex({
-              justifyContent: "space-between",
+            class={vstack({
               gap: 4,
               width: "100%",
-              alignItems: "center",
-              flexWrap: "wrap",
-              "& > *": {
-                flex: "1 1 250px",
-              },
             })}
           >
-            <p class={css({ overflowWrap: "anywhere" })}>{room.id}</p>
-            <Button onClick={handleCopyInvite}>Invite Friend</Button>
+            <div
+              class={flex({
+                justifyContent: "space-between",
+                gap: 4,
+                width: "100%",
+                alignItems: "center",
+                flexWrap: "wrap",
+                "& > *": {
+                  flex: "1 1 250px",
+                },
+              })}
+            >
+              <p class={css({ overflowWrap: "anywhere" })}>{room.id}</p>
+              <Button onClick={handleCopyInvite}>Invite Friend</Button>
+            </div>
+            <ul
+              class={flex({
+                gap: 1,
+                width: "100%",
+                overflow: "scroll",
+                scrollbarWidth: "none",
+                justifyContent: "safe center",
+              })}
+            >
+              {room.users.map((user) => (
+                <li>
+                  <NameTag
+                    name={user.userName}
+                    self={user.id === userId}
+                    ready={user.ready}
+                  />
+                </li>
+              ))}
+            </ul>
+            <WikiSearchInput
+              labelValue="Start"
+              value={startValue}
+              onChange={handleSetStart}
+              // disabled={inputsDisabled}
+            />
           </div>
-          <ul
-            class={flex({
-              gap: 1,
-              width: "100%",
-              overflow: "scroll",
-              scrollbarWidth: "none",
-              justifyContent: "safe center",
-            })}
-          >
-            {room.users.map((user) => (
-              <li>
-                <NameTag
-                  name={user.userName}
-                  self={user.id === userId}
-                  ready={user.ready}
-                />
-              </li>
-            ))}
-          </ul>
           <WikiSearchInput
-            labelValue="Start"
-            value={startValue}
-            onChange={handleSetStart}
+            labelValue="Finish"
+            value={endValue}
+            onChange={handleSetEnd}
             // disabled={inputsDisabled}
           />
-        </div>
-        <WikiSearchInput
-          labelValue="Finish"
-          value={endValue}
-          onChange={handleSetEnd}
-          // disabled={inputsDisabled}
-        />
 
-        {isRoomOwner && (
-          <Button
-            onClick={handleStartGame}
-            stretch
-          >{`Start game ${room.users.length}/100`}</Button>
-        )}
-        <div class={hstack({ gap: 8, alignItems: "center" })}>
-          <Button onClick={handleReadyUp}>Ready Up</Button>
-          <Button onClick={handleRoomLeave}>Leave</Button>
+          <div
+            class={center({
+              paddingInline: 4,
+              paddingBlock: 2,
+              border: "solid 3px",
+              rounded: "br-12",
+              cursor: "pointer",
+              borderColor: "ww-black",
+              bg: "ww-purple",
+              alignSelf: "start",
+            })}
+            onClick={() => setShowRulesDialog(!showRulesDialog)}
+          >
+            <p>Rules</p>
+          </div>
+
+          {isRoomOwner && (
+            <Button
+              onClick={handleStartGame}
+              stretch
+            >{`Start game ${room.users.length}/100`}</Button>
+          )}
+          <div class={hstack({ gap: 8, alignItems: "center" })}>
+            <Button onClick={handleReadyUp}>Ready Up</Button>
+            <Button onClick={handleRoomLeave}>Leave</Button>
+          </div>
+        </GreenBox>
+      </div>
+      <Dialog open={showRulesDialog}>
+        <div class={vstack({ gap: 2, alignItems: "start" })}>
+          <div
+            class={center({
+              paddingInline: 4,
+              paddingBlock: 2,
+              border: "solid 3px",
+              rounded: "br-12",
+              borderColor: "ww-black",
+              bg: "ww-purple",
+            })}
+          >
+            <p>Rules</p>
+          </div>
+          <p>Exclude groups</p>
+          <div class={flex({ wrap: "wrap", gap: 1, width: "100%" })}>
+            <ToggleButton
+              toggled={countriedToggle}
+              onToggled={setCountriesToggle}
+            >
+              Coutries
+            </ToggleButton>
+          </div>
         </div>
-      </GreenBox>
-    </div>
+      </Dialog>
+    </>
   );
 }
