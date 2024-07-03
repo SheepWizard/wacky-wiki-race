@@ -188,9 +188,10 @@ export function handleRoomSetStart(
     return;
   }
 
-  if (room.roomOwnerId !== user.id) {
-    return;
-  }
+  // if (room.roomOwnerId !== user.id) {
+  //   return;
+  // }
+
   start = start.replace(/\u00AD/g, "");
   roomSetStart(socket, room, start);
 }
@@ -227,9 +228,10 @@ export function handleRoomSetEnd(
     return;
   }
 
-  if (room.roomOwnerId !== user.id) {
-    return;
-  }
+  // if (room.roomOwnerId !== user.id) {
+  //   return;
+  // }
+
   end = end.replace(/\u00AD/g, "");
   roomSetEnd(socket, room, end);
 }

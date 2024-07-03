@@ -18,8 +18,6 @@ interface LobbyPageProps {
 export default function LobbyPage({ room }: LobbyPageProps) {
   const { userId } = useSession();
   const socket = useSocket();
-  const [start, setStart] = useState("Cat");
-  const [end, setEnd] = useState("Dog");
   const { setRoom } = useRoom();
   const isRoomOwner = room.roomOwnerId === userId;
 
@@ -38,8 +36,6 @@ export default function LobbyPage({ room }: LobbyPageProps) {
           randomEndPromise,
         ]);
 
-        setStart(results[0]);
-        setEnd(results[1]);
         socket.emit("room:set:start", room.id, results[0]);
         socket.emit("room:set:end", room.id, results[1]);
       } catch {}
@@ -48,19 +44,13 @@ export default function LobbyPage({ room }: LobbyPageProps) {
     getRandom();
   }, [room.id]);
 
-  useEffect(() => {
-    if (!isRoomOwner) {
-      return;
-    }
-    socket.emit("room:set:start", room.id, start);
-  }, [start, room.id]);
+  const handleSetStart = (value: string) => {
+    socket.emit("room:set:start", room.id, value);
+  };
 
-  useEffect(() => {
-    if (!isRoomOwner) {
-      return;
-    }
-    socket.emit("room:set:end", room.id, end);
-  }, [end, room.id]);
+  const handleSetEnd = (value: string) => {
+    socket.emit("room:set:end", room.id, value);
+  };
 
   const handleStartGame = () => {
     socket.emit("room:play", room.id);
@@ -81,12 +71,8 @@ export default function LobbyPage({ room }: LobbyPageProps) {
     socket.emit("room:user:readyUp", room.id);
   };
 
-  const startValue = isRoomOwner
-    ? start.replaceAll("_", " ")
-    : room.start.replaceAll("_", " ");
-  const endValue = isRoomOwner
-    ? end.replaceAll("_", " ")
-    : room.end.replaceAll("_", " ");
+  const startValue = room.start.replaceAll("_", " ");
+  const endValue = room.end.replaceAll("_", " ");
 
   const inputsDisabled = !isRoomOwner;
 
@@ -143,15 +129,15 @@ export default function LobbyPage({ room }: LobbyPageProps) {
           <WikiSearchInput
             labelValue="Start"
             value={startValue}
-            onChange={(value) => setStart(value)}
-            disabled={inputsDisabled}
+            onChange={handleSetStart}
+            // disabled={inputsDisabled}
           />
         </div>
         <WikiSearchInput
           labelValue="Finish"
           value={endValue}
-          onChange={(value) => setEnd(value)}
-          disabled={inputsDisabled}
+          onChange={handleSetEnd}
+          // disabled={inputsDisabled}
         />
 
         {isRoomOwner && (
