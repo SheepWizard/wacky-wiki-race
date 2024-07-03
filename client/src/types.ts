@@ -4,6 +4,7 @@ export interface User {
   roomId?: string;
   route: string[];
   ready: boolean;
+  surrendered: boolean;
 }
 
 export interface Room {

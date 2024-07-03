@@ -9,6 +9,7 @@ export interface ClientToServerEvents {
   "room:set:end": (roomId: string, end: string) => void;
   "room:user:route": (roomId: string, route: string) => void;
   "room:user:readyUp": (roomId: string) => void;
+  "room:user:surrender": (roomId: string) => void;
   "room:lobby": (roomId: string) => void;
   "room:leave": () => void;
   disconnect: () => void;

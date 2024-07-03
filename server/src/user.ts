@@ -4,6 +4,7 @@ export interface User {
   roomId?: string;
   route: string[];
   ready: boolean;
+  surrendered: boolean;
 }
 
 export const users: Map<string, User> = new Map();
@@ -14,6 +15,7 @@ export function createUser(id: string, userName: string) {
     userName,
     route: [],
     ready: false,
+    surrendered: false,
   };
   users.set(id, user);
   return user;
@@ -44,4 +46,8 @@ export function clearRoutes(user: User) {
 
 export function readyUp(user: User, ready: boolean) {
   user.ready = ready;
+}
+
+export function surrender(user: User, surrender: boolean) {
+  user.surrendered = surrender;
 }

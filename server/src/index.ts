@@ -11,6 +11,7 @@ import {
   handleRoomReJoin,
   handleRoomSetEnd,
   handleRoomSetStart,
+  handleRoomSurrender,
   handleUserRoute,
 } from "./roomHandler.js";
 import {
@@ -59,6 +60,9 @@ io.on("connection", (socket) => {
   socket.on("room:user:route", (...input) => handleUserRoute(socket, ...input));
   socket.on("room:user:readyUp", (...input) =>
     handleRoomReadyUp(socket, ...input)
+  );
+  socket.on("room:user:surrender", (...input) =>
+    handleRoomSurrender(socket, ...input)
   );
   socket.on("room:lobby", (...input) => handleRoomLobby(socket, ...input));
   socket.on("room:leave", () => handleRoomLeave(socket, false));

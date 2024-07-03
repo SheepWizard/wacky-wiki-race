@@ -17,6 +17,7 @@ import {
   roomSetEnd,
   roomSetStart,
   userReadyUp,
+  userSurrender,
 } from "./room.js";
 import { MySocket } from "./socket.js";
 import z from "zod";
@@ -123,6 +124,14 @@ export function handleRoomLeave(socket: MySocket, disconnected: boolean) {
   }
 
   removeUserFromRoom(socket, room, user, disconnected);
+
+  const allSurrendered = room.users.every((x) => x.surrendered);
+
+  if (!allSurrendered) {
+    return;
+  }
+
+  resetRoom(socket, room);
 }
 
 export function handleRoomPlay(socket: MySocket, roomId: string) {
@@ -307,6 +316,12 @@ export function handleRoomLobby(socket: MySocket, roomId: string) {
 }
 
 export function handleRoomReadyUp(socket: MySocket, roomId: string) {
+  const validator = z.string();
+  const result = validator.safeParse(roomId);
+  if (!result.success) {
+    //add error
+    return;
+  }
   const room = getRoomById(roomId);
   if (!room) {
     return;
@@ -327,4 +342,42 @@ export function handleRoomReadyUp(socket: MySocket, roomId: string) {
   }
 
   userReadyUp(socket, room, user);
+}
+
+export function handleRoomSurrender(socket: MySocket, roomId: string) {
+  const validator = z.string();
+  const result = validator.safeParse(roomId);
+  if (!result.success) {
+    //add error
+    return;
+  }
+
+  const room = getRoomById(roomId);
+  if (!room) {
+    return;
+  }
+
+  if (room.state !== "inGame") {
+    return;
+  }
+
+  const user = getUserById(socket.data.userId);
+  if (!user) {
+    return;
+  }
+
+  const found = room.users.some((x) => x.id === user.id);
+  if (!found) {
+    return;
+  }
+
+  userSurrender(socket, room, user);
+
+  const allSurrendered = room.users.every((x) => x.surrendered);
+
+  if (!allSurrendered) {
+    return;
+  }
+
+  resetRoom(socket, room);
 }

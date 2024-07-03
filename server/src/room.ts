@@ -1,4 +1,4 @@
-import { clearRoutes, readyUp, User } from "./user.js";
+import { clearRoutes, readyUp, surrender, User } from "./user.js";
 import { MySocket } from "./socket.js";
 import { customAlphabet } from "nanoid";
 
@@ -122,10 +122,17 @@ export function resetRoom(socket: MySocket, room: Room) {
   for (const user of room.users) {
     clearRoutes(user);
     readyUp(user, false);
+    surrender(user, false);
   }
   socket.nsp.to(room.id).emit("room:update", room);
 }
+
 export function userReadyUp(socket: MySocket, room: Room, user: User) {
   readyUp(user, !user.ready);
+  socket.nsp.to(room.id).emit("room:update", room);
+}
+
+export function userSurrender(socket: MySocket, room: Room, user: User) {
+  surrender(user, !user.surrendered);
   socket.nsp.to(room.id).emit("room:update", room);
 }

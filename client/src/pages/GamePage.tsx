@@ -3,7 +3,7 @@ import { Room } from "../types";
 import { getWikiPage } from "../wiki";
 import Timer from "../components/Timer";
 import { css } from "../../styled-system/css";
-import { center, flex, vstack } from "../../styled-system/patterns";
+import { center, flex, hstack, vstack } from "../../styled-system/patterns";
 import Button from "../components/Button";
 import { anchorClickListen } from "../util/wikiFormatter";
 import { useRoom } from "../providers/RoomProvider";
@@ -64,6 +64,12 @@ export default function GamePage({ room }: RoomPageProps) {
     setRoom(undefined);
   };
 
+  const handleSurrender = () => {
+    socket.emit("room:user:surrender", room.id);
+  };
+
+  const surrenderedCount = room.users.filter((x) => x.surrendered).length;
+
   return (
     <div>
       <div
@@ -84,7 +90,12 @@ export default function GamePage({ room }: RoomPageProps) {
       >
         <Timer />
         <div>{room.end.replaceAll("_", " ")}</div>
-        <Button onClick={handleRoomLeave}>Leave</Button>
+        <div class={hstack({ gap: 2 })}>
+          <Button
+            onClick={handleSurrender}
+          >{`Surrender ${surrenderedCount}/${room.users.length}`}</Button>
+          <Button onClick={handleRoomLeave}>Leave</Button>
+        </div>
       </div>
       {loading && <div class={center()}>Loading</div>}
       {error && (
