@@ -5,7 +5,7 @@ import Timer from "../components/Timer";
 import { css } from "../../styled-system/css";
 import { center, flex, hstack, vstack } from "../../styled-system/patterns";
 import Button from "../components/Button";
-import { anchorClickListen } from "../util/wikiFormatter";
+import { anchorClickListen, applyRules } from "../util/wikiFormatter";
 import { useRoom } from "../providers/RoomProvider";
 import { useSocket } from "../providers/SessionProvider";
 
@@ -42,6 +42,7 @@ export default function GamePage({ room }: RoomPageProps) {
         socket.emit("room:user:route", room.id, pageTitle);
         setCurrentWiki(pageTitle);
       });
+      await applyRules(room.rules);
     } catch {
       setError(true);
     } finally {

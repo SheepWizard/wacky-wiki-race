@@ -13,6 +13,9 @@ export interface Room {
   startTime: Date;
   endTime: Date;
   winnerUserId?: string;
+  rules: {
+    excludeGroups: string[];
+  };
 }
 const nanoid = customAlphabet(
   "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM",
@@ -34,6 +37,9 @@ export function createRoom(user: User) {
     end: "Cat",
     startTime: new Date(),
     endTime: new Date(),
+    rules: {
+      excludeGroups: [],
+    },
   };
   rooms.set(roomId, room);
   return room;
@@ -134,5 +140,22 @@ export function userReadyUp(socket: MySocket, room: Room, user: User) {
 
 export function userSurrender(socket: MySocket, room: Room, user: User) {
   surrender(user, !user.surrendered);
+  socket.nsp.to(room.id).emit("room:update", room);
+}
+
+export function toggleExcludeGroup(
+  socket: MySocket,
+  room: Room,
+  excludeGroup: string
+) {
+  const containsGroup = room.rules.excludeGroups.includes(excludeGroup);
+
+  if (!containsGroup) {
+    room.rules.excludeGroups.push(excludeGroup);
+  } else {
+    room.rules.excludeGroups = room.rules.excludeGroups.filter(
+      (x) => x !== excludeGroup
+    );
+  }
   socket.nsp.to(room.id).emit("room:update", room);
 }

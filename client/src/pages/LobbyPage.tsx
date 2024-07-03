@@ -190,8 +190,10 @@ export default function LobbyPage({ room }: LobbyPageProps) {
           <p>Exclude groups</p>
           <div class={flex({ wrap: "wrap", gap: 1, width: "100%" })}>
             <ToggleButton
-              toggled={countriedToggle}
-              onToggled={setCountriesToggle}
+              toggled={room.rules.excludeGroups.includes("countries")}
+              onToggled={() => {
+                socket.emit("room:rules:excludeGroup", room.id, "countries");
+              }}
             >
               Coutries
             </ToggleButton>

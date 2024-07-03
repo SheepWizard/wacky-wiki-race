@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import express from "express";
 import { createServer } from "node:http";
 import {
+  handleExcludeGroup,
   handleRoomCreate,
   handleRoomJoin,
   handleRoomLeave,
@@ -67,6 +68,9 @@ io.on("connection", (socket) => {
   );
   socket.on("room:user:surrender", (...input) =>
     handleRoomSurrender(socket, ...input)
+  );
+  socket.on("room:rules:excludeGroup", (...input) =>
+    handleExcludeGroup(socket, ...input)
   );
   socket.on("room:lobby", (...input) => handleRoomLobby(socket, ...input));
   socket.on("room:leave", () => handleRoomLeave(socket, false));

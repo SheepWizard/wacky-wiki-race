@@ -2,6 +2,15 @@
   content: attr(data-link-remove);
 }
 
+.link-hide {
+  color: black !important;
+}
+
+.link-hide:hover {
+  cursor: text;
+  text-decoration: none !important;
+}
+
 .wiki-css {
   background-color: white;
   font-family:

@@ -16,6 +16,7 @@ import {
   roomPlay,
   roomSetEnd,
   roomSetStart,
+  toggleExcludeGroup,
   userReadyUp,
   userSurrender,
 } from "./room.js";
@@ -380,4 +381,33 @@ export function handleRoomSurrender(socket: MySocket, roomId: string) {
   }
 
   resetRoom(socket, room);
+}
+
+export function handleExcludeGroup(
+  socket: MySocket,
+  roomId: string,
+  excludeGroup: string
+) {
+  // add validation
+
+  const room = getRoomById(roomId);
+  if (!room) {
+    return;
+  }
+
+  if (room.state !== "lobby") {
+    return;
+  }
+
+  const user = getUserById(socket.data.userId);
+  if (!user) {
+    return;
+  }
+
+  const found = room.users.some((x) => x.id === user.id);
+  if (!found) {
+    return;
+  }
+
+  toggleExcludeGroup(socket, room, excludeGroup);
 }

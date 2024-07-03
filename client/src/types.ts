@@ -10,6 +10,7 @@ export interface User {
 export interface Room {
   id: string;
   users: User[];
+  disconnectedUsers: User[];
   state: "lobby" | "inGame" | "endGame";
   roomOwnerId: string;
   start: string;
@@ -17,4 +18,7 @@ export interface Room {
   startTime: Date;
   endTime: Date;
   winnerUserId?: string;
+  rules: {
+    excludeGroups: Array<"countries">;
+  };
 }
