@@ -1,4 +1,4 @@
-import { clearRoutes, User } from "./user.js";
+import { clearRoutes, readyUp, User } from "./user.js";
 import { MySocket } from "./socket.js";
 import { customAlphabet } from "nanoid";
 
@@ -121,6 +121,11 @@ export function resetRoom(socket: MySocket, room: Room) {
   room.disconnectedUsers = [];
   for (const user of room.users) {
     clearRoutes(user);
+    readyUp(user, false);
   }
+  socket.nsp.to(room.id).emit("room:update", room);
+}
+export function userReadyUp(socket: MySocket, room: Room, user: User) {
+  readyUp(user, !user.ready);
   socket.nsp.to(room.id).emit("room:update", room);
 }

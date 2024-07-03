@@ -5,7 +5,7 @@ import { WikiSearchInput } from "../components/WikiSearchInput";
 import GreenBox from "../components/GreenBox";
 import Title from "../components/Title";
 import Button from "../components/Button";
-import { flex, vstack } from "../../styled-system/patterns";
+import { flex, hstack, vstack } from "../../styled-system/patterns";
 import { css } from "../../styled-system/css";
 import NameTag from "../components/NameTag";
 import { useRoom } from "../providers/RoomProvider";
@@ -77,6 +77,10 @@ export default function LobbyPage({ room }: LobbyPageProps) {
     );
   };
 
+  const handleReadyUp = () => {
+    socket.emit("room:user:readyUp", room.id);
+  };
+
   const startValue = isRoomOwner
     ? start.replaceAll("_", " ")
     : room.start.replaceAll("_", " ");
@@ -128,7 +132,11 @@ export default function LobbyPage({ room }: LobbyPageProps) {
           >
             {room.users.map((user) => (
               <li>
-                <NameTag name={user.userName} self={false} />
+                <NameTag
+                  name={user.userName}
+                  self={user.id === userId}
+                  ready={user.ready}
+                />
               </li>
             ))}
           </ul>
@@ -152,7 +160,10 @@ export default function LobbyPage({ room }: LobbyPageProps) {
             stretch
           >{`Start game ${room.users.length}/100`}</Button>
         )}
-        <Button onClick={handleRoomLeave}>Leave</Button>
+        <div class={hstack({ gap: 8, alignItems: "center" })}>
+          <Button onClick={handleReadyUp}>Ready Up</Button>
+          <Button onClick={handleRoomLeave}>Leave</Button>
+        </div>
       </GreenBox>
     </div>
   );

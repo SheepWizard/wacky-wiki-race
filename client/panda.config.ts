@@ -1,8 +1,4 @@
-import {
-  defineConfig,
-  defineGlobalStyles,
-  defineKeyframes,
-} from "@pandacss/dev";
+import { defineConfig, defineGlobalStyles } from "@pandacss/dev";
 
 const globalCss = defineGlobalStyles({
   body: {
@@ -86,6 +82,7 @@ export default defineConfig({
           ["ww-black"]: { value: "#000000" },
           ["ww-white"]: { value: "#FFFFFF" },
           ["ww-grey"]: { value: "#BFBFBF" },
+          ["ww-bright-green"]: { value: "#8CFFAB" },
         },
         radii: {
           ["br-12"]: { value: "12px" },

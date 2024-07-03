@@ -3,6 +3,7 @@ export interface User {
   userName: string;
   roomId?: string;
   route: string[];
+  ready: boolean;
 }
 
 export interface Room {

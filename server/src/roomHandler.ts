@@ -16,6 +16,7 @@ import {
   roomPlay,
   roomSetEnd,
   roomSetStart,
+  userReadyUp,
 } from "./room.js";
 import { MySocket } from "./socket.js";
 import z from "zod";
@@ -301,4 +302,27 @@ export function handleRoomLobby(socket: MySocket, roomId: string) {
   }
 
   resetRoom(socket, room);
+}
+
+export function handleRoomReadyUp(socket: MySocket, roomId: string) {
+  const room = getRoomById(roomId);
+  if (!room) {
+    return;
+  }
+
+  if (room.state !== "lobby") {
+    return;
+  }
+
+  const user = getUserById(socket.data.userId);
+  if (!user) {
+    return;
+  }
+
+  const found = room.users.some((x) => x.id === user.id);
+  if (!found) {
+    return;
+  }
+
+  userReadyUp(socket, room, user);
 }

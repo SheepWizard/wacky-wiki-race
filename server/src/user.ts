@@ -3,6 +3,7 @@ export interface User {
   userName: string;
   roomId?: string;
   route: string[];
+  ready: boolean;
 }
 
 export const users: Map<string, User> = new Map();
@@ -12,6 +13,7 @@ export function createUser(id: string, userName: string) {
     id,
     userName,
     route: [],
+    ready: false,
   };
   users.set(id, user);
   return user;
@@ -38,4 +40,8 @@ export function addToUserRoute(user: User, route: string) {
 
 export function clearRoutes(user: User) {
   user.route = [];
+}
+
+export function readyUp(user: User, ready: boolean) {
+  user.ready = ready;
 }
