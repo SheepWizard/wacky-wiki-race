@@ -19,7 +19,6 @@ interface LobbyPageProps {
 
 export default function LobbyPage({ room }: LobbyPageProps) {
   const [showRulesDialog, setShowRulesDialog] = useState(false);
-  const [countriedToggle, setCountriesToggle] = useState(false);
   const { userId } = useSession();
   const socket = useSocket();
   const { setRoom } = useRoom();
@@ -78,7 +77,7 @@ export default function LobbyPage({ room }: LobbyPageProps) {
   const startValue = room.start.replaceAll("_", " ");
   const endValue = room.end.replaceAll("_", " ");
 
-  const inputsDisabled = !isRoomOwner;
+  // const inputsDisabled = !isRoomOwner;
 
   return (
     <>
