@@ -30,4 +30,4 @@ jobs:
           context: ./server
           push: true
           tags: |
-            ghcr.io/nginx-wacky-wiki-race-api:latest
+            ghcr.io/sheepwizard/test:latest
