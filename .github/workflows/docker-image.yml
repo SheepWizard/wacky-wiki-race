@@ -1,4 +1,4 @@
-name: Build server
+name: Build server / client
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
   
-      - name: Build and push
+      - name: Build and push server
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64
@@ -31,3 +31,11 @@ jobs:
           push: true
           tags: |
             ghcr.io/sheepwizard/wackywikiraces/server:latest
+      - name: Build and push client
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64
+          context: ./client
+          push: true
+          tags: |
+            ghcr.io/sheepwizard/wackywikiraces/client:latest
