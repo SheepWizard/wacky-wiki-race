@@ -102,7 +102,6 @@ export function handleRoomJoin(
 }
 
 export function handleRoomLeave(socket: MySocket, disconnected: boolean) {
-  console.log("Disconnect");
   const user = getUserById(socket.data.userId);
   if (!user) {
     console.log("No user");
@@ -116,23 +115,20 @@ export function handleRoomLeave(socket: MySocket, disconnected: boolean) {
     return;
   }
 
-  console.log("on disconnect", disconnected);
   if (disconnected) {
     const session = getSession(socket.data.sessionId);
     if (session) {
       session.oldRoomId = room.id;
     }
   }
-
   removeUserFromRoom(socket, room, user, disconnected);
 
-  const allSurrendered = room.users.every((x) => x.surrendered);
-
-  if (!allSurrendered) {
-    return;
+  if (room.users.length > 1) {
+    const allSurrendered = room.users.every((x) => x.surrendered);
+    if (allSurrendered) {
+      resetRoom(socket, room);
+    }
   }
-
-  resetRoom(socket, room);
 }
 
 export function handleRoomPlay(socket: MySocket, roomId: string) {

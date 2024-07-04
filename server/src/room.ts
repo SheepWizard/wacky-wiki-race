@@ -81,7 +81,6 @@ export function removeUserFromRoom(
   if (user.id === room.roomOwnerId) {
     room.roomOwnerId = room.users[0].id;
   }
-
   socket.to(room.id).emit("room:update", room);
 }
 
