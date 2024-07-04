@@ -11,8 +11,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - run: cd client
-      - uses: actions/setup-node@v4.0.2
+      - name: Node
+        uses: actions/setup-node@v4.0.2
         with:
           node-version: 22
       
@@ -27,6 +27,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64
+          file: ./client/Dockerfile
           push: true
           tags: |
             nginx-wacky-wiki-race-api:latest
