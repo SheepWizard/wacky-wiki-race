@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64
-          file: ./client/Dockerfile
+          file: ./server/Dockerfile
           push: true
           tags: |
             nginx-wacky-wiki-race-api:latest
