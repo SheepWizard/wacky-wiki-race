@@ -6,7 +6,7 @@
   "scripts": {
     "start": "vite",
     "build": "tsc -b && vite build",
-    "prepare": "npx panda codegen"
+    "prepare": "panda codegen"
   },
   "dependencies": {
     "preact": "^10.22.0",

@@ -8,7 +8,7 @@ COPY package.json package.json
 COPY package-lock.json package-lock.json
 COPY panda.config.ts panda.config.ts
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 RUN npm run build
