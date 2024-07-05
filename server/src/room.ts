@@ -110,7 +110,7 @@ export function checkWin(
   user: User,
   route: string
 ) {
-  if (room.end !== route) {
+  if (room.end.toLowerCase() !== route.toLowerCase()) {
     return;
   }
 
