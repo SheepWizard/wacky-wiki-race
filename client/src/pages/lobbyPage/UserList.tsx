@@ -26,6 +26,7 @@ export default function UserList() {
           <NameTag
             name={user.userName}
             self={user.id === userId}
+            isOwner={user.id === room.roomOwnerId}
             ready={user.ready}
           />
         </li>

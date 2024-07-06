@@ -34,7 +34,7 @@ export default function EndGamePage({ room }: EndGamePageProps) {
     }));
 
   return (
-    <div class={center({ bg: "ww-yellow", h: "lvh" })}>
+    <div class={center({ bg: "ww-yellow", h: "lvh", overflowY: "auto" })}>
       <div class={vstack({ gap: 2 })}>
         <h1>Winner</h1>
         <h1>{winningUser?.userName}</h1>
