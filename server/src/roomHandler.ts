@@ -384,7 +384,6 @@ export function handleExcludeGroup(
   roomId: string,
   excludeGroup: string
 ) {
-  // add validation
   const validator = z.object({
     roomId: z.string(),
     excludeGroup: z.string(),

@@ -20,5 +20,6 @@ export interface Room {
   winnerUserId?: string;
   rules: {
     excludeGroups: Array<"countries" | "events" | "celebrities">;
+    noPageSearch: boolean;
   };
 }

@@ -15,6 +15,7 @@ export interface Room {
   winnerUserId?: string;
   rules: {
     excludeGroups: string[];
+    noPageSearch: boolean;
   };
 }
 const nanoid = customAlphabet(
@@ -39,6 +40,7 @@ export function createRoom(user: User) {
     endTime: new Date(),
     rules: {
       excludeGroups: [],
+      noPageSearch: false,
     },
   };
   rooms.set(roomId, room);
