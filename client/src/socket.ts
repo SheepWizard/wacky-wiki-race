@@ -24,6 +24,6 @@ export interface ServerToClientEvents {
 export type MySocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
 export const URL =
-  import.meta.env.NODE_ENV === "production"
+  import.meta.env.PROD === true
     ? "https://wiki-api.sheepwizard.com"
     : "http://localhost:3001";
