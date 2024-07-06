@@ -56,7 +56,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
           script: |
+            docker login ghcr.io -u ${{ github.repository_owner }} --password ${{ secrets.GITHUB_TOKEN }} 
             docker stop wackywikirace || true
             docker rm wackywikirace || true
             docker pull ghcr.io/sheepwizard/wackywikiraces/client:latest
             docker run -d --network nginxproxymanager_default --name=wackywikirace --restart unless-stopped ghcr.io/sheepwizard/wackywikiraces/client:latest
+            docker logout ghcr.io
