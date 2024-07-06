@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { useSocket } from "../../providers/SessionProvider";
 import { useRoom } from "../../providers/RoomProvider";
 import { getWikiPage } from "../../wiki";
-import { anchorClickListen, applyRules } from "../../util/wikiFormatter";
+import { anchorClickListen, applyExcludeRules } from "../../util/wikiFormatter";
 import { center, vstack } from "../../../styled-system/patterns";
 import Button from "../../components/Button";
 import { css } from "../../../styled-system/css";
@@ -42,7 +42,7 @@ export default function GamePage() {
         socket.emit("room:user:route", room.id, pageTitle);
         setCurrentWiki(pageTitle);
       });
-      await applyRules(room.rules);
+      applyExcludeRules(room.rules.excludeGroups);
     } catch {
       setError(true);
     } finally {

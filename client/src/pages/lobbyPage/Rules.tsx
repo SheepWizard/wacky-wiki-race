@@ -55,6 +55,22 @@ export default function Rules() {
             >
               Coutries
             </ToggleButton>
+            <ToggleButton
+              toggled={room.rules.excludeGroups.includes("events")}
+              onToggled={() => {
+                socket.emit("room:rules:excludeGroup", room.id, "events");
+              }}
+            >
+              Events
+            </ToggleButton>
+            <ToggleButton
+              toggled={room.rules.excludeGroups.includes("celebrities")}
+              onToggled={() => {
+                socket.emit("room:rules:excludeGroup", room.id, "celebrities");
+              }}
+            >
+              Celebrities
+            </ToggleButton>
           </div>
         </div>
       </Dialog>

@@ -147,6 +147,7 @@ export function toggleExcludeGroup(
   room: Room,
   excludeGroup: string
 ) {
+  // Check exclude group is valid
   const containsGroup = room.rules.excludeGroups.includes(excludeGroup);
 
   if (!containsGroup) {

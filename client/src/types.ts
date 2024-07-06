@@ -19,6 +19,6 @@ export interface Room {
   endTime: Date;
   winnerUserId?: string;
   rules: {
-    excludeGroups: Array<"countries">;
+    excludeGroups: Array<"countries" | "events" | "celebrities">;
   };
 }

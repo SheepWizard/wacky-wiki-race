@@ -49,7 +49,7 @@ export default function EndGamePage({ room }: EndGamePageProps) {
               <h2>{user.userName}</h2>
               <ul class={vstack({})}>
                 {user.route.map((pageTitle, index) => (
-                  <li key={index}>{pageTitle}</li>
+                  <li key={index}>{pageTitle.replaceAll("_", " ")}</li>
                 ))}
               </ul>
             </Fragment>
