@@ -54,4 +54,9 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          script: whoami
+          script: |
+            docker stop wackywikirace
+            docker rm wackywikirace
+            docker pull ghcr.io/sheepwizard/wackywikiraces/client:latest
+            docker run -d --network nginxproxymanager_default --name=wackywikirace --restart unless-stopped ghcr.io/sheepwizard/wackywikiraces/client:latest
+
