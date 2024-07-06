@@ -68,6 +68,7 @@ export default function LobbyPage() {
           bg: "ww-yellow",
           h: "lvh",
           overflow: "hidden",
+          paddingBlock: 2,
         })}
       >
         <GreenBox>
