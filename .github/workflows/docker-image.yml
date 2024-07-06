@@ -47,3 +47,11 @@ jobs:
           cache-to: type=gha,mode=max
           tags: |
             ghcr.io/sheepwizard/wackywikiraces/client:latest
+
+      - name: Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          script: whoami
