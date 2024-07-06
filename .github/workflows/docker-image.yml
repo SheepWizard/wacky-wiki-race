@@ -56,7 +56,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
           script: |
-            docker stop wackywikirace
-            docker rm wackywikirace
+            docker stop wackywikirace || true
+            docker rm wackywikirace || true
             docker pull ghcr.io/sheepwizard/wackywikiraces/client:latest
             docker run -d --network nginxproxymanager_default --name=wackywikirace --restart unless-stopped ghcr.io/sheepwizard/wackywikiraces/client:latest
