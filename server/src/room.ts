@@ -1,4 +1,4 @@
-import { clearRoutes, readyUp, surrender, User } from "./user.js";
+import { User, userClearRoutes, userReadyUp, userSurrender } from "./user.js";
 import { MySocket } from "./socket.js";
 import { customAlphabet } from "nanoid";
 
@@ -25,7 +25,7 @@ const nanoid = customAlphabet(
 
 export const rooms: Map<string, Room> = new Map();
 
-export function createRoom(user: User) {
+export function roomCreate(user: User) {
   const roomId = nanoid();
 
   const room: Room = {
@@ -47,7 +47,7 @@ export function createRoom(user: User) {
   return room;
 }
 
-export function addUserToRoom(socket: MySocket, room: Room, user: User) {
+export function roomAddUser(socket: MySocket, room: Room, user: User) {
   room.users.push(user);
   user.roomId = room.id;
   socket.join(room.id);
@@ -56,14 +56,14 @@ export function addUserToRoom(socket: MySocket, room: Room, user: User) {
   socket.to(room.id).emit("room:update", room);
 }
 
-export function reAddUserToRoom(socket: MySocket, room: Room, user: User) {
+export function roomReAddUser(socket: MySocket, room: Room, user: User) {
   room.disconnectedUsers = room.disconnectedUsers.filter(
     (x) => x.id !== user.id
   );
-  addUserToRoom(socket, room, user);
+  roomAddUser(socket, room, user);
 }
 
-export function removeUserFromRoom(
+export function roomRemoveUser(
   socket: MySocket,
   room: Room,
   user: User,
@@ -86,7 +86,7 @@ export function removeUserFromRoom(
   socket.to(room.id).emit("room:update", room);
 }
 
-export function getRoomById(id: string) {
+export function roomGetById(id: string) {
   return rooms.get(id);
 }
 
@@ -106,45 +106,40 @@ export function roomSetEnd(socket: MySocket, room: Room, end: string) {
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
-export function checkWin(
-  socket: MySocket,
-  room: Room,
-  user: User,
-  route: string
-) {
-  if (room.end.toLowerCase() !== route.toLowerCase()) {
-    return;
-  }
-
+export function roomEndGame(socket: MySocket, room: Room, winnerUser?: User) {
   room.state = "endGame";
   room.endTime = new Date();
-  room.winnerUserId = user.id;
+  room.winnerUserId = winnerUser?.id;
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
-export function resetRoom(socket: MySocket, room: Room) {
+export function roomCheckWin(room: Room, route: string) {
+  return room.end.toLowerCase() === route.toLowerCase();
+}
+
+export function roomReset(socket: MySocket, room: Room) {
   room.state = "lobby";
   room.winnerUserId = "";
   room.disconnectedUsers = [];
   for (const user of room.users) {
-    clearRoutes(user);
-    readyUp(user, false);
-    surrender(user, false);
+    userClearRoutes(user);
+    userReadyUp(user, false);
+    userSurrender(user, false);
   }
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
-export function userReadyUp(socket: MySocket, room: Room, user: User) {
-  readyUp(user, !user.ready);
+export function roomUserReadyUp(socket: MySocket, room: Room, user: User) {
+  userReadyUp(user, !user.ready);
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
-export function userSurrender(socket: MySocket, room: Room, user: User) {
-  surrender(user, !user.surrendered);
+export function roomUserSurrender(socket: MySocket, room: Room, user: User) {
+  userSurrender(user, !user.surrendered);
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
-export function toggleExcludeGroup(
+export function roomToggleExcludeGroup(
   socket: MySocket,
   room: Room,
   excludeGroup: string

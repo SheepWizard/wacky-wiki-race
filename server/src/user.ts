@@ -9,7 +9,7 @@ export interface User {
 
 export const users: Map<string, User> = new Map();
 
-export function createUser(id: string, userName: string) {
+export function userCreate(id: string, userName: string) {
   const user: User = {
     id,
     userName,
@@ -21,33 +21,33 @@ export function createUser(id: string, userName: string) {
   return user;
 }
 
-export function removeUser(id: string) {
+export function userRemove(id: string) {
   users.delete(id);
 }
 
-export function addUser(user: User) {
+export function userAdd(user: User) {
   users.set(user.id, user);
 }
 
-export function getUserById(id: string) {
+export function userGetById(id: string) {
   return users.get(id);
 }
 
-export function addToUserRoute(user: User, route: string) {
+export function userAddToRoute(user: User, route: string) {
   if (user.route.length > 100) {
     user.route.shift();
   }
   user.route.push(route);
 }
 
-export function clearRoutes(user: User) {
+export function userClearRoutes(user: User) {
   user.route = [];
 }
 
-export function readyUp(user: User, ready: boolean) {
+export function userReadyUp(user: User, ready: boolean) {
   user.ready = ready;
 }
 
-export function surrender(user: User, surrender: boolean) {
+export function userSurrender(user: User, surrender: boolean) {
   user.surrendered = surrender;
 }

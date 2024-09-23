@@ -1,28 +1,29 @@
 import {
-  addToUserRoute,
-  addUser,
-  createUser,
-  getUserById,
-  removeUser,
-} from "./user.js";
-import {
-  addUserToRoom,
-  checkWin,
-  createRoom,
-  getRoomById,
-  reAddUserToRoom,
-  removeUserFromRoom,
-  resetRoom,
+  roomAddUser,
+  roomCheckWin,
+  roomCreate,
+  roomEndGame,
+  roomGetById,
   roomPlay,
+  roomReAddUser,
+  roomRemoveUser,
+  roomReset,
   roomSetEnd,
   roomSetStart,
-  toggleExcludeGroup,
-  userReadyUp,
-  userSurrender,
+  roomToggleExcludeGroup,
+  roomUserReadyUp,
+  roomUserSurrender,
 } from "./room.js";
 import { MySocket } from "./socket.js";
 import z from "zod";
 import { getSession } from "./middleware/sessionMiddleware.js";
+import {
+  userAdd,
+  userAddToRoute,
+  userCreate,
+  userGetById,
+  userRemove,
+} from "./user.js";
 
 export function handleRoomCreate(socket: MySocket, userName: string) {
   const validator = z.string().max(25);
@@ -32,13 +33,13 @@ export function handleRoomCreate(socket: MySocket, userName: string) {
     return;
   }
 
-  const user = createUser(socket.data.userId, userName);
-  const room = createRoom(user);
-  addUserToRoom(socket, room, user);
+  const user = userCreate(socket.data.userId, userName);
+  const room = roomCreate(user);
+  roomAddUser(socket, room, user);
 }
 
 export function handleRoomReJoin(socket: MySocket, roomId: string) {
-  const room = getRoomById(roomId);
+  const room = roomGetById(roomId);
   if (!room) {
     // add error
     console.log("No room");
@@ -59,8 +60,8 @@ export function handleRoomReJoin(socket: MySocket, roomId: string) {
     return;
   }
 
-  addUser(foundUser);
-  reAddUserToRoom(socket, room, foundUser);
+  userAdd(foundUser);
+  roomReAddUser(socket, room, foundUser);
 }
 
 export function handleRoomJoin(
@@ -81,7 +82,7 @@ export function handleRoomJoin(
     return;
   }
 
-  const room = getRoomById(roomId);
+  const room = roomGetById(roomId);
   if (!room) {
     // add error
     console.log("No room found");
@@ -97,19 +98,19 @@ export function handleRoomJoin(
     return;
   }
 
-  const user = createUser(socket.data.userId, userName);
-  addUserToRoom(socket, room, user);
+  const user = userCreate(socket.data.userId, userName);
+  roomAddUser(socket, room, user);
 }
 
 export function handleRoomLeave(socket: MySocket, disconnected: boolean) {
-  const user = getUserById(socket.data.userId);
+  const user = userGetById(socket.data.userId);
   if (!user) {
     console.log("No user");
     return;
   }
-  removeUser(user.id);
+  userRemove(user.id);
 
-  const room = getRoomById(user.roomId ?? "");
+  const room = roomGetById(user.roomId ?? "");
   if (!room) {
     console.log("No room");
     return;
@@ -121,12 +122,12 @@ export function handleRoomLeave(socket: MySocket, disconnected: boolean) {
       session.oldRoomId = room.id;
     }
   }
-  removeUserFromRoom(socket, room, user, disconnected);
+  roomRemoveUser(socket, room, user, disconnected);
 
   if (room.users.length > 1) {
     const allSurrendered = room.users.every((x) => x.surrendered);
     if (allSurrendered) {
-      resetRoom(socket, room);
+      roomReset(socket, room);
     }
   }
 }
@@ -139,7 +140,7 @@ export function handleRoomPlay(socket: MySocket, roomId: string) {
     return;
   }
 
-  const room = getRoomById(roomId);
+  const room = roomGetById(roomId);
   if (!room) {
     return;
   }
@@ -148,7 +149,7 @@ export function handleRoomPlay(socket: MySocket, roomId: string) {
     return;
   }
 
-  const user = getUserById(socket.data.userId);
+  const user = userGetById(socket.data.userId);
   if (!user) {
     return;
   }
@@ -157,7 +158,7 @@ export function handleRoomPlay(socket: MySocket, roomId: string) {
     return;
   }
 
-  room.users.forEach((user) => addToUserRoute(user, room.start));
+  room.users.forEach((user) => userAddToRoute(user, room.start));
 
   roomPlay(socket, room);
 }
@@ -180,7 +181,7 @@ export function handleRoomSetStart(
     return;
   }
 
-  const room = getRoomById(roomId);
+  const room = roomGetById(roomId);
   if (!room) {
     return;
   }
@@ -189,7 +190,7 @@ export function handleRoomSetStart(
     return;
   }
 
-  const user = getUserById(socket.data.userId);
+  const user = userGetById(socket.data.userId);
   if (!user) {
     return;
   }
@@ -220,7 +221,7 @@ export function handleRoomSetEnd(
     return;
   }
 
-  const room = getRoomById(roomId);
+  const room = roomGetById(roomId);
   if (!room) {
     return;
   }
@@ -229,7 +230,7 @@ export function handleRoomSetEnd(
     return;
   }
 
-  const user = getUserById(socket.data.userId);
+  const user = userGetById(socket.data.userId);
   if (!user) {
     return;
   }
@@ -260,7 +261,7 @@ export function handleUserRoute(
     return;
   }
 
-  const room = getRoomById(roomId);
+  const room = roomGetById(roomId);
   if (!room) {
     return;
   }
@@ -269,7 +270,7 @@ export function handleUserRoute(
     return;
   }
 
-  const user = getUserById(socket.data.userId);
+  const user = userGetById(socket.data.userId);
   if (!user) {
     return;
   }
@@ -279,8 +280,15 @@ export function handleUserRoute(
     return;
   }
   route = route.replace(/\u00AD/g, "");
-  addToUserRoute(user, route);
-  checkWin(socket, room, user, route);
+  userAddToRoute(user, route);
+
+  const won = roomCheckWin(room, route);
+
+  if (!won) {
+    return;
+  }
+
+  roomEndGame(socket, room, user);
 }
 
 export function handleRoomLobby(socket: MySocket, roomId: string) {
@@ -291,7 +299,7 @@ export function handleRoomLobby(socket: MySocket, roomId: string) {
     return;
   }
 
-  const room = getRoomById(roomId);
+  const room = roomGetById(roomId);
   if (!room) {
     return;
   }
@@ -300,7 +308,7 @@ export function handleRoomLobby(socket: MySocket, roomId: string) {
     return;
   }
 
-  const user = getUserById(socket.data.userId);
+  const user = userGetById(socket.data.userId);
   if (!user) {
     return;
   }
@@ -309,7 +317,7 @@ export function handleRoomLobby(socket: MySocket, roomId: string) {
     return;
   }
 
-  resetRoom(socket, room);
+  roomReset(socket, room);
 }
 
 export function handleRoomReadyUp(socket: MySocket, roomId: string) {
@@ -319,7 +327,7 @@ export function handleRoomReadyUp(socket: MySocket, roomId: string) {
     //add error
     return;
   }
-  const room = getRoomById(roomId);
+  const room = roomGetById(roomId);
   if (!room) {
     return;
   }
@@ -328,7 +336,7 @@ export function handleRoomReadyUp(socket: MySocket, roomId: string) {
     return;
   }
 
-  const user = getUserById(socket.data.userId);
+  const user = userGetById(socket.data.userId);
   if (!user) {
     return;
   }
@@ -338,7 +346,7 @@ export function handleRoomReadyUp(socket: MySocket, roomId: string) {
     return;
   }
 
-  userReadyUp(socket, room, user);
+  roomUserReadyUp(socket, room, user);
 }
 
 export function handleRoomSurrender(socket: MySocket, roomId: string) {
@@ -349,7 +357,7 @@ export function handleRoomSurrender(socket: MySocket, roomId: string) {
     return;
   }
 
-  const room = getRoomById(roomId);
+  const room = roomGetById(roomId);
   if (!room) {
     return;
   }
@@ -358,7 +366,7 @@ export function handleRoomSurrender(socket: MySocket, roomId: string) {
     return;
   }
 
-  const user = getUserById(socket.data.userId);
+  const user = userGetById(socket.data.userId);
   if (!user) {
     return;
   }
@@ -368,7 +376,7 @@ export function handleRoomSurrender(socket: MySocket, roomId: string) {
     return;
   }
 
-  userSurrender(socket, room, user);
+  roomUserSurrender(socket, room, user);
 
   const allSurrendered = room.users.every((x) => x.surrendered);
 
@@ -376,7 +384,7 @@ export function handleRoomSurrender(socket: MySocket, roomId: string) {
     return;
   }
 
-  resetRoom(socket, room);
+  roomEndGame(socket, room);
 }
 
 export function handleExcludeGroup(
@@ -394,7 +402,7 @@ export function handleExcludeGroup(
     return;
   }
 
-  const room = getRoomById(roomId);
+  const room = roomGetById(roomId);
   if (!room) {
     return;
   }
@@ -403,7 +411,7 @@ export function handleExcludeGroup(
     return;
   }
 
-  const user = getUserById(socket.data.userId);
+  const user = userGetById(socket.data.userId);
   if (!user) {
     return;
   }
@@ -413,5 +421,5 @@ export function handleExcludeGroup(
     return;
   }
 
-  toggleExcludeGroup(socket, room, excludeGroup);
+  roomToggleExcludeGroup(socket, room, excludeGroup);
 }

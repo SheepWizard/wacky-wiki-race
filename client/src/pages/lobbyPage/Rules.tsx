@@ -4,6 +4,8 @@ import { center, flex, vstack } from "../../../styled-system/patterns";
 import Dialog from "../../components/Dialog";
 import { ToggleButton } from "../../components/ToggleButton";
 import { useSocket } from "../../providers/SessionProvider";
+import Button from "../../components/Button";
+import { css } from "../../../styled-system/css";
 
 export default function Rules() {
   const [showRulesDialog, setShowRulesDialog] = useState(false);
@@ -31,7 +33,7 @@ export default function Rules() {
       >
         <p>Rules</p>
       </div>
-      <Dialog open={showRulesDialog}>
+      <Dialog open={showRulesDialog} onClose={() => setShowRulesDialog(false)}>
         <div class={vstack({ gap: 2, alignItems: "start" })}>
           <div
             class={center({
@@ -61,7 +63,7 @@ export default function Rules() {
                 socket.emit("room:rules:excludeGroup", room.id, "events");
               }}
             >
-              Events
+              Major Events
             </ToggleButton>
             <ToggleButton
               toggled={room.rules.excludeGroups.includes("celebrities")}
@@ -71,6 +73,18 @@ export default function Rules() {
             >
               Celebrities
             </ToggleButton>
+          </div>
+          <p>Misc</p>
+          <ToggleButton
+            toggled={room.rules.excludeGroups.includes("celebrities")}
+            onToggled={() => {
+              socket.emit("room:rules:excludeGroup", room.id, "celebrities");
+            }}
+          >
+            Disable link search
+          </ToggleButton>
+          <div class={css({ alignSelf: "center", marginTop: 3 })}>
+            <Button onClick={() => setShowRulesDialog(false)}>Close</Button>
           </div>
         </div>
       </Dialog>

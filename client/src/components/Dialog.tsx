@@ -5,9 +5,10 @@ import { css } from "../../styled-system/css";
 interface DialogProps {
   children: ComponentChildren;
   open: boolean;
+  onClose: () => void;
 }
 
-export default function Dialog({ children, open }: DialogProps) {
+export default function Dialog({ children, open, onClose }: DialogProps) {
   const ref = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -22,6 +23,16 @@ export default function Dialog({ children, open }: DialogProps) {
     } else {
       current.close();
     }
+
+    const handleClose = () => {
+      onClose();
+    };
+
+    current.addEventListener("close", handleClose);
+
+    return () => {
+      current.removeEventListener("close", handleClose);
+    };
   }, [open]);
 
   return (

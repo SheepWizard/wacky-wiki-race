@@ -19,8 +19,8 @@ export function ToggleButton({
         rounded: "br-25",
         padding: 1,
         cursor: "pointer",
-        bg: toggled ? "ww-white" : "ww-grey",
-        border: "solid 1px",
+        bg: toggled ? "ww-green" : "ww-white",
+        border: toggled ? "solid 2px" : "solid 1px",
         borderColor: "ww-black",
       })}
     >
