@@ -36,8 +36,14 @@ export default function EndGamePage({ room }: EndGamePageProps) {
   return (
     <div class={center({ bg: "ww-yellow", h: "lvh", overflowY: "auto" })}>
       <div class={vstack({ gap: 2 })}>
-        <h1>Winner</h1>
-        <h1>{winningUser?.userName}</h1>
+        {winningUser ? (
+          <>
+            <h1>Winner</h1>
+            <h1>{winningUser.userName}</h1>
+          </>
+        ) : (
+          <h1>Surrender</h1>
+        )}
         <ul class={vstack({})}>
           {winningUser?.route.map((pageName, index) => (
             <li key={index}>{pageName.replaceAll("_", " ")}</li>

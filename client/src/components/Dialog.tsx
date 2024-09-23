@@ -28,10 +28,18 @@ export default function Dialog({ children, open, onClose }: DialogProps) {
       onClose();
     };
 
+    const handleClick = (event: MouseEvent) => {
+      if (event.target === current) {
+        current.close();
+      }
+    };
+
+    current.addEventListener("click", handleClick);
     current.addEventListener("close", handleClose);
 
     return () => {
       current.removeEventListener("close", handleClose);
+      current.removeEventListener("click", handleClick);
     };
   }, [open]);
 

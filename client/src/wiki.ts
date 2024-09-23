@@ -1,4 +1,4 @@
-export async function getWikiPage(pageTitle: string) {
+export async function wikiApiGetPage(pageTitle: string) {
   const result = await fetch(
     `https://en.wikipedia.org/w/api.php?action=parse&prop=text&page=${encodeURIComponent(pageTitle)}&format=json&disableeditsection=1&redirects=true&useskin=minerva&origin=*`
   );
@@ -7,7 +7,7 @@ export async function getWikiPage(pageTitle: string) {
   return data.parse.text["*"];
 }
 
-export async function getRandomWikiPage(): Promise<string> {
+export async function wikiApiGetRandomPage(): Promise<string> {
   const result = await fetch(
     `https://en.wikipedia.org/w/api.php?action=query&list=random&rnnamespace=0&rnlimit=1&format=json&origin=*`
   );
@@ -18,14 +18,22 @@ export async function getRandomWikiPage(): Promise<string> {
   return titles[0];
 }
 
-export async function searchWikiPage(searchTerm: string): Promise<string[]> {
+interface SearchResult {
+  title: string;
+  snippet: string;
+}
+
+export async function wikiApiSearchForPage(
+  searchTerm: string
+): Promise<SearchResult[]> {
   const result = await fetch(
     `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchTerm)}&utf8=&format=json&origin=*`
   );
   const data = await result.json();
-  const titles = data.query.search.map((x: any) =>
-    x.title.replaceAll(" ", "_")
-  );
+  const results: SearchResult[] = data.query.search.map((x: any) => ({
+    title: x.title.replaceAll(" ", "_"),
+    snippet: x.snippet,
+  }));
 
-  return titles;
+  return results;
 }

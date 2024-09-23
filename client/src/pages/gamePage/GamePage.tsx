@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { useSocket } from "../../providers/SessionProvider";
 import { useRoom } from "../../providers/RoomProvider";
-import { getWikiPage } from "../../wiki";
+import { wikiApiGetPage } from "../../wiki";
 import { anchorClickListen, applyExcludeRules } from "../../util/wikiFormatter";
 import { center, vstack } from "../../../styled-system/patterns";
 import Button from "../../components/Button";
@@ -36,7 +36,7 @@ export default function GamePage() {
     }
     setLoading(true);
     try {
-      const data = await getWikiPage(currentWiki);
+      const data = await wikiApiGetPage(currentWiki);
       current.innerHTML = data;
       await anchorClickListen((pageTitle: string) => {
         socket.emit("room:user:route", room.id, pageTitle);

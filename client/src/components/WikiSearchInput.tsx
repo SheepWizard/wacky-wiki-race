@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 import Select from "./Select";
-import { searchWikiPage } from "../wiki";
+import { wikiApiSearchForPage } from "../wiki";
 
 interface WikiSearchInputProps {
   value: string;
@@ -21,8 +21,9 @@ export function WikiSearchInput({
   const handleSearchTextChange = async (searchTerm: string) => {
     try {
       setLoading(true);
-      const results = await searchWikiPage(searchTerm);
-      setSearchList(results);
+      const results = await wikiApiSearchForPage(searchTerm);
+      setSearchList(results.map((x) => x.title));
+      console.log(results);
     } catch {
     } finally {
       setLoading(false);

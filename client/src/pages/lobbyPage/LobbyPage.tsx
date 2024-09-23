@@ -1,5 +1,5 @@
 import { useEffect } from "preact/hooks";
-import { getRandomWikiPage } from "../../wiki";
+import { wikiApiGetRandomPage } from "../../wiki";
 import GreenBox from "../../components/GreenBox";
 import Title from "../../components/Title";
 import Button from "../../components/Button";
@@ -30,9 +30,9 @@ export default function LobbyPage() {
 
     const getRandom = async () => {
       try {
-        const randomStartPromise = getRandomWikiPage();
+        const randomStartPromise = wikiApiGetRandomPage();
 
-        const randomEndPromise = getRandomWikiPage();
+        const randomEndPromise = wikiApiGetRandomPage();
         const results = await Promise.all([
           randomStartPromise,
           randomEndPromise,

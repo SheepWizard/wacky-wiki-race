@@ -9,14 +9,14 @@ interface SessionState {
 
 const nanoid = customAlphabet(
   "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM",
-  16,
+  16
 );
 
 const sessions: Map<string, SessionState> = new Map();
 
 export function sessionMiddleware(
   socket: MySocket,
-  next: (err?: Error) => void,
+  next: (err?: Error) => void
 ) {
   const sessionId = socket.handshake.auth.sessionId;
 
