@@ -18,22 +18,46 @@ export async function wikiApiGetRandomPage(): Promise<string> {
   return titles[0];
 }
 
-interface SearchResult {
-  title: string;
-  snippet: string;
-}
-
+const searchCache: Map<string, string[]> = new Map();
 export async function wikiApiSearchForPage(
   searchTerm: string
-): Promise<SearchResult[]> {
+): Promise<string[]> {
+  const cachedSearch = searchCache.get(searchTerm);
+  if (cachedSearch?.length) {
+    return cachedSearch;
+  }
   const result = await fetch(
     `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchTerm)}&utf8=&format=json&origin=*`
   );
   const data = await result.json();
-  const results: SearchResult[] = data.query.search.map((x: any) => ({
-    title: x.title.replaceAll(" ", "_"),
-    snippet: x.snippet,
-  }));
+  const titles = data.query.search.map((x: any) =>
+    x.title.replaceAll(" ", "_")
+  );
+  searchCache.set(searchTerm, titles);
+  return titles;
+}
 
-  return results;
+const extractCache: Map<string, string> = new Map();
+export async function wikiApiGetExtract(title: string): Promise<string> {
+  const cachedExtract = extractCache.get(title);
+  if (cachedExtract) {
+    return cachedExtract;
+  }
+
+  const result = await fetch(
+    `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exchars=120&titles=${encodeURIComponent(title)}&format=json&explaintext=true&origin=*`
+  );
+  const data = await result.json();
+  const entry = Object.entries(data.query.pages)[0];
+  if (
+    entry &&
+    entry[1] !== null &&
+    typeof entry[1] === "object" &&
+    "extract" in entry[1] &&
+    typeof entry[1].extract === "string"
+  ) {
+    extractCache.set(title, entry[1].extract);
+    return entry[1].extract;
+  }
+  return "";
 }

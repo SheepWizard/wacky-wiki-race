@@ -81,6 +81,7 @@ export default defineConfig({
           ["ww-primary-text"]: { value: "#000000" },
           ["ww-black"]: { value: "#000000" },
           ["ww-white"]: { value: "#FFFFFF" },
+          ["ww-grey-dark"]: { value: "#808080" },
           ["ww-grey"]: { value: "#BFBFBF" },
           ["ww-bright-green"]: { value: "#8CFFAB" },
           ["ww-purple"]: { value: "#AB96FF" },

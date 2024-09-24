@@ -59,8 +59,6 @@ export default function LobbyPage() {
     socket.emit("room:user:readyUp", room.id);
   };
 
-  // const inputsDisabled = !isRoomOwner;
-
   return (
     <>
       <div

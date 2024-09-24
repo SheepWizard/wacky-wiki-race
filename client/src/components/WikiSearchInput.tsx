@@ -22,8 +22,7 @@ export function WikiSearchInput({
     try {
       setLoading(true);
       const results = await wikiApiSearchForPage(searchTerm);
-      setSearchList(results.map((x) => x.title));
-      console.log(results);
+      setSearchList(results);
     } catch {
     } finally {
       setLoading(false);
