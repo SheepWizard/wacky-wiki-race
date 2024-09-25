@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { useSocket } from "../../providers/SessionProvider";
 import { useRoom } from "../../providers/RoomProvider";
-import { wikiApiGetPage } from "../../wiki";
-import { anchorClickListen, applyExcludeRules } from "../../util/wikiFormatter";
+import { wikiApiGetCategories, wikiApiGetPage } from "../../wiki";
+import { anchorClickListen } from "../../util/wikiFormatter";
 import { center, vstack } from "../../../styled-system/patterns";
 import Button from "../../components/Button";
 import { css } from "../../../styled-system/css";
@@ -37,12 +37,13 @@ export default function GamePage() {
     setLoading(true);
     try {
       const data = await wikiApiGetPage(currentWiki);
-      current.innerHTML = data;
-      await anchorClickListen((pageTitle: string) => {
+      current.innerHTML = data.parse;
+      const pageId = data.pageId;
+      await anchorClickListen(async (pageTitle: string) => {
+        await wikiApiGetCategories(pageId);
         socket.emit("room:user:route", room.id, pageTitle);
         setCurrentWiki(pageTitle);
       });
-      applyExcludeRules(room.rules.excludeGroups);
     } catch {
       setError(true);
     } finally {

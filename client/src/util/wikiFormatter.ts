@@ -1,17 +1,9 @@
-import { Room } from "../types";
-import {
-  celebrityUrls,
-  majorEventsUrls,
-  wikipediaCountryPages,
-} from "./excludeGroups";
-
 function hideLink(node: HTMLAnchorElement) {
   node.classList.add("link-hide");
 }
 
 function disableLink(node: HTMLAnchorElement) {
   node.addEventListener("click", (e) => {
-    console.log("click");
     e.preventDefault();
   });
 }
@@ -20,9 +12,9 @@ export async function anchorClickListen(callback: (pageTitle: string) => void) {
   const atags = document.querySelectorAll("a");
 
   for (let node of atags) {
-    // node.setAttribute("data-link-remove", node.innerText);
-    // node.classList.add(searchHide);
-    // node.innerHTML = "";
+    node.setAttribute("data-link-remove", node.innerText);
+    node.classList.add("searchHide");
+    node.innerHTML = "";
 
     if (node.href.match(/^.*\.[a-zA-Z\d]+$/)) {
       hideLink(node);
@@ -64,33 +56,5 @@ export async function anchorClickListen(callback: (pageTitle: string) => void) {
       }
       callback(decodeURIComponent(pageTitle));
     });
-  }
-}
-
-export function applyExcludeRules(
-  excludeGroups: Room["rules"]["excludeGroups"]
-) {
-  const atags = document.querySelectorAll("a");
-
-  const excludePageTitles: string[] = [];
-  if (excludeGroups.includes("countries")) {
-    excludePageTitles.push(...wikipediaCountryPages);
-  }
-  if (excludeGroups.includes("events")) {
-    excludePageTitles.push(...majorEventsUrls);
-  }
-  if (excludeGroups.includes("celebrities")) {
-    excludePageTitles.push(...celebrityUrls);
-  }
-
-  for (let node of atags) {
-    for (let pageTitle of excludePageTitles) {
-      const hrefLower = node.href.toLowerCase();
-      if (hrefLower.endsWith(`/wiki/${pageTitle.toLowerCase()}`)) {
-        hideLink(node);
-        disableLink(node);
-        continue;
-      }
-    }
   }
 }

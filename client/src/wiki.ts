@@ -1,10 +1,18 @@
-export async function wikiApiGetPage(pageTitle: string) {
+interface WikiPage {
+  parse: string;
+  pageId: string;
+}
+
+export async function wikiApiGetPage(pageTitle: string): Promise<WikiPage> {
   const result = await fetch(
-    `https://en.wikipedia.org/w/api.php?action=parse&prop=text&page=${encodeURIComponent(pageTitle)}&format=json&disableeditsection=1&redirects=true&useskin=minerva&origin=*`
+    `https://en.wikipedia.org/w/api.php?action=parse&prop=text|categories&page=${encodeURIComponent(pageTitle)}&disabletoc=true&format=json&disableeditsection=1&redirects=true&useskin=minerva&origin=*`
   );
   const data = await result.json();
 
-  return data.parse.text["*"];
+  return {
+    parse: data.parse.text["*"],
+    pageId: data.parse.pageid,
+  };
 }
 
 export async function wikiApiGetRandomPage(): Promise<string> {
@@ -60,4 +68,14 @@ export async function wikiApiGetExtract(title: string): Promise<string> {
     return entry[1].extract;
   }
   return "";
+}
+
+export async function wikiApiGetCategories(pageId: string): Promise<string[]> {
+  const result = await fetch(
+    `https://en.wikipedia.org/w/api.php?action=query&prop=categories&format=json&cllimit=50&clcategories=Category:G20 members&pageids=${pageId}&origin=*`
+  );
+  const data = await result.json();
+  const categories = data.query?.pages?.[pageId]?.categories;
+  console.log(categories);
+  return [];
 }
