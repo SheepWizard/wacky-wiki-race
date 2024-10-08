@@ -1,4 +1,10 @@
-import { User, userClearRoutes, userReadyUp, userSurrender } from "./user.js";
+import {
+  User,
+  userClearRoutes,
+  userReadyUp,
+  userSurrender,
+  WikiPage,
+} from "./user.js";
 import { MySocket } from "./socket.js";
 import { customAlphabet } from "nanoid";
 
@@ -8,8 +14,8 @@ export interface Room {
   disconnectedUsers: User[];
   state: "lobby" | "inGame" | "endGame";
   roomOwnerId: string;
-  start: string;
-  end: string;
+  start: WikiPage;
+  end: WikiPage;
   startTime: Date;
   endTime: Date;
   winnerUserId?: string;
@@ -34,8 +40,14 @@ export function roomCreate(user: User) {
     disconnectedUsers: [],
     state: "lobby",
     roomOwnerId: user.id,
-    start: "Dog",
-    end: "Cat",
+    start: {
+      title: "Dog",
+      pageId: 4269567,
+    },
+    end: {
+      title: "Cat",
+      pageId: 6678,
+    },
     startTime: new Date(),
     endTime: new Date(),
     rules: {
@@ -96,12 +108,12 @@ export function roomPlay(socket: MySocket, room: Room) {
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
-export function roomSetStart(socket: MySocket, room: Room, start: string) {
+export function roomSetStart(socket: MySocket, room: Room, start: WikiPage) {
   room.start = start;
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
-export function roomSetEnd(socket: MySocket, room: Room, end: string) {
+export function roomSetEnd(socket: MySocket, room: Room, end: WikiPage) {
   room.end = end;
   socket.nsp.to(room.id).emit("room:update", room);
 }
@@ -113,8 +125,8 @@ export function roomEndGame(socket: MySocket, room: Room, winnerUser?: User) {
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
-export function roomCheckWin(room: Room, route: string) {
-  return room.end.toLowerCase() === route.toLowerCase();
+export function roomCheckWin(room: Room, route: WikiPage) {
+  return room.end.pageId === route.pageId;
 }
 
 export function roomReset(socket: MySocket, room: Room) {

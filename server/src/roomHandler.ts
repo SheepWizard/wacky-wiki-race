@@ -23,6 +23,7 @@ import {
   userCreate,
   userGetById,
   userRemove,
+  WikiPage,
 } from "./user.js";
 
 export function handleRoomCreate(socket: MySocket, userName: string) {
@@ -166,18 +167,21 @@ export function handleRoomPlay(socket: MySocket, roomId: string) {
 export function handleRoomSetStart(
   socket: MySocket,
   roomId: string,
-  start: string
+  start: WikiPage
 ) {
   const validator = z.object({
     roomId: z.string(),
-    start: z.string().max(500),
+    start: z.object({
+      title: z.string().max(500),
+      pageId: z.number(),
+    }),
   });
   const result = validator.safeParse({
     roomId,
     start,
   });
   if (!result.success) {
-    //add error
+    console.log(result.error);
     return;
   }
 
@@ -198,19 +202,20 @@ export function handleRoomSetStart(
   // if (room.roomOwnerId !== user.id) {
   //   return;
   // }
-
-  start = start.replace(/\u00AD/g, "");
   roomSetStart(socket, room, start);
 }
 
 export function handleRoomSetEnd(
   socket: MySocket,
   roomId: string,
-  end: string
+  end: WikiPage
 ) {
   const validator = z.object({
     roomId: z.string(),
-    end: z.string().max(500),
+    end: z.object({
+      title: z.string().max(500),
+      pageId: z.number(),
+    }),
   });
   const result = validator.safeParse({
     roomId,
@@ -239,18 +244,20 @@ export function handleRoomSetEnd(
   //   return;
   // }
 
-  end = end.replace(/\u00AD/g, "");
   roomSetEnd(socket, room, end);
 }
 
 export function handleUserRoute(
   socket: MySocket,
   roomId: string,
-  route: string
+  route: WikiPage
 ) {
   const validator = z.object({
     roomId: z.string(),
-    route: z.string().max(500),
+    route: z.object({
+      title: z.string().max(500),
+      pageId: z.number(),
+    }),
   });
   const result = validator.safeParse({
     roomId,
@@ -279,7 +286,6 @@ export function handleUserRoute(
   if (!found) {
     return;
   }
-  route = route.replace(/\u00AD/g, "");
   userAddToRoute(user, route);
 
   const won = roomCheckWin(room, route);

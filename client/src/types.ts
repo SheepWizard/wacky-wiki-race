@@ -1,8 +1,13 @@
+export interface WikiPage {
+  title: string;
+  pageId: number;
+}
+
 export interface User {
   id: string;
   userName: string;
   roomId?: string;
-  route: string[];
+  route: WikiPage[];
   ready: boolean;
   surrendered: boolean;
 }
@@ -13,13 +18,13 @@ export interface Room {
   disconnectedUsers: User[];
   state: "lobby" | "inGame" | "endGame";
   roomOwnerId: string;
-  start: string;
-  end: string;
+  start: WikiPage;
+  end: WikiPage;
   startTime: Date;
   endTime: Date;
   winnerUserId?: string;
   rules: {
-    excludeGroups: Array<"countries" | "events" | "celebrities">;
+    excludeGroups: string[];
     noPageSearch: boolean;
   };
 }

@@ -46,7 +46,7 @@ export default function EndGamePage({ room }: EndGamePageProps) {
         )}
         <ul class={vstack({})}>
           {winningUser?.route.map((pageName, index) => (
-            <li key={index}>{pageName.replaceAll("_", " ")}</li>
+            <li key={index}>{pageName.title.replaceAll("_", " ")}</li>
           ))}
         </ul>
         {otherUsers.map((user, i) => {
@@ -55,7 +55,7 @@ export default function EndGamePage({ room }: EndGamePageProps) {
               <h2>{user.userName}</h2>
               <ul class={vstack({})}>
                 {user.route.map((pageTitle, index) => (
-                  <li key={index}>{pageTitle.replaceAll("_", " ")}</li>
+                  <li key={index}>{pageTitle.title.replaceAll("_", " ")}</li>
                 ))}
               </ul>
             </Fragment>

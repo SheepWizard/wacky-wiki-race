@@ -5,7 +5,7 @@ import { flex, vstack } from "../../styled-system/patterns";
 
 interface SearchInputProps {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: string, index: number) => void;
   onSearchTextChange: (searchTerm: string) => void;
   searchItems: string[];
   loading?: boolean;
@@ -76,8 +76,8 @@ export default function Select({
     popoverRef.current?.hidePopover();
   };
 
-  const handleItemClick = (item: string) => {
-    onChange(item);
+  const handleItemClick = (item: string, index: number) => {
+    onChange(item, index);
     setSearchText("");
   };
 
@@ -122,7 +122,7 @@ export default function Select({
           if (!selected) {
             return;
           }
-          handleItemClick(selected);
+          handleItemClick(selected, selectIndex);
           input.blur();
       }
     };
@@ -174,7 +174,7 @@ export default function Select({
               searchItems.map((item, index) => (
                 <li
                   key={index}
-                  onMouseDown={() => handleItemClick(item)}
+                  onMouseDown={() => handleItemClick(item, index)}
                   data-selected={selectIndex === index}
                   class={css({
                     rounded: "br-12",

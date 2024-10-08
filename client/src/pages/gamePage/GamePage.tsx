@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { useSocket } from "../../providers/SessionProvider";
 import { useRoom } from "../../providers/RoomProvider";
-import { wikiApiGetCategories, wikiApiGetPage } from "../../wiki";
+import {
+  wikiApiGetCategories,
+  wikiApiGetPage,
+  wikiApiGetPageIdFromTitle,
+} from "../../wiki";
 import { anchorClickListen } from "../../util/wikiFormatter";
 import { center, vstack } from "../../../styled-system/patterns";
 import Button from "../../components/Button";
@@ -36,13 +40,23 @@ export default function GamePage() {
     }
     setLoading(true);
     try {
-      const data = await wikiApiGetPage(currentWiki);
+      const data = await wikiApiGetPage(currentWiki.pageId);
       current.innerHTML = data.parse;
       const pageId = data.pageId;
       await anchorClickListen(async (pageTitle: string) => {
+        // add try catch
+
+        //maybe combine into one promise
+        const linkPageId = await wikiApiGetPageIdFromTitle(pageTitle);
         await wikiApiGetCategories(pageId);
-        socket.emit("room:user:route", room.id, pageTitle);
-        setCurrentWiki(pageTitle);
+        socket.emit("room:user:route", room.id, {
+          pageId: linkPageId,
+          title: pageTitle,
+        });
+        setCurrentWiki({
+          pageId: linkPageId,
+          title: pageTitle,
+        });
       });
     } catch {
       setError(true);
@@ -91,7 +105,7 @@ export default function GamePage() {
             mb: 2,
           })}
         >
-          {currentWiki.replaceAll("_", " ")}
+          {currentWiki.title.replaceAll("_", " ")}
         </h1>
         <div
           class="wiki-css lang-en"

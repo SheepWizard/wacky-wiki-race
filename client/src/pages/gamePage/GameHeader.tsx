@@ -41,7 +41,7 @@ export default function GameHeader() {
       })}
     >
       <Timer />
-      <div>{room.end.replaceAll("_", " ")}</div>
+      <div>{room.end.title.replaceAll("_", " ")}</div>
       <div class={hstack({ gap: 2 })}>
         <Button
           onClick={handleSurrender}

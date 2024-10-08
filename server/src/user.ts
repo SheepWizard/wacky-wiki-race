@@ -1,8 +1,13 @@
+export interface WikiPage {
+  title: string;
+  pageId: number;
+}
+
 export interface User {
   id: string;
   userName: string;
   roomId?: string;
-  route: string[];
+  route: WikiPage[];
   ready: boolean;
   surrendered: boolean;
 }
@@ -33,7 +38,7 @@ export function userGetById(id: string) {
   return users.get(id);
 }
 
-export function userAddToRoute(user: User, route: string) {
+export function userAddToRoute(user: User, route: WikiPage) {
   if (user.route.length > 100) {
     user.route.shift();
   }
