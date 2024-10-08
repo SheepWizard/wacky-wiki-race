@@ -62,18 +62,10 @@ export async function wikiApiGetExtract(pageId: number): Promise<string> {
     `${BASE_URL}?action=query&prop=extracts&exchars=120&pageids=${pageId}&format=json&explaintext=true&origin=*`
   );
   const data = await result.json();
-  const entry = Object.entries(data.query.pages)[0];
-  if (
-    entry &&
-    entry[1] !== null &&
-    typeof entry[1] === "object" &&
-    "extract" in entry[1] &&
-    typeof entry[1].extract === "string"
-  ) {
-    extractCache.set(pageId, entry[1].extract);
-    return entry[1].extract;
-  }
-  return "";
+  const extract = data.query.pages[pageId].extract;
+
+  extractCache.set(pageId, extract);
+  return extract;
 }
 
 export async function wikiApiGetCategories(pageId: string): Promise<string[]> {
