@@ -2,7 +2,6 @@ import { Server } from "socket.io";
 import express from "express";
 import { createServer } from "node:http";
 import {
-  handleExcludeGroup,
   handleRoomCreate,
   handleRoomJoin,
   handleRoomLeave,
@@ -13,6 +12,7 @@ import {
   handleRoomSetEnd,
   handleRoomSetStart,
   handleRoomSurrender,
+  handleUpdateRules,
   handleUserRoute,
 } from "./roomHandler.js";
 import {
@@ -59,19 +59,19 @@ io.on("connection", (socket) => {
   socket.on("room:join", (...input) => handleRoomJoin(socket, ...input));
   socket.on("room:play", (...input) => handleRoomPlay(socket, ...input));
   socket.on("room:set:start", (...input) =>
-    handleRoomSetStart(socket, ...input),
+    handleRoomSetStart(socket, ...input)
   );
 
   socket.on("room:set:end", (...input) => handleRoomSetEnd(socket, ...input));
   socket.on("room:user:route", (...input) => handleUserRoute(socket, ...input));
   socket.on("room:user:readyUp", (...input) =>
-    handleRoomReadyUp(socket, ...input),
+    handleRoomReadyUp(socket, ...input)
   );
   socket.on("room:user:surrender", (...input) =>
-    handleRoomSurrender(socket, ...input),
+    handleRoomSurrender(socket, ...input)
   );
-  socket.on("room:rules:excludeGroup", (...input) =>
-    handleExcludeGroup(socket, ...input),
+  socket.on("room:rules:updateRules", (...input) =>
+    handleUpdateRules(socket, ...input)
   );
   socket.on("room:lobby", (...input) => handleRoomLobby(socket, ...input));
   socket.on("room:leave", () => handleRoomLeave(socket, false));

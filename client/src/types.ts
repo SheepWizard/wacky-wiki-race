@@ -24,7 +24,6 @@ export interface Room {
   endTime: Date;
   winnerUserId?: string;
   rules: {
-    excludeGroups: string[];
     noPageSearch: boolean;
   };
 }

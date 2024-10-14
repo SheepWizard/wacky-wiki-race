@@ -7,6 +7,13 @@ import { useSocket } from "../../providers/SessionProvider";
 import Button from "../../components/Button";
 import { css } from "../../../styled-system/css";
 
+const excludeGroups = [
+  {
+    title: "Countries",
+    category: "Category:Member states of the United Nations",
+  },
+];
+
 export default function Rules() {
   const [showRulesDialog, setShowRulesDialog] = useState(false);
   const socket = useSocket();
@@ -47,38 +54,14 @@ export default function Rules() {
           >
             <p>Rules</p>
           </div>
-          <p>Exclude groups</p>
-          <div class={flex({ wrap: "wrap", gap: 1, width: "100%" })}>
-            <ToggleButton
-              toggled={room.rules.excludeGroups.includes("countries")}
-              onToggled={() => {
-                socket.emit("room:rules:excludeGroup", room.id, "countries");
-              }}
-            >
-              Coutries
-            </ToggleButton>
-            <ToggleButton
-              toggled={room.rules.excludeGroups.includes("events")}
-              onToggled={() => {
-                socket.emit("room:rules:excludeGroup", room.id, "events");
-              }}
-            >
-              Major Events
-            </ToggleButton>
-            <ToggleButton
-              toggled={room.rules.excludeGroups.includes("celebrities")}
-              onToggled={() => {
-                socket.emit("room:rules:excludeGroup", room.id, "celebrities");
-              }}
-            >
-              Celebrities
-            </ToggleButton>
-          </div>
-          <p>Misc</p>
           <ToggleButton
-            toggled={room.rules.excludeGroups.includes("celebrities")}
+            toggled={room.rules.noPageSearch}
             onToggled={() => {
-              socket.emit("room:rules:excludeGroup", room.id, "celebrities");
+              const updatedRules = {
+                ...room.rules,
+                noPageSearch: !room.rules.noPageSearch,
+              };
+              socket.emit("room:rules:updateRules", room.id, updatedRules);
             }}
           >
             Disable link search

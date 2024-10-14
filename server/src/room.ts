@@ -20,7 +20,6 @@ export interface Room {
   endTime: Date;
   winnerUserId?: string;
   rules: {
-    excludeGroups: string[];
     noPageSearch: boolean;
   };
 }
@@ -51,7 +50,6 @@ export function roomCreate(user: User) {
     startTime: new Date(),
     endTime: new Date(),
     rules: {
-      excludeGroups: [],
       noPageSearch: false,
     },
   };
@@ -151,20 +149,11 @@ export function roomUserSurrender(socket: MySocket, room: Room, user: User) {
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
-export function roomToggleExcludeGroup(
+export function roomUpdateRules(
   socket: MySocket,
   room: Room,
-  excludeGroup: string
+  rules: Room["rules"]
 ) {
-  // Check exclude group is valid
-  const containsGroup = room.rules.excludeGroups.includes(excludeGroup);
-
-  if (!containsGroup) {
-    room.rules.excludeGroups.push(excludeGroup);
-  } else {
-    room.rules.excludeGroups = room.rules.excludeGroups.filter(
-      (x) => x !== excludeGroup
-    );
-  }
+  room.rules = rules;
   socket.nsp.to(room.id).emit("room:update", room);
 }

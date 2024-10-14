@@ -11,7 +11,7 @@ export interface ClientToServerEvents {
   "room:user:route": (roomId: string, route: WikiPage) => void;
   "room:user:readyUp": (roomId: string) => void;
   "room:user:surrender": (roomId: string) => void;
-  "room:rules:excludeGroup": (roomId: string, excludeGroup: string) => void;
+  "room:rules:updateRules": (roomId: string, rules: Room["rules"]) => void;
   "room:lobby": (roomId: string) => void;
   "room:leave": () => void;
   disconnect: () => void;

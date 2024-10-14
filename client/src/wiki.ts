@@ -1,22 +1,14 @@
 import { WikiPage } from "./types";
 
-interface WikiParsePage {
-  parse: string;
-  pageId: string;
-}
-
 const BASE_URL = "https://en.wikipedia.org/w/api.php";
 
-export async function wikiApiGetPage(pageId: number): Promise<WikiParsePage> {
+export async function wikiApiGetPage(pageId: number): Promise<string> {
   const result = await fetch(
     `${BASE_URL}?action=parse&prop=text|categories&pageid=${pageId}&disabletoc=true&format=json&disableeditsection=1&redirects=true&useskin=minerva&origin=*`
   );
   const data = await result.json();
 
-  return {
-    parse: data.parse.text["*"],
-    pageId: data.parse.pageid,
-  };
+  return data.parse.text["*"];
 }
 
 export async function wikiApiGetRandomPage(): Promise<WikiPage> {
@@ -66,16 +58,6 @@ export async function wikiApiGetExtract(pageId: number): Promise<string> {
 
   extractCache.set(pageId, extract);
   return extract;
-}
-
-export async function wikiApiGetCategories(pageId: string): Promise<string[]> {
-  const result = await fetch(
-    `${BASE_URL}?action=query&prop=categories&format=json&cllimit=50&clcategories=Category:G20 members&pageids=${pageId}&origin=*`
-  );
-  const data = await result.json();
-  const categories = data.query?.pages?.[pageId]?.categories;
-  console.log(categories);
-  return [];
 }
 
 const pageIdCache: Map<string, number> = new Map();

@@ -1,4 +1,5 @@
 import {
+  Room,
   roomAddUser,
   roomCheckWin,
   roomCreate,
@@ -10,7 +11,7 @@ import {
   roomReset,
   roomSetEnd,
   roomSetStart,
-  roomToggleExcludeGroup,
+  roomUpdateRules,
   roomUserReadyUp,
   roomUserSurrender,
 } from "./room.js";
@@ -181,7 +182,6 @@ export function handleRoomSetStart(
     start,
   });
   if (!result.success) {
-    console.log(result.error);
     return;
   }
 
@@ -393,18 +393,16 @@ export function handleRoomSurrender(socket: MySocket, roomId: string) {
   roomEndGame(socket, room);
 }
 
-export function handleExcludeGroup(
+export function handleUpdateRules(
   socket: MySocket,
   roomId: string,
-  excludeGroup: string
+  rules: Room["rules"]
 ) {
-  const validator = z.object({
-    roomId: z.string(),
-    excludeGroup: z.string(),
-  });
-  const result = validator.safeParse({ roomId, excludeGroup });
+  console.log(rules);
+  const validator = z.custom<Room["rules"]>();
+  const result = validator.safeParse({ roomId, rules });
   if (!result.success) {
-    //add error
+    console.log(result.error);
     return;
   }
 
@@ -427,5 +425,5 @@ export function handleExcludeGroup(
     return;
   }
 
-  roomToggleExcludeGroup(socket, room, excludeGroup);
+  roomUpdateRules(socket, room, rules);
 }

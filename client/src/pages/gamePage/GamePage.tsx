@@ -40,15 +40,13 @@ export default function GamePage() {
     }
     setLoading(true);
     try {
-      const data = await wikiApiGetPage(currentWiki.pageId);
-      current.innerHTML = data.parse;
-      const pageId = data.pageId;
-      await anchorClickListen(async (pageTitle: string) => {
+      const parse = await wikiApiGetPage(currentWiki.pageId);
+      current.innerHTML = parse;
+      await anchorClickListen(room.rules, async (pageTitle: string) => {
         // add try catch
 
-        //maybe combine into one promise
         const linkPageId = await wikiApiGetPageIdFromTitle(pageTitle);
-        await wikiApiGetCategories(pageId);
+
         socket.emit("room:user:route", room.id, {
           pageId: linkPageId,
           title: pageTitle,

@@ -1,3 +1,5 @@
+import { Room } from "../types";
+
 function hideLink(node: HTMLAnchorElement) {
   node.classList.add("link-hide");
 }
@@ -8,13 +10,18 @@ function disableLink(node: HTMLAnchorElement) {
   });
 }
 
-export async function anchorClickListen(callback: (pageTitle: string) => void) {
+export async function anchorClickListen(
+  rules: Room["rules"],
+  callback: (pageTitle: string) => void
+) {
   const atags = document.querySelectorAll("a");
 
   for (let node of atags) {
-    node.setAttribute("data-link-remove", node.innerText);
-    node.classList.add("searchHide");
-    node.innerHTML = "";
+    if (rules.noPageSearch) {
+      node.setAttribute("data-link-remove", node.innerText);
+      node.classList.add("searchHide");
+      node.innerHTML = "";
+    }
 
     if (node.href.match(/^.*\.[a-zA-Z\d]+$/)) {
       hideLink(node);
