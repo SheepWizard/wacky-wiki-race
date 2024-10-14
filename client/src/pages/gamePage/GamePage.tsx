@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { useSocket } from "../../providers/SessionProvider";
 import { useRoom } from "../../providers/RoomProvider";
-import {
-  wikiApiGetCategories,
-  wikiApiGetPage,
-  wikiApiGetPageIdFromTitle,
-} from "../../wiki";
+import { wikiApiGetPage, wikiApiGetPageIdFromTitle } from "../../wiki";
 import { anchorClickListen } from "../../util/wikiFormatter";
 import { center, vstack } from "../../../styled-system/patterns";
 import Button from "../../components/Button";

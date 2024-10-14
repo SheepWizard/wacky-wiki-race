@@ -1,18 +1,11 @@
 import { useState } from "preact/hooks";
 import { useRoom } from "../../providers/RoomProvider";
-import { center, flex, vstack } from "../../../styled-system/patterns";
+import { center, vstack } from "../../../styled-system/patterns";
 import Dialog from "../../components/Dialog";
 import { ToggleButton } from "../../components/ToggleButton";
 import { useSocket } from "../../providers/SessionProvider";
 import Button from "../../components/Button";
 import { css } from "../../../styled-system/css";
-
-const excludeGroups = [
-  {
-    title: "Countries",
-    category: "Category:Member states of the United Nations",
-  },
-];
 
 export default function Rules() {
   const [showRulesDialog, setShowRulesDialog] = useState(false);
