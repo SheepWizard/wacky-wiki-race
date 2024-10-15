@@ -25,5 +25,6 @@ export interface Room {
   winnerUserId?: string;
   rules: {
     noPageSearch: boolean;
+    noNavBox: boolean;
   };
 }

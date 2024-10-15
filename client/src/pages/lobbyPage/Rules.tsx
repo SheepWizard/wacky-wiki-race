@@ -47,18 +47,32 @@ export default function Rules() {
           >
             <p>Rules</p>
           </div>
-          <ToggleButton
-            toggled={room.rules.noPageSearch}
-            onToggled={() => {
-              const updatedRules = {
-                ...room.rules,
-                noPageSearch: !room.rules.noPageSearch,
-              };
-              socket.emit("room:rules:updateRules", room.id, updatedRules);
-            }}
-          >
-            Disable link search
-          </ToggleButton>
+          <div class={css({ display: "flex", flexWrap: "wrap", gap: 2 })}>
+            <ToggleButton
+              toggled={room.rules.noPageSearch}
+              onToggled={() => {
+                const updatedRules = {
+                  ...room.rules,
+                  noPageSearch: !room.rules.noPageSearch,
+                };
+                socket.emit("room:rules:updateRules", room.id, updatedRules);
+              }}
+            >
+              Disable link search
+            </ToggleButton>
+            <ToggleButton
+              toggled={room.rules.noNavBox}
+              onToggled={() => {
+                const updatedRules = {
+                  ...room.rules,
+                  noNavBox: !room.rules.noNavBox,
+                };
+                socket.emit("room:rules:updateRules", room.id, updatedRules);
+              }}
+            >
+              Disable nav boxes
+            </ToggleButton>
+          </div>
           <div class={css({ alignSelf: "center", marginTop: 3 })}>
             <Button onClick={() => setShowRulesDialog(false)}>Close</Button>
           </div>

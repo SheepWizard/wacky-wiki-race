@@ -16,6 +16,13 @@ export async function anchorClickListen(
 ) {
   const atags = document.querySelectorAll("a");
 
+  if (rules.noNavBox) {
+    const navBoxs = document.querySelectorAll(".navbox");
+    for (let elm of navBoxs) {
+      elm.remove();
+    }
+  }
+
   for (let node of atags) {
     if (rules.noPageSearch) {
       node.setAttribute("data-link-remove", node.innerText);

@@ -21,6 +21,7 @@ export interface Room {
   winnerUserId?: string;
   rules: {
     noPageSearch: boolean;
+    noNavBox: boolean;
   };
 }
 const nanoid = customAlphabet(
@@ -51,6 +52,7 @@ export function roomCreate(user: User) {
     endTime: new Date(),
     rules: {
       noPageSearch: false,
+      noNavBox: false,
     },
   };
   rooms.set(roomId, room);

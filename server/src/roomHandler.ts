@@ -398,7 +398,6 @@ export function handleUpdateRules(
   roomId: string,
   rules: Room["rules"]
 ) {
-  console.log(rules);
   const validator = z.custom<Room["rules"]>();
   const result = validator.safeParse({ roomId, rules });
   if (!result.success) {
