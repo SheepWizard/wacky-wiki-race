@@ -1,5 +1,5 @@
 import { css } from "../../../styled-system/css";
-import { flex, hstack, vstack } from "../../../styled-system/patterns";
+import { flex, vstack } from "../../../styled-system/patterns";
 import Button from "../../components/Button";
 import Timer from "../../components/Timer";
 import { useRoom } from "../../providers/RoomProvider";
@@ -44,11 +44,34 @@ export default function GameHeader() {
         },
       })}
     >
-      <div class={vstack({ alignItems: "center", gap: 1 })}>
+      <div
+        class={vstack({
+          alignItems: "center",
+          gap: 1,
+          bg: "ww-blue",
+          borderRadius: "br-12",
+          padding: 3,
+          mdDown: {
+            padding: 1,
+          },
+        })}
+      >
         <h3>Time:</h3>
         <Timer />
       </div>
-      <div class={vstack({ alignItems: "center", gap: 1 })}>
+      <div
+        class={vstack({
+          alignItems: "center",
+          gap: 1,
+          bg: "ww-blue",
+          borderRadius: "br-12",
+          padding: 3,
+          textAlign: "center",
+          mdDown: {
+            padding: 1,
+          },
+        })}
+      >
         <h3>Article to find:</h3>
         <p>{room.end.title.replaceAll("_", " ")}</p>
       </div>
