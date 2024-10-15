@@ -10,6 +10,8 @@ export default function Timer() {
   }, []);
 
   const minutes = Math.floor(seconds / 60);
+  const timerSeconds = seconds % 60;
+  const sec = timerSeconds < 10 ? `${0}${timerSeconds}` : timerSeconds;
 
-  return <div>{`${minutes}:${seconds % 60}`}</div>;
+  return <p>{`${minutes}:${sec}`}</p>;
 }

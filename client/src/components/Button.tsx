@@ -6,6 +6,7 @@ interface ButtonProps {
   disabled?: boolean;
   stretch?: boolean;
   style?: "default" | "secondary";
+  size?: "small";
   children: ComponentChildren;
 }
 
@@ -44,6 +45,12 @@ const button = cva({
         cursor: "default",
       },
     },
+    size: {
+      small: {
+        height: 34,
+        padding: "5px",
+      },
+    },
     style: {
       secondary: {
         bg: "ww-purple",
@@ -56,6 +63,7 @@ export default function Button({
   onClick,
   stretch,
   disabled,
+  size,
   children,
 }: ButtonProps) {
   return (
@@ -63,6 +71,7 @@ export default function Button({
       class={button({
         visual: stretch ? "stretch" : undefined,
         state: disabled ? "disabled" : undefined,
+        size: size === "small" ? "small" : undefined,
       })}
       onClick={onClick}
       disabled={disabled}
