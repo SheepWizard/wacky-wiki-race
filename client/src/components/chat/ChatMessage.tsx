@@ -21,7 +21,7 @@ export default function ChatMessage({ chatMessage }: ChatMessageProps) {
         alignItems: isMe ? "flex-end" : "flex-start",
         maxWidth: "80%",
         textWrap: "wrap",
-        wordBreak: "break-all",
+        wordBreak: "break-word",
         borderRadius: "br-12",
       })}
     >
