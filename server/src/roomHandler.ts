@@ -11,6 +11,7 @@ import {
   roomReset,
   roomSetEnd,
   roomSetStart,
+  roomUpdateChat,
   roomUpdateRules,
   roomUserReadyUp,
   roomUserSurrender,
@@ -142,27 +143,25 @@ export function handleRoomPlay(socket: MySocket, roomId: string) {
     return;
   }
 
-  const room = roomGetById(roomId);
-  if (!room) {
+  const details = checkUserIsInRoom(roomId, socket.data.userId);
+
+  if (!details) {
     return;
   }
 
-  if (room.state !== "lobby") {
+  if (details.room.state !== "lobby") {
     return;
   }
 
-  const user = userGetById(socket.data.userId);
-  if (!user) {
+  if (details.room.roomOwnerId !== details.user.id) {
     return;
   }
 
-  if (room.roomOwnerId !== user.id) {
-    return;
-  }
+  details.room.users.forEach((user) =>
+    userAddToRoute(user, details.room.start)
+  );
 
-  room.users.forEach((user) => userAddToRoute(user, room.start));
-
-  roomPlay(socket, room);
+  roomPlay(socket, details.room);
 }
 
 export function handleRoomSetStart(
@@ -185,24 +184,20 @@ export function handleRoomSetStart(
     return;
   }
 
-  const room = roomGetById(roomId);
-  if (!room) {
+  const details = checkUserIsInRoom(roomId, socket.data.userId);
+
+  if (!details) {
     return;
   }
 
-  if (room.state !== "lobby") {
-    return;
-  }
-
-  const user = userGetById(socket.data.userId);
-  if (!user) {
+  if (details.room.state !== "lobby") {
     return;
   }
 
   // if (room.roomOwnerId !== user.id) {
   //   return;
   // }
-  roomSetStart(socket, room, start);
+  roomSetStart(socket, details.room, start);
 }
 
 export function handleRoomSetEnd(
@@ -226,17 +221,13 @@ export function handleRoomSetEnd(
     return;
   }
 
-  const room = roomGetById(roomId);
-  if (!room) {
+  const details = checkUserIsInRoom(roomId, socket.data.userId);
+
+  if (!details) {
     return;
   }
 
-  if (room.state !== "lobby") {
-    return;
-  }
-
-  const user = userGetById(socket.data.userId);
-  if (!user) {
+  if (details.room.state !== "lobby") {
     return;
   }
 
@@ -244,7 +235,7 @@ export function handleRoomSetEnd(
   //   return;
   // }
 
-  roomSetEnd(socket, room, end);
+  roomSetEnd(socket, details.room, end);
 }
 
 export function handleUserRoute(
@@ -268,33 +259,25 @@ export function handleUserRoute(
     return;
   }
 
-  const room = roomGetById(roomId);
-  if (!room) {
+  const details = checkUserIsInRoom(roomId, socket.data.userId);
+
+  if (!details) {
     return;
   }
 
-  if (room.state !== "inGame") {
+  if (details.room.state !== "inGame") {
     return;
   }
 
-  const user = userGetById(socket.data.userId);
-  if (!user) {
-    return;
-  }
+  userAddToRoute(details.user, route);
 
-  const found = room.users.some((x) => x.id === user.id);
-  if (!found) {
-    return;
-  }
-  userAddToRoute(user, route);
-
-  const won = roomCheckWin(room, route);
+  const won = roomCheckWin(details.room, route);
 
   if (!won) {
     return;
   }
 
-  roomEndGame(socket, room, user);
+  roomEndGame(socket, details.room, details.user);
 }
 
 export function handleRoomLobby(socket: MySocket, roomId: string) {
@@ -305,25 +288,21 @@ export function handleRoomLobby(socket: MySocket, roomId: string) {
     return;
   }
 
-  const room = roomGetById(roomId);
-  if (!room) {
+  const details = checkUserIsInRoom(roomId, socket.data.userId);
+
+  if (!details) {
     return;
   }
 
-  if (room.state !== "endGame") {
+  if (details.room.state !== "endGame") {
     return;
   }
 
-  const user = userGetById(socket.data.userId);
-  if (!user) {
+  if (details.room.roomOwnerId !== details.user.id) {
     return;
   }
 
-  if (room.roomOwnerId !== user.id) {
-    return;
-  }
-
-  roomReset(socket, room);
+  roomReset(socket, details.room);
 }
 
 export function handleRoomReadyUp(socket: MySocket, roomId: string) {
@@ -333,26 +312,17 @@ export function handleRoomReadyUp(socket: MySocket, roomId: string) {
     //add error
     return;
   }
-  const room = roomGetById(roomId);
-  if (!room) {
+  const details = checkUserIsInRoom(roomId, socket.data.userId);
+
+  if (!details) {
     return;
   }
 
-  if (room.state !== "lobby") {
+  if (details.room.state !== "lobby") {
     return;
   }
 
-  const user = userGetById(socket.data.userId);
-  if (!user) {
-    return;
-  }
-
-  const found = room.users.some((x) => x.id === user.id);
-  if (!found) {
-    return;
-  }
-
-  roomUserReadyUp(socket, room, user);
+  roomUserReadyUp(socket, details.room, details.user);
 }
 
 export function handleRoomSurrender(socket: MySocket, roomId: string) {
@@ -363,34 +333,25 @@ export function handleRoomSurrender(socket: MySocket, roomId: string) {
     return;
   }
 
-  const room = roomGetById(roomId);
-  if (!room) {
+  const details = checkUserIsInRoom(roomId, socket.data.userId);
+
+  if (!details) {
     return;
   }
 
-  if (room.state !== "inGame") {
+  if (details.room.state !== "inGame") {
     return;
   }
 
-  const user = userGetById(socket.data.userId);
-  if (!user) {
-    return;
-  }
+  roomUserSurrender(socket, details.room, details.user);
 
-  const found = room.users.some((x) => x.id === user.id);
-  if (!found) {
-    return;
-  }
-
-  roomUserSurrender(socket, room, user);
-
-  const allSurrendered = room.users.every((x) => x.surrendered);
+  const allSurrendered = details.room.users.every((x) => x.surrendered);
 
   if (!allSurrendered) {
     return;
   }
 
-  roomEndGame(socket, room);
+  roomEndGame(socket, details.room);
 }
 
 export function handleUpdateRules(
@@ -405,24 +366,64 @@ export function handleUpdateRules(
     return;
   }
 
+  const details = checkUserIsInRoom(roomId, socket.data.userId);
+
+  if (!details) {
+    return;
+  }
+
+  if (details.room.state !== "lobby") {
+    return;
+  }
+
+  roomUpdateRules(socket, details.room, rules);
+}
+
+export function handleRoomChat(
+  socket: MySocket,
+  roomId: string,
+  message: string
+) {
+  const validator = z.object({
+    roomId: z.string(),
+    message: z.string().max(250),
+  });
+  const result = validator.safeParse({
+    roomId,
+    message,
+  });
+  if (!result.success) {
+    //add error
+    return;
+  }
+
+  const details = checkUserIsInRoom(roomId, socket.data.userId);
+
+  if (!details) {
+    return;
+  }
+
+  roomUpdateChat(socket, details.room, details.user, message);
+}
+
+function checkUserIsInRoom(roomId: string, userId: string) {
   const room = roomGetById(roomId);
   if (!room) {
-    return;
+    return false;
   }
 
-  if (room.state !== "lobby") {
-    return;
-  }
-
-  const user = userGetById(socket.data.userId);
+  const user = userGetById(userId);
   if (!user) {
-    return;
+    return false;
   }
 
   const found = room.users.some((x) => x.id === user.id);
   if (!found) {
-    return;
+    return false;
   }
 
-  roomUpdateRules(socket, room, rules);
+  return {
+    room,
+    user,
+  };
 }

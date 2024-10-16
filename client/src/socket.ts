@@ -12,12 +12,14 @@ export interface ClientToServerEvents {
   "room:user:surrender": (roomId: string) => void;
   "room:rules:updateRules": (roomId: string, rules: Room["rules"]) => void;
   "room:lobby": (roomId: string) => void;
+  "room:chat": (roomId: string, message: string) => void;
   "room:leave": () => void;
   disconnect: () => void;
 }
 
 export interface ServerToClientEvents {
   "room:update": (room: Room) => void;
+  "room:chat:update": (chat: Room["chat"]) => void;
   session: (sessionId: string, userId: string) => void;
 }
 

@@ -11,6 +11,7 @@ import RouteSelect from "./RouteSelect";
 import FriendInvite from "./FriendInvite";
 import UserList from "./UserList";
 import Rules from "./Rules";
+import Chat from "../../components/chat/Chat";
 
 export default function LobbyPage() {
   const { userId } = useSession();
@@ -70,6 +71,7 @@ export default function LobbyPage() {
         })}
       >
         <GreenBox>
+          {/* <Chat /> */}
           <Title />
 
           <FriendInvite />

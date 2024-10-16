@@ -8,6 +8,12 @@ import {
 import { MySocket } from "./socket.js";
 import { customAlphabet } from "nanoid";
 
+interface RoomChatMessage {
+  userId: string;
+  userName: string;
+  message: string;
+}
+
 export interface Room {
   id: string;
   users: User[];
@@ -23,6 +29,7 @@ export interface Room {
     noPageSearch: boolean;
     noNavBox: boolean;
   };
+  chat: Array<RoomChatMessage>;
 }
 const nanoid = customAlphabet(
   "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM",
@@ -54,6 +61,7 @@ export function roomCreate(user: User) {
       noPageSearch: false,
       noNavBox: false,
     },
+    chat: [],
   };
   rooms.set(roomId, room);
   return room;
@@ -158,4 +166,23 @@ export function roomUpdateRules(
 ) {
   room.rules = rules;
   socket.nsp.to(room.id).emit("room:update", room);
+}
+
+export function roomUpdateChat(
+  socket: MySocket,
+  room: Room,
+  user: User,
+  message: string
+) {
+  room.chat.push({
+    message,
+    userId: user.id,
+    userName: user.userName,
+  });
+
+  if (room.chat.length > 500) {
+    room.chat.shift();
+  }
+
+  socket.nsp.to(room.id).emit("room:chat:update", room.chat);
 }

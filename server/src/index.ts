@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import express from "express";
 import { createServer } from "node:http";
 import {
+  handleRoomChat,
   handleRoomCreate,
   handleRoomJoin,
   handleRoomLeave,
@@ -73,6 +74,7 @@ io.on("connection", (socket) => {
   socket.on("room:rules:updateRules", (...input) =>
     handleUpdateRules(socket, ...input)
   );
+  socket.on("room:chat", (...input) => handleRoomChat(socket, ...input));
   socket.on("room:lobby", (...input) => handleRoomLobby(socket, ...input));
   socket.on("room:leave", () => handleRoomLeave(socket, false));
   socket.once("disconnect", () => handleRoomLeave(socket, true));

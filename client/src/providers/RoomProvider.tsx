@@ -6,6 +6,7 @@ import { useSocket } from "./SessionProvider";
 interface RoomContextProps {
   room?: Room;
   setRoom: (room?: Room) => void;
+  chat: Room["chat"];
 }
 
 const RoomContext = createContext<RoomContextProps | null>(null);
@@ -16,10 +17,15 @@ interface RoomProviderProps {
 
 export default function RoomProvider({ children }: RoomProviderProps) {
   const [room, setRoom] = useState<Room>();
+  const [chat, setChat] = useState<Room["chat"]>([]);
   const socket = useSocket();
 
   const handleRoomUpdate = (room: Room) => {
     setRoom(room);
+  };
+
+  const handleChatUpdate = (chat: Room["chat"]) => {
+    setChat(chat);
   };
 
   useEffect(() => {
@@ -29,8 +35,15 @@ export default function RoomProvider({ children }: RoomProviderProps) {
     };
   }, []);
 
+  useEffect(() => {
+    socket.on("room:chat:update", handleChatUpdate);
+    return () => {
+      socket.off("room:chat:update", handleChatUpdate);
+    };
+  }, []);
+
   return (
-    <RoomContext.Provider value={{ room, setRoom }}>
+    <RoomContext.Provider value={{ room, setRoom, chat }}>
       {children}
     </RoomContext.Provider>
   );

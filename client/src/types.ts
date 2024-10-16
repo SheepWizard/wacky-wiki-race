@@ -12,6 +12,12 @@ export interface User {
   surrendered: boolean;
 }
 
+interface RoomChatMessage {
+  userId: string;
+  userName: string;
+  message: string;
+}
+
 export interface Room {
   id: string;
   users: User[];
@@ -27,4 +33,7 @@ export interface Room {
     noPageSearch: boolean;
     noNavBox: boolean;
   };
+  chat: Array<RoomChatMessage>;
 }
+
+export type Unarray<T> = T extends Array<infer R> ? R : never;
