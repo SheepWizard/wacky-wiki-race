@@ -4,9 +4,8 @@ import { useRef, useState } from "preact/hooks";
 import { vstack } from "../../../styled-system/patterns";
 import { useRoom } from "../../providers/RoomProvider";
 import Input from "../Input";
-import { useSession, useSocket } from "../../providers/SessionProvider";
+import { useSocket } from "../../providers/SessionProvider";
 import Button from "../Button";
-import { css } from "../../../styled-system/css";
 import ChatMessage from "./ChatMessage";
 
 export default function Chat() {
