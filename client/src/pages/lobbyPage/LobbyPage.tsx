@@ -71,11 +71,11 @@ export default function LobbyPage() {
         })}
       >
         <GreenBox>
-          <Chat />
           <Title />
 
           <FriendInvite />
           <UserList />
+          <Chat />
           <RouteSelect />
           <Rules />
 

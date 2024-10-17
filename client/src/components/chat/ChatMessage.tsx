@@ -1,3 +1,4 @@
+import { css } from "../../../styled-system/css";
 import { vstack } from "../../../styled-system/patterns";
 import { useSession } from "../../providers/SessionProvider";
 import { Room, Unarray } from "../../types";
@@ -25,7 +26,7 @@ export default function ChatMessage({ chatMessage }: ChatMessageProps) {
         borderRadius: "br-12",
       })}
     >
-      <div>{chatMessage.userName}</div>
+      <div class={css({ fontSize: 12 })}>{chatMessage.userName}</div>
       <div>{chatMessage.message}</div>
     </div>
   );
