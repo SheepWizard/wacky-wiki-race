@@ -1,13 +1,13 @@
 import { css } from "../../../styled-system/css";
 import { vstack } from "../../../styled-system/patterns";
 import { useSession } from "../../providers/SessionProvider";
-import { Room, Unarray } from "../../types";
+import { RoomChatMessage } from "../../types";
 
 interface ChatMessageProps {
-  chatMessage: Unarray<Room["chat"]>;
+  chatMessage: RoomChatMessage;
 }
 
-export default function ChatMessage({ chatMessage }: ChatMessageProps) {
+export default function UserChatMessage({ chatMessage }: ChatMessageProps) {
   const { userId } = useSession();
 
   const isMe = chatMessage.userId === userId;

@@ -16,7 +16,7 @@ export default function ChatButton({ onClick, reff }: ChatButtonProps) {
         height: 10,
         bg: "ww-purple",
         borderRadius: "999999px",
-        pos: "absolute",
+        pos: "fixed",
         bottom: 5,
         right: 5,
         cursor: "pointer",

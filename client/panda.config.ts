@@ -87,6 +87,7 @@ export default defineConfig({
           ["ww-purple"]: { value: "#AB96FF" },
         },
         radii: {
+          ["br-6"]: { value: "6px" },
           ["br-12"]: { value: "12px" },
           ["br-25"]: { value: "25px" },
         },

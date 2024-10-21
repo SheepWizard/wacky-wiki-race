@@ -9,8 +9,14 @@ import { MySocket } from "./socket.js";
 import { customAlphabet } from "nanoid";
 
 interface RoomChatMessage {
+  __type: "userChat";
   userId: string;
   userName: string;
+  message: string;
+}
+
+interface RoomSystemChatMessage {
+  __type: "systemChat";
   message: string;
 }
 
@@ -29,7 +35,7 @@ export interface Room {
     noPageSearch: boolean;
     noNavBox: boolean;
   };
-  chat: Array<RoomChatMessage>;
+  chat: Array<RoomChatMessage | RoomSystemChatMessage>;
 }
 const nanoid = customAlphabet(
   "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM",
@@ -74,6 +80,7 @@ export function roomAddUser(socket: MySocket, room: Room, user: User) {
   socket.emit("room:update", room);
 
   socket.to(room.id).emit("room:update", room);
+  roomSystemChat(socket, room, `${user.userName} joined the lobby!`);
 }
 
 export function roomReAddUser(socket: MySocket, room: Room, user: User) {
@@ -104,6 +111,7 @@ export function roomRemoveUser(
     room.roomOwnerId = room.users[0].id;
   }
   socket.to(room.id).emit("room:update", room);
+  roomSystemChat(socket, room, `${user.userName} left the lobby!`);
 }
 
 export function roomGetById(id: string) {
@@ -156,6 +164,9 @@ export function roomUserReadyUp(socket: MySocket, room: Room, user: User) {
 
 export function roomUserSurrender(socket: MySocket, room: Room, user: User) {
   userSurrender(user, !user.surrendered);
+  if (user.surrendered) {
+    roomSystemChat(socket, room, `${user.userName} voted to surrender`);
+  }
   socket.nsp.to(room.id).emit("room:update", room);
 }
 
@@ -176,8 +187,22 @@ export function roomUpdateChat(
 ) {
   room.chat.push({
     message,
+    __type: "userChat",
     userId: user.id,
     userName: user.userName,
+  });
+
+  if (room.chat.length > 500) {
+    room.chat.shift();
+  }
+
+  socket.nsp.to(room.id).emit("room:chat:update", room.chat);
+}
+
+export function roomSystemChat(socket: MySocket, room: Room, message: string) {
+  room.chat.push({
+    message,
+    __type: "systemChat",
   });
 
   if (room.chat.length > 500) {

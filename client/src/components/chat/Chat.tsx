@@ -6,9 +6,10 @@ import { useRoom } from "../../providers/RoomProvider";
 import Input from "../Input";
 import { useSocket } from "../../providers/SessionProvider";
 import Button from "../Button";
-import ChatMessage from "./ChatMessage";
 import ChatButton from "./ChatButton";
 import { css } from "../../../styled-system/css";
+import UserChatMessage from "./UserChatMessage";
+import SystemChatMessage from "./SystemChatMessage";
 
 export default function Chat() {
   const { chat, room } = useRoom();
@@ -136,9 +137,13 @@ export default function Chat() {
               scrollbarWidth: "none",
             })}
           >
-            {chat.map((message, index) => (
-              <ChatMessage key={index} chatMessage={message} />
-            ))}
+            {chat.map((message, index) =>
+              message.__type === "userChat" ? (
+                <UserChatMessage key={index} chatMessage={message} />
+              ) : (
+                <SystemChatMessage key={index} chatMessage={message} />
+              )
+            )}
           </div>
           <div class={vstack({ w: "full", gap: 1 })}>
             <Input value={text} onChange={setText} max={500} />

@@ -4,6 +4,7 @@ import { Room } from "../types";
 import Button from "../components/Button";
 import { useRoom } from "../providers/RoomProvider";
 import { useSession, useSocket } from "../providers/SessionProvider";
+import Chat from "../components/chat/Chat";
 
 interface EndGamePageProps {
   room: Room;
@@ -64,6 +65,7 @@ export default function EndGamePage({ room }: EndGamePageProps) {
         {isRoomOwner && <Button onClick={handleNewGame}>New game</Button>}
         <Button onClick={handleRoomLeave}>Leave</Button>
       </div>
+      <Chat />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { center, vstack } from "../../../styled-system/patterns";
 import Button from "../../components/Button";
 import { css } from "../../../styled-system/css";
 import GameHeader from "./GameHeader";
+import Chat from "../../components/chat/Chat";
 
 function scrollToTop() {
   window.scrollTo({
@@ -70,46 +71,49 @@ export default function GamePage() {
   };
 
   return (
-    <div>
-      <GameHeader />
-      {loading && <div class={center()}>Loading</div>}
-      {error && (
-        <div class={vstack({ gap: 2 })}>
-          <p>Something went wrong 😭</p>
-          <Button onClick={handleTryAgain}>Try again</Button>
-        </div>
-      )}
-      <div
-        data-loading={loading}
-        class={css({
-          width: "min(1200px, 100% - 4em)",
-          marginInline: "auto",
-          "&[data-loading=true]": {
-            display: "none",
-          },
-        })}
-      >
-        <h1
+    <>
+      <div>
+        <GameHeader />
+        {loading && <div class={center()}>Loading</div>}
+        {error && (
+          <div class={vstack({ gap: 2 })}>
+            <p>Something went wrong 😭</p>
+            <Button onClick={handleTryAgain}>Try again</Button>
+          </div>
+        )}
+        <div
+          data-loading={loading}
           class={css({
-            wordBreak: "break-word",
-            wordWrap: "break-word",
-            fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif",
-            lineHeight: "1.375",
-            fontSize: "1.7em",
-            mb: 2,
+            width: "min(1200px, 100% - 4em)",
+            marginInline: "auto",
+            "&[data-loading=true]": {
+              display: "none",
+            },
           })}
         >
-          {currentWiki.title.replaceAll("_", " ")}
-        </h1>
-        <div
-          class="wiki-css lang-en"
-          style={{ display: loading ? "none" : "block" }}
-        >
-          <div class="content">
-            <div ref={ref} />
+          <h1
+            class={css({
+              wordBreak: "break-word",
+              wordWrap: "break-word",
+              fontFamily: "Helvetica Neue,Helvetica,Arial,sans-serif",
+              lineHeight: "1.375",
+              fontSize: "1.7em",
+              mb: 2,
+            })}
+          >
+            {currentWiki.title.replaceAll("_", " ")}
+          </h1>
+          <div
+            class="wiki-css lang-en"
+            style={{ display: loading ? "none" : "block" }}
+          >
+            <div class="content">
+              <div ref={ref} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <Chat />
+    </>
   );
 }

@@ -12,9 +12,15 @@ export interface User {
   surrendered: boolean;
 }
 
-interface RoomChatMessage {
+export interface RoomChatMessage {
+  __type: "userChat";
   userId: string;
   userName: string;
+  message: string;
+}
+
+export interface RoomSystemChatMessage {
+  __type: "systemChat";
   message: string;
 }
 
@@ -33,7 +39,7 @@ export interface Room {
     noPageSearch: boolean;
     noNavBox: boolean;
   };
-  chat: Array<RoomChatMessage>;
+  chat: Array<RoomChatMessage | RoomSystemChatMessage>;
 }
 
 export type Unarray<T> = T extends Array<infer R> ? R : never;
