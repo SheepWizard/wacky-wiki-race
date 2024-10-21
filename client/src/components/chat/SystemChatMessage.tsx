@@ -1,5 +1,4 @@
 import { css } from "../../../styled-system/css";
-import { vstack } from "../../../styled-system/patterns";
 import { RoomSystemChatMessage } from "../../types";
 
 interface SystemChatMessageProps {
