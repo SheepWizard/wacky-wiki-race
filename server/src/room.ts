@@ -37,6 +37,9 @@ export interface Room {
   };
   chat: Array<RoomChatMessage | RoomSystemChatMessage>;
 }
+
+export interface RoomPartial extends Omit<Room, "chat" | "disconnectedUsers"> {}
+
 const nanoid = customAlphabet(
   "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM",
   8
@@ -110,6 +113,7 @@ export function roomRemoveUser(
   if (user.id === room.roomOwnerId) {
     room.roomOwnerId = room.users[0].id;
   }
+
   socket.to(room.id).emit("room:update", room);
   roomSystemChat(socket, room, `${user.userName} left the lobby!`);
 }
@@ -121,24 +125,24 @@ export function roomGetById(id: string) {
 export function roomPlay(socket: MySocket, room: Room) {
   room.state = "inGame";
   room.startTime = new Date();
-  socket.nsp.to(room.id).emit("room:update", room);
+  roomSendPartialUpdate(socket, room);
 }
 
 export function roomSetStart(socket: MySocket, room: Room, start: WikiPage) {
   room.start = start;
-  socket.nsp.to(room.id).emit("room:update", room);
+  roomSendPartialUpdate(socket, room);
 }
 
 export function roomSetEnd(socket: MySocket, room: Room, end: WikiPage) {
   room.end = end;
-  socket.nsp.to(room.id).emit("room:update", room);
+  roomSendPartialUpdate(socket, room);
 }
 
 export function roomEndGame(socket: MySocket, room: Room, winnerUser?: User) {
   room.state = "endGame";
   room.endTime = new Date();
   room.winnerUserId = winnerUser?.id;
-  socket.nsp.to(room.id).emit("room:update", room);
+  roomSendPartialUpdate(socket, room);
 }
 
 export function roomCheckWin(room: Room, route: WikiPage) {
@@ -154,12 +158,12 @@ export function roomReset(socket: MySocket, room: Room) {
     userReadyUp(user, false);
     userSurrender(user, false);
   }
-  socket.nsp.to(room.id).emit("room:update", room);
+  roomSendPartialUpdate(socket, room);
 }
 
 export function roomUserReadyUp(socket: MySocket, room: Room, user: User) {
   userReadyUp(user, !user.ready);
-  socket.nsp.to(room.id).emit("room:update", room);
+  roomSendPartialUpdate(socket, room);
 }
 
 export function roomUserSurrender(socket: MySocket, room: Room, user: User) {
@@ -167,7 +171,7 @@ export function roomUserSurrender(socket: MySocket, room: Room, user: User) {
   if (user.surrendered) {
     roomSystemChat(socket, room, `${user.userName} voted to surrender`);
   }
-  socket.nsp.to(room.id).emit("room:update", room);
+  roomSendPartialUpdate(socket, room);
 }
 
 export function roomUpdateRules(
@@ -176,7 +180,7 @@ export function roomUpdateRules(
   rules: Room["rules"]
 ) {
   room.rules = rules;
-  socket.nsp.to(room.id).emit("room:update", room);
+  roomSendPartialUpdate(socket, room);
 }
 
 export function roomUpdateChat(
@@ -210,4 +214,9 @@ export function roomSystemChat(socket: MySocket, room: Room, message: string) {
   }
 
   socket.nsp.to(room.id).emit("room:chat:update", room.chat);
+}
+
+export function roomSendPartialUpdate(socket: MySocket, room: Room) {
+  const { chat, disconnectedUsers, ...rest } = room;
+  socket.nsp.to(room.id).emit("room:partial:update", rest);
 }

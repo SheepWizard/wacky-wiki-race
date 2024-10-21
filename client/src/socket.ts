@@ -1,5 +1,5 @@
 import { Socket } from "socket.io-client";
-import { Room, WikiPage } from "./types";
+import { Room, RoomPartial, WikiPage } from "./types";
 
 export interface ClientToServerEvents {
   "room:create": (userName: string) => void;
@@ -19,6 +19,7 @@ export interface ClientToServerEvents {
 
 export interface ServerToClientEvents {
   "room:update": (room: Room) => void;
+  "room:partial:update": (room: RoomPartial) => void;
   "room:chat:update": (chat: Room["chat"]) => void;
   session: (sessionId: string, userId: string) => void;
 }

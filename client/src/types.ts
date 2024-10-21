@@ -42,4 +42,6 @@ export interface Room {
   chat: Array<RoomChatMessage | RoomSystemChatMessage>;
 }
 
+export interface RoomPartial extends Omit<Room, "chat" | "disconnectedUsers"> {}
+
 export type Unarray<T> = T extends Array<infer R> ? R : never;

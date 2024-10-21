@@ -1,6 +1,6 @@
 import { ComponentChildren, createContext } from "preact";
-import { Room } from "../types";
-import { useContext, useEffect, useState } from "preact/hooks";
+import { Room, RoomPartial } from "../types";
+import { useCallback, useContext, useEffect, useState } from "preact/hooks";
 import { useSocket } from "./SessionProvider";
 
 interface RoomContextProps {
@@ -20,27 +20,35 @@ export default function RoomProvider({ children }: RoomProviderProps) {
   const [chat, setChat] = useState<Room["chat"]>([]);
   const socket = useSocket();
 
-  const handleRoomUpdate = (room: Room) => {
+  const handleRoomUpdate = useCallback((room: Room) => {
     setRoom(room);
-  };
-
-  const handleChatUpdate = (chat: Room["chat"]) => {
-    setChat(chat);
-  };
-
-  useEffect(() => {
-    socket.on("room:update", handleRoomUpdate);
-    return () => {
-      socket.off("room:update", handleRoomUpdate);
-    };
+    setChat(room.chat);
   }, []);
+
+  const handleChatUpdate = useCallback((chat: Room["chat"]) => {
+    setChat(chat);
+  }, []);
+
+  const handleRoomPartialUpdate = useCallback(
+    (partialRoom: RoomPartial) => {
+      if (!room) {
+        return;
+      }
+      setRoom({ ...room, ...partialRoom });
+    },
+    [room]
+  );
 
   useEffect(() => {
     socket.on("room:chat:update", handleChatUpdate);
+    socket.on("room:update", handleRoomUpdate);
+    socket.on("room:partial:update", handleRoomPartialUpdate);
     return () => {
       socket.off("room:chat:update", handleChatUpdate);
+      socket.off("room:update", handleRoomUpdate);
+      socket.off("room:partial:update", handleRoomPartialUpdate);
     };
-  }, []);
+  }, [handleRoomUpdate, handleChatUpdate, handleRoomPartialUpdate]);
 
   return (
     <RoomContext.Provider value={{ room, setRoom, chat }}>
