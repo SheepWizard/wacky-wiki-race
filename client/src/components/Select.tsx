@@ -1,5 +1,5 @@
 import { TargetedEvent } from "preact/compat";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { css, cva } from "../../styled-system/css";
 import { flex, vstack } from "../../styled-system/patterns";
 
@@ -42,17 +42,12 @@ export default function Select({
   const [selectIndex, setSelectedIndex] = useState(0);
   const selectedIndexRef = useRef(selectIndex);
 
-  //maybe add debounce
-  const handleOnFocus = () => {
-    setSearching(true);
-    setSelectedIndex(0);
-
+  const positionPopover = useCallback(() => {
     const popover = popoverRef.current;
     const input = inputRef.current;
     if (!popover || !input) {
       return;
     }
-    popover.showPopover();
     // Switch to this when its out
     // https://developer.chrome.com/blog/anchor-positioning-api
 
@@ -64,6 +59,20 @@ export default function Select({
 
     const offset = windowHeight - inputBox.bottom;
     popover.style.maxHeight = `${offset}px`;
+  }, []);
+
+  //maybe add debounce
+  const handleOnFocus = () => {
+    setSearching(true);
+    setSelectedIndex(0);
+
+    const popover = popoverRef.current;
+    const input = inputRef.current;
+    if (!popover || !input) {
+      return;
+    }
+    popover.showPopover();
+    positionPopover();
   };
 
   const handleInputOnChange = (e: TargetedEvent<HTMLInputElement>) => {
@@ -80,6 +89,16 @@ export default function Select({
     onChange(item, index);
     setSearchText("");
   };
+
+  useEffect(() => {
+    window.addEventListener("resize", positionPopover);
+    window.addEventListener("scroll", positionPopover, true);
+
+    return () => {
+      window.removeEventListener("resize", positionPopover);
+      window.removeEventListener("scroll", positionPopover, true);
+    };
+  }, [positionPopover]);
 
   useEffect(() => {
     selectedIndexRef.current = selectIndex;

@@ -19,6 +19,20 @@ export default function Chat() {
   const chatListRef = useRef<HTMLDivElement>(null);
   const [text, setText] = useState("");
 
+  const positionPopover = useCallback(() => {
+    const popover = popoverRef.current;
+    const button = buttonRef.current;
+
+    if (!popover || !button) {
+      return;
+    }
+
+    const buttonBox = button.getBoundingClientRect();
+    const popoverBox = popover.getBoundingClientRect();
+    popover.style.top = `${buttonBox.top - popoverBox.height - 10}px`;
+    popover.style.left = `${buttonBox.right - popoverBox.width}px`;
+  }, []);
+
   const handleOpenClick = () => {
     const popover = popoverRef.current;
     const button = buttonRef.current;
@@ -36,10 +50,7 @@ export default function Chat() {
     setChatOpen(true);
     popover.showPopover();
 
-    const buttonBox = button.getBoundingClientRect();
-    const popoverBox = popover.getBoundingClientRect();
-    popover.style.top = `${buttonBox.top - popoverBox.height - 10}px`;
-    popover.style.left = `${buttonBox.right - popoverBox.width}px`;
+    positionPopover();
   };
 
   const handleTextSend = useCallback(() => {
@@ -58,6 +69,16 @@ export default function Chat() {
     socket.emit("room:chat", room.id, text);
     setText("");
   }, [text, room]);
+
+  useEffect(() => {
+    window.addEventListener("resize", positionPopover);
+    window.addEventListener("scroll", positionPopover, true);
+
+    return () => {
+      window.removeEventListener("resize", positionPopover);
+      window.removeEventListener("scroll", positionPopover, true);
+    };
+  }, [positionPopover]);
 
   useEffect(() => {
     const chatList = chatListRef.current;
@@ -97,7 +118,7 @@ export default function Chat() {
           bg: "ww-white",
           shadow: "ww-mid",
           borderRadius: "br-12",
-          height: "500px",
+          height: "min(80%, 500px)",
           padding: 2,
           border: "solid 2px",
           borderColor: "ww-black",
