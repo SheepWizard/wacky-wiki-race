@@ -1,5 +1,3 @@
-//dont send chat when updating room
-
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { vstack } from "../../../styled-system/patterns";
 import { useRoom } from "../../providers/RoomProvider";
@@ -15,6 +13,7 @@ export default function Chat() {
   const { chat, room } = useRoom();
   const socket = useSocket();
   const [chatOpen, setChatOpen] = useState(false);
+  const [notificationBubble, setNotificationBubble] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
   const chatListRef = useRef<HTMLDivElement>(null);
@@ -42,6 +41,7 @@ export default function Chat() {
       return;
     }
 
+    setNotificationBubble(false);
     if (chatOpen) {
       setChatOpen(false);
       popover.hidePopover();
@@ -108,6 +108,13 @@ export default function Chat() {
     return () => window.removeEventListener("keypress", handleKeyPress);
   }, [handleTextSend]);
 
+  useEffect(() => {
+    if (chat.at(-1)?.__type === "systemChat") {
+      return;
+    }
+    setNotificationBubble(true);
+  }, [chat.length]);
+
   return (
     <>
       <div
@@ -146,14 +153,18 @@ export default function Chat() {
             )}
           </div>
           <div class={vstack({ w: "full", gap: 1 })}>
-            <Input value={text} onChange={setText} max={500} />
+            <Input value={text} onChange={setText} max={250} />
             <Button onClick={handleTextSend} stretch size="small">
               Send
             </Button>
           </div>
         </div>
       </div>
-      <ChatButton reff={buttonRef} onClick={handleOpenClick} />
+      <ChatButton
+        reff={buttonRef}
+        onClick={handleOpenClick}
+        notificationBubble={notificationBubble && !chatOpen}
+      />
     </>
   );
 }

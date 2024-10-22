@@ -1,5 +1,10 @@
 import { ComponentChildren, createContext } from "preact";
-import { Room, RoomPartial } from "../types";
+import {
+  Room,
+  RoomChatMessage,
+  RoomPartial,
+  RoomSystemChatMessage,
+} from "../types";
 import { useCallback, useContext, useEffect, useState } from "preact/hooks";
 import { useSocket } from "./SessionProvider";
 
@@ -25,9 +30,12 @@ export default function RoomProvider({ children }: RoomProviderProps) {
     setChat(room.chat);
   }, []);
 
-  const handleChatUpdate = useCallback((chat: Room["chat"]) => {
-    setChat(chat);
-  }, []);
+  const handleChatUpdate = useCallback(
+    (chatMessage: RoomChatMessage | RoomSystemChatMessage) => {
+      setChat((value) => [...value, chatMessage]);
+    },
+    []
+  );
 
   const handleRoomPartialUpdate = useCallback(
     (partialRoom: RoomPartial) => {

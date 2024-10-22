@@ -8,14 +8,14 @@ import {
 import { MySocket } from "./socket.js";
 import { customAlphabet } from "nanoid";
 
-interface RoomChatMessage {
+export interface RoomChatMessage {
   __type: "userChat";
   userId: string;
   userName: string;
   message: string;
 }
 
-interface RoomSystemChatMessage {
+export interface RoomSystemChatMessage {
   __type: "systemChat";
   message: string;
 }
@@ -189,31 +189,35 @@ export function roomUpdateChat(
   user: User,
   message: string
 ) {
-  room.chat.push({
+  const newMessage: RoomChatMessage = {
     message,
     __type: "userChat",
     userId: user.id,
     userName: user.userName,
-  });
+  };
+
+  room.chat.push(newMessage);
 
   if (room.chat.length > 500) {
     room.chat.shift();
   }
 
-  socket.nsp.to(room.id).emit("room:chat:update", room.chat);
+  socket.nsp.to(room.id).emit("room:chat:update", newMessage);
 }
 
 export function roomSystemChat(socket: MySocket, room: Room, message: string) {
-  room.chat.push({
+  const newMessage: RoomSystemChatMessage = {
     message,
     __type: "systemChat",
-  });
+  };
+
+  room.chat.push(newMessage);
 
   if (room.chat.length > 500) {
     room.chat.shift();
   }
 
-  socket.nsp.to(room.id).emit("room:chat:update", room.chat);
+  socket.nsp.to(room.id).emit("room:chat:update", newMessage);
 }
 
 export function roomSendPartialUpdate(socket: MySocket, room: Room) {

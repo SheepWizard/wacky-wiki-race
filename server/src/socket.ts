@@ -1,5 +1,10 @@
 import { Socket } from "socket.io";
-import { Room, RoomPartial } from "./room.js";
+import {
+  Room,
+  RoomChatMessage,
+  RoomPartial,
+  RoomSystemChatMessage,
+} from "./room.js";
 import { WikiPage } from "./user.js";
 
 export interface ClientToServerEvents {
@@ -21,7 +26,7 @@ export interface ClientToServerEvents {
 export interface ServerToClientEvents {
   "room:update": (room: Room) => void;
   "room:partial:update": (room: RoomPartial) => void;
-  "room:chat:update": (chat: Room["chat"]) => void;
+  "room:chat:update": (chat: RoomChatMessage | RoomSystemChatMessage) => void;
   session: (sessionId: string, userId: string) => void;
 }
 
