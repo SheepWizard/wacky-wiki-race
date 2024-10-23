@@ -1,3 +1,4 @@
+import { css } from "../../styled-system/css";
 import { center } from "../../styled-system/patterns";
 import CrownIcon from "./icons/CrownIcon";
 
@@ -28,7 +29,7 @@ export default function NameTag({ name, self, ready, isOwner }: NameTagProps) {
         },
       })}
     >
-      {isOwner && <CrownIcon />}
+      {isOwner && <CrownIcon class={css({ flexShrink: 0 })} />}
       <p>{name}</p>
     </div>
   );

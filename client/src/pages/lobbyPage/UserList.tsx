@@ -1,3 +1,4 @@
+import { css } from "../../../styled-system/css";
 import { flex } from "../../../styled-system/patterns";
 import NameTag from "../../components/NameTag";
 import { useRoom } from "../../providers/RoomProvider";
@@ -22,7 +23,7 @@ export default function UserList() {
       })}
     >
       {room.users.map((user) => (
-        <li>
+        <li class={css({ flexShrink: 0 })}>
           <NameTag
             name={user.userName}
             self={user.id === userId}
