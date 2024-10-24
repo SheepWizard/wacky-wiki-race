@@ -17,6 +17,7 @@ export default function Chat() {
   const popoverRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
   const chatListRef = useRef<HTMLDivElement>(null);
+  const previousHeight = useRef(0);
   const [text, setText] = useState("");
 
   const positionPopover = useCallback(() => {
@@ -86,14 +87,13 @@ export default function Chat() {
     if (!chatList) {
       return;
     }
-    // const chatListBox = chatList.getBoundingClientRect();
+    const chatListBox = chatList.getBoundingClientRect();
 
-    // if (chatList.scrollTop + chatListBox.height !== chatList.scrollHeight) {
-    //   return;
-    // }
-
-    chatList.scrollTo(0, chatList.scrollHeight);
-  });
+    if (chatList.scrollTop + chatListBox.height >= previousHeight.current) {
+      chatList.scrollTo(0, chatList.scrollHeight);
+      previousHeight.current = chatList.scrollTop + chatListBox.height;
+    }
+  }, [chat.length]);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
