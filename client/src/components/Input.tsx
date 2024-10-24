@@ -1,7 +1,7 @@
 import { JSX } from "preact/jsx-runtime";
 import { css } from "../../styled-system/css";
 import { vstack } from "../../styled-system/patterns";
-import { Ref, useRef } from "preact/hooks";
+import { useRef } from "preact/hooks";
 
 interface InputProps {
   value: string;
