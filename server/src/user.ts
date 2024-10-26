@@ -56,3 +56,5 @@ export function userReadyUp(user: User, ready: boolean) {
 export function userSurrender(user: User, surrender: boolean) {
   user.surrendered = surrender;
 }
+
+// add user cleanup on timer

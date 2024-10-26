@@ -224,3 +224,9 @@ export function roomSendPartialUpdate(socket: MySocket, room: Room) {
   const { chat, disconnectedUsers, ...rest } = room;
   socket.nsp.to(room.id).emit("room:partial:update", rest);
 }
+
+export function roomRemove(roomId: string) {
+  rooms.delete(roomId);
+}
+
+// add room cleanup on timer

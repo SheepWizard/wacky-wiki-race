@@ -7,6 +7,7 @@ import {
   roomGetById,
   roomPlay,
   roomReAddUser,
+  roomRemove,
   roomRemoveUser,
   roomReset,
   roomSetEnd,
@@ -60,6 +61,11 @@ export function handleRoomReJoin(socket: MySocket, roomId: string) {
   );
   if (!foundUser) {
     console.log("User not found");
+    return;
+  }
+
+  if (room.users.length === 0) {
+    roomRemove(room.id);
     return;
   }
 
