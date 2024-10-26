@@ -25,11 +25,17 @@ export default function SessionProvider({ children }: SessionProviderProps) {
     sessionStorage.getItem(sessionKey)
   );
   const [userId, setUserId] = useState(sessionStorage.getItem(userKey));
-  const socket: MySocket = useMemo(() => io(URL), []);
+  const socket: MySocket = useMemo(
+    () =>
+      io(URL, {
+        transports: ["websocket", "polling"],
+      }),
+    []
+  );
   socket.auth = {
     sessionId: sessionId,
   };
-  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     const handleSession = (_sessionId: string, _userId: string) => {
@@ -40,6 +46,8 @@ export default function SessionProvider({ children }: SessionProviderProps) {
     };
 
     const handleConnectError = () => {
+      // revert to classic upgrade
+      socket.io.opts.transports = ["polling", "websocket"];
       setIsConnected(false);
     };
 
