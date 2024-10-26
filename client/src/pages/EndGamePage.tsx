@@ -1,5 +1,4 @@
-import { Fragment } from "preact/jsx-runtime";
-import { center, vstack } from "../../styled-system/patterns";
+import { center, hstack, vstack } from "../../styled-system/patterns";
 import Button from "../components/Button";
 import { useRoom } from "../providers/RoomProvider";
 import { useSession, useSocket } from "../providers/SessionProvider";
@@ -33,9 +32,18 @@ export default function EndGamePage() {
       route: x.route,
     }));
 
+  const users = winningUser ? [winningUser, ...otherUsers] : otherUsers;
+
   return (
-    <div class={center({ bg: "ww-yellow", h: "lvh", overflowY: "auto" })}>
-      <div class={vstack({ gap: 2 })}>
+    <div class={center({ bg: "ww-yellow", h: "lvh" })}>
+      <div
+        class={vstack({
+          gap: 2,
+          h: "lvh",
+          paddingBlock: 2,
+          overflowX: "hidden",
+        })}
+      >
         {winningUser ? (
           <>
             <h1>Winner</h1>
@@ -44,25 +52,46 @@ export default function EndGamePage() {
         ) : (
           <h1>Surrender</h1>
         )}
-        <ul class={vstack({})}>
-          {winningUser?.route.map((pageName, index) => (
-            <li key={index}>{pageName.title.replaceAll("_", " ")}</li>
-          ))}
+        <ul
+          class={hstack({
+            overflowX: "auto",
+            overflowY: "hidden",
+            scrollbar: "hidden",
+            w: "full",
+            gap: 3,
+            flexGrow: 1,
+            maxHeight: "600px",
+          })}
+        >
+          {users.map((user, i) => {
+            return (
+              <li
+                key={i}
+                class={vstack({
+                  marginInline: 2,
+                  bg: "ww-white",
+                  borderRadius: "br-25",
+                  border: "solid 2px",
+                  borderColor: "ww-black",
+                  p: 6,
+                  boxShadow: "ww-mid",
+                  h: "calc(100% - 20px)",
+                })}
+              >
+                <h2>{user.userName}</h2>
+                <ul class={vstack()}>
+                  {user.route.map((pageTitle, index) => (
+                    <li key={index}>{pageTitle.title.replaceAll("_", " ")}</li>
+                  ))}
+                </ul>
+              </li>
+            );
+          })}
         </ul>
-        {otherUsers.map((user, i) => {
-          return (
-            <Fragment key={i}>
-              <h2>{user.userName}</h2>
-              <ul class={vstack({})}>
-                {user.route.map((pageTitle, index) => (
-                  <li key={index}>{pageTitle.title.replaceAll("_", " ")}</li>
-                ))}
-              </ul>
-            </Fragment>
-          );
-        })}
-        {isRoomOwner && <Button onClick={handleNewGame}>New game</Button>}
-        <Button onClick={handleRoomLeave}>Leave</Button>
+        <div class={hstack({ gap: 4 })}>
+          {isRoomOwner && <Button onClick={handleNewGame}>New game</Button>}
+          <Button onClick={handleRoomLeave}>Leave</Button>
+        </div>
       </div>
     </div>
   );
