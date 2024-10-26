@@ -2,6 +2,7 @@ import { TargetedEvent } from "preact/compat";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { css, cva } from "../../styled-system/css";
 import { flex, vstack } from "../../styled-system/patterns";
+import { useWindowChange } from "../hooks/useWindowChange";
 
 interface SearchInputProps {
   value: string;
@@ -60,6 +61,7 @@ export default function Select({
     const offset = windowHeight - inputBox.bottom;
     popover.style.maxHeight = `${offset}px`;
   }, []);
+  useWindowChange(positionPopover);
 
   //maybe add debounce
   const handleOnFocus = () => {
@@ -89,16 +91,6 @@ export default function Select({
     onChange(item, index);
     setSearchText("");
   };
-
-  useEffect(() => {
-    window.addEventListener("resize", positionPopover);
-    window.addEventListener("scroll", positionPopover, true);
-
-    return () => {
-      window.removeEventListener("resize", positionPopover);
-      window.removeEventListener("scroll", positionPopover, true);
-    };
-  }, [positionPopover]);
 
   useEffect(() => {
     selectedIndexRef.current = selectIndex;
