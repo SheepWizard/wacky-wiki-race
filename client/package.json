@@ -9,12 +9,12 @@
     "prepare": "panda codegen"
   },
   "dependencies": {
-    "preact": "^10.22.0",
+    "preact": "^10.24.3",
     "socket.io-client": "^4.7.5"
   },
   "devDependencies": {
     "@pandacss/dev": "^0.41.0",
-    "@preact/preset-vite": "^2.8.2",
+    "@preact/preset-vite": "^2.9.1",
     "typescript": "^5.2.2",
     "vite": "^5.3.1"
   }

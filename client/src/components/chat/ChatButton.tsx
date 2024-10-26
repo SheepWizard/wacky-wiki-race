@@ -1,9 +1,9 @@
-import { Ref } from "preact";
+import { RefObject } from "preact";
 import { center } from "../../../styled-system/patterns";
 
 interface ChatButtonProps {
   onClick: () => void;
-  reff: Ref<HTMLDivElement>;
+  reff: RefObject<HTMLDivElement>;
   notificationBubble: boolean;
 }
 

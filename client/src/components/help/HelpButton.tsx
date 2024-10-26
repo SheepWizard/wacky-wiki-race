@@ -1,9 +1,9 @@
-import { Ref } from "preact";
+import { RefObject } from "preact";
 import { center } from "../../../styled-system/patterns";
 
 interface HelpButtonProps {
   onClick: () => void;
-  reff: Ref<HTMLDivElement>;
+  reff: RefObject<HTMLDivElement>;
 }
 
 export default function HelpButton({ onClick, reff }: HelpButtonProps) {

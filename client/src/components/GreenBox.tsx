@@ -14,6 +14,7 @@ export default function GreenBox({ children }: GreenBoxProps) {
         height: "100%",
         overflowY: "auto",
         alignItems: "safe center",
+        scrollbarWidth: "thin",
       })}
     >
       <div

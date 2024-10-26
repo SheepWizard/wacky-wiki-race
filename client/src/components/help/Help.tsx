@@ -71,8 +71,12 @@ export default function Help() {
           padding: 2,
           border: "solid 2px",
           borderColor: "ww-black",
+          overflowY: "auto",
+          scrollbarWidth: "thin",
         })}
-      ></div>
+      >
+        <h2>How to play</h2>
+      </div>
       <HelpButton reff={buttonRef} onClick={handleOpenClick} />
     </>
   );
