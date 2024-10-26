@@ -22,6 +22,7 @@ export function userCreate(id: string, userName: string) {
     ready: false,
     surrendered: false,
   };
+
   users.set(id, user);
   return user;
 }
@@ -56,5 +57,3 @@ export function userReadyUp(user: User, ready: boolean) {
 export function userSurrender(user: User, surrender: boolean) {
   user.surrendered = surrender;
 }
-
-// add user cleanup on timer

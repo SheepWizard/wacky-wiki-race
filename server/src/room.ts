@@ -1,12 +1,14 @@
+import { customAlphabet } from "nanoid";
+import { roomStore, watchProxy } from "./keyStore.js";
+import { MySocket } from "./socket.js";
 import {
   User,
   userClearRoutes,
   userReadyUp,
+  userRemove,
   userSurrender,
   WikiPage,
 } from "./user.js";
-import { MySocket } from "./socket.js";
-import { customAlphabet } from "nanoid";
 
 export interface RoomChatMessage {
   __type: "userChat";
@@ -36,6 +38,7 @@ export interface Room {
     noNavBox: boolean;
   };
   chat: Array<RoomChatMessage | RoomSystemChatMessage>;
+  lastAccessed: Date;
 }
 
 export interface RoomPartial extends Omit<Room, "chat" | "disconnectedUsers"> {}
@@ -44,8 +47,6 @@ const nanoid = customAlphabet(
   "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM",
   8
 );
-
-export const rooms: Map<string, Room> = new Map();
 
 export function roomCreate(user: User) {
   const roomId = nanoid();
@@ -71,8 +72,12 @@ export function roomCreate(user: User) {
       noNavBox: false,
     },
     chat: [],
+    lastAccessed: new Date(),
   };
-  rooms.set(roomId, room);
+
+  const roomProxy = watchProxy(room);
+
+  roomStore.set(roomId, roomProxy);
   return room;
 }
 
@@ -119,7 +124,7 @@ export function roomRemoveUser(
 }
 
 export function roomGetById(id: string) {
-  return rooms.get(id);
+  return roomStore.get(id);
 }
 
 export function roomPlay(socket: MySocket, room: Room) {
@@ -226,7 +231,11 @@ export function roomSendPartialUpdate(socket: MySocket, room: Room) {
 }
 
 export function roomRemove(roomId: string) {
-  rooms.delete(roomId);
+  const room = roomStore.get(roomId);
+  if (!room) {
+    return;
+  }
+  // tell user that they are done!
+  room.users.forEach((user) => userRemove(user.id));
+  roomStore.delete(roomId);
 }
-
-// add room cleanup on timer

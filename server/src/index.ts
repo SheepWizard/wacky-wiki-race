@@ -1,6 +1,11 @@
-import { Server } from "socket.io";
 import express from "express";
 import { createServer } from "node:http";
+import { Server } from "socket.io";
+import { watchStore } from "./keyStore.js";
+import {
+  getSession,
+  sessionMiddleware,
+} from "./middleware/sessionMiddleware.js";
 import {
   handleRoomChat,
   handleRoomCreate,
@@ -16,10 +21,6 @@ import {
   handleUpdateRules,
   handleUserRoute,
 } from "./roomHandler.js";
-import {
-  getSession,
-  sessionMiddleware,
-} from "./middleware/sessionMiddleware.js";
 import {
   ClientToServerEvents,
   ServerToClientEvents,
@@ -38,7 +39,11 @@ const io = new Server<
     origin: ["http://localhost:5173", "https://wiki.sheepwizard.com"], //change me
     methods: ["GET", "POST"],
   },
+  pingInterval: 3000,
+  pingTimeout: 3000,
 });
+
+watchStore();
 
 io.use(sessionMiddleware);
 

@@ -12,7 +12,6 @@ export function useOutsideRefClicked(
         event.target instanceof Node &&
         !ref.current.contains(event.target)
       ) {
-        console.log("click");
         onClick(event);
       }
     }

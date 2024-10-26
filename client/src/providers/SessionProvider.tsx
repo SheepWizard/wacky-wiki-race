@@ -28,6 +28,7 @@ export default function SessionProvider({ children }: SessionProviderProps) {
   const socket: MySocket = useMemo(
     () =>
       io(URL, {
+        reconnectionDelay: 300,
         transports: ["websocket", "polling"],
       }),
     []
@@ -35,7 +36,7 @@ export default function SessionProvider({ children }: SessionProviderProps) {
   socket.auth = {
     sessionId: sessionId,
   };
-  const [isConnected, setIsConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState(socket.connected);
 
   useEffect(() => {
     const handleSession = (_sessionId: string, _userId: string) => {

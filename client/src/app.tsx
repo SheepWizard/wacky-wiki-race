@@ -6,16 +6,14 @@ import GamePage from "./pages/gamePage/GamePage";
 import LandingPage from "./pages/landingPage/LandingPage";
 import LobbyPage from "./pages/lobbyPage/LobbyPage";
 import { useRoom } from "./providers/RoomProvider";
-import { useSession } from "./providers/SessionProvider";
 import { Room } from "./types";
 
 export function App() {
-  const { isConnected } = useSession();
   const { room } = useRoom();
 
   return (
     <>
-      {!isConnected && <NotConnectedBanner />}
+      <NotConnectedBanner />
       {getPage(room?.state)}
       {room && <Chat />}
       <Help />

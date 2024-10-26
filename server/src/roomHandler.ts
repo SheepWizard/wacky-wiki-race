@@ -1,3 +1,5 @@
+import z from "zod";
+import { getSession } from "./middleware/sessionMiddleware.js";
 import {
   Room,
   roomAddUser,
@@ -7,7 +9,6 @@ import {
   roomGetById,
   roomPlay,
   roomReAddUser,
-  roomRemove,
   roomRemoveUser,
   roomReset,
   roomSetEnd,
@@ -18,8 +19,6 @@ import {
   roomUserSurrender,
 } from "./room.js";
 import { MySocket } from "./socket.js";
-import z from "zod";
-import { getSession } from "./middleware/sessionMiddleware.js";
 import {
   userAdd,
   userAddToRoute,
@@ -61,11 +60,6 @@ export function handleRoomReJoin(socket: MySocket, roomId: string) {
   );
   if (!foundUser) {
     console.log("User not found");
-    return;
-  }
-
-  if (room.users.length === 0) {
-    roomRemove(room.id);
     return;
   }
 
