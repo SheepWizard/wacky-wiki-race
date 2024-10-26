@@ -1,20 +1,19 @@
 import { Fragment } from "preact/jsx-runtime";
 import { center, vstack } from "../../styled-system/patterns";
-import { Room } from "../types";
 import Button from "../components/Button";
 import { useRoom } from "../providers/RoomProvider";
 import { useSession, useSocket } from "../providers/SessionProvider";
-import Chat from "../components/chat/Chat";
 
-interface EndGamePageProps {
-  room: Room;
-}
-
-export default function EndGamePage({ room }: EndGamePageProps) {
+export default function EndGamePage() {
   const socket = useSocket();
   const { userId } = useSession();
+  const { setRoom, room } = useRoom();
+
+  if (!room) {
+    return null;
+  }
+
   const isRoomOwner = room.roomOwnerId === userId;
-  const { setRoom } = useRoom();
 
   const handleNewGame = () => {
     socket.emit("room:lobby", room.id);
@@ -65,7 +64,6 @@ export default function EndGamePage({ room }: EndGamePageProps) {
         {isRoomOwner && <Button onClick={handleNewGame}>New game</Button>}
         <Button onClick={handleRoomLeave}>Leave</Button>
       </div>
-      <Chat />
     </div>
   );
 }

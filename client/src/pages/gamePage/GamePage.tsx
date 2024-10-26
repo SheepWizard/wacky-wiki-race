@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
-import { useSocket } from "../../providers/SessionProvider";
-import { useRoom } from "../../providers/RoomProvider";
-import { wikiApiGetPage, wikiApiGetPageIdFromTitle } from "../../wiki";
-import { anchorClickListen } from "../../util/wikiFormatter";
+import { css } from "../../../styled-system/css";
 import { center, vstack } from "../../../styled-system/patterns";
 import Button from "../../components/Button";
-import { css } from "../../../styled-system/css";
+import { useRoom } from "../../providers/RoomProvider";
+import { useSocket } from "../../providers/SessionProvider";
+import { anchorClickListen } from "../../util/wikiFormatter";
+import { wikiApiGetPage, wikiApiGetPageIdFromTitle } from "../../wiki";
 import GameHeader from "./GameHeader";
-import Chat from "../../components/chat/Chat";
 
 function scrollToTop() {
   window.scrollTo({
@@ -113,7 +112,6 @@ export default function GamePage() {
           </div>
         </div>
       </div>
-      <Chat />
     </>
   );
 }

@@ -1,17 +1,16 @@
 import { useEffect } from "preact/hooks";
-import { wikiApiGetRandomPage } from "../../wiki";
+import { css } from "../../../styled-system/css";
+import { hstack } from "../../../styled-system/patterns";
+import Button from "../../components/Button";
 import GreenBox from "../../components/GreenBox";
 import Title from "../../components/Title";
-import Button from "../../components/Button";
-import { hstack } from "../../../styled-system/patterns";
-import { css } from "../../../styled-system/css";
 import { useRoom } from "../../providers/RoomProvider";
 import { useSession, useSocket } from "../../providers/SessionProvider";
-import RouteSelect from "./RouteSelect";
+import { wikiApiGetRandomPage } from "../../wiki";
 import FriendInvite from "./FriendInvite";
-import UserList from "./UserList";
+import RouteSelect from "./RouteSelect";
 import Rules from "./Rules";
-import Chat from "../../components/chat/Chat";
+import UserList from "./UserList";
 
 export default function LobbyPage() {
   const { userId } = useSession();
@@ -75,7 +74,6 @@ export default function LobbyPage() {
 
           <FriendInvite />
           <UserList />
-          <Chat />
           <RouteSelect />
           <Rules />
 

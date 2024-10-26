@@ -1,14 +1,14 @@
 import { ComponentChildren, createContext } from "preact";
-import { MySocket } from "../socket";
 import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { io } from "socket.io-client";
-import { URL } from "../socket";
 import { center } from "../../styled-system/patterns";
+import { MySocket, URL } from "../socket";
 
 interface SessionContextProps {
   sessionId: string;
   userId: string;
   socket: MySocket;
+  isConnected: boolean;
 }
 
 const SessionContext = createContext<SessionContextProps | null>(null);
@@ -25,11 +25,11 @@ export default function SessionProvider({ children }: SessionProviderProps) {
     sessionStorage.getItem(sessionKey)
   );
   const [userId, setUserId] = useState(sessionStorage.getItem(userKey));
-
   const socket: MySocket = useMemo(() => io(URL), []);
   socket.auth = {
     sessionId: sessionId,
   };
+  const [isConnected, setIsConnected] = useState(socket.connected);
 
   useEffect(() => {
     const handleSession = (_sessionId: string, _userId: string) => {
@@ -40,20 +40,26 @@ export default function SessionProvider({ children }: SessionProviderProps) {
     };
 
     const handleConnectError = () => {
-      console.log("Error connecting");
+      setIsConnected(false);
+    };
+
+    const handleDisconnect = () => {
+      setIsConnected(false);
     };
 
     const handleConnect = () => {
-      console.log("connect");
+      setIsConnected(true);
     };
 
     socket.on("session", handleSession);
     socket.on("connect", handleConnect);
+    socket.on("disconnect", handleDisconnect);
     socket.on("connect_error", handleConnectError);
 
     return () => {
       socket.off("session", handleSession);
       socket.off("connect", handleConnect);
+      socket.off("disconnect", handleDisconnect);
       socket.off("connect_error", handleConnectError);
     };
   }, [socket]);
@@ -62,12 +68,24 @@ export default function SessionProvider({ children }: SessionProviderProps) {
     socket.connect();
   }, [socket]);
 
+  useEffect(() => {
+    if (sessionId && userId) {
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      socket.connect();
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  });
+
   if (!sessionId || !userId) {
     return <h1 class={center()}>Loading</h1>;
   }
 
   return (
-    <SessionContext.Provider value={{ sessionId, userId, socket }}>
+    <SessionContext.Provider value={{ sessionId, userId, socket, isConnected }}>
       {children}
     </SessionContext.Provider>
   );
@@ -83,6 +101,7 @@ export function useSession() {
   return {
     sessionId: ctx.sessionId,
     userId: ctx.userId,
+    isConnected: ctx.isConnected,
   };
 }
 

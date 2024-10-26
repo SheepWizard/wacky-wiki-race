@@ -3,10 +3,11 @@ import { flex, vstack } from "../../../styled-system/patterns";
 import Button from "../../components/Button";
 import Timer from "../../components/Timer";
 import { useRoom } from "../../providers/RoomProvider";
-import { useSocket } from "../../providers/SessionProvider";
+import { useSession, useSocket } from "../../providers/SessionProvider";
 
 export default function GameHeader() {
   const { room, setRoom } = useRoom();
+  const { isConnected } = useSession();
   const socket = useSocket();
 
   if (!room) {
@@ -33,7 +34,7 @@ export default function GameHeader() {
         alignItems: "center",
         justifyContent: "space-between",
         position: "sticky",
-        top: 0,
+        top: isConnected ? 0 : 10,
         zIndex: 5,
         paddingInline: 20,
         marginBottom: 3,

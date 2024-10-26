@@ -1,13 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "preact/hooks";
+import { css } from "../../../styled-system/css";
 import { vstack } from "../../../styled-system/patterns";
+import { useWindowChange } from "../../hooks/useWindowChange";
 import { useRoom } from "../../providers/RoomProvider";
-import Input from "../Input";
 import { useSocket } from "../../providers/SessionProvider";
 import Button from "../Button";
+import Input from "../Input";
 import ChatButton from "./ChatButton";
-import { css } from "../../../styled-system/css";
-import UserChatMessage from "./UserChatMessage";
 import SystemChatMessage from "./SystemChatMessage";
+import UserChatMessage from "./UserChatMessage";
 
 export default function Chat() {
   const { chat, room } = useRoom();
@@ -33,12 +40,12 @@ export default function Chat() {
     popover.style.top = `${buttonBox.top - popoverBox.height - 10}px`;
     popover.style.left = `${buttonBox.right - popoverBox.width}px`;
   }, []);
+  useWindowChange(positionPopover);
 
   const handleOpenClick = () => {
     const popover = popoverRef.current;
-    const button = buttonRef.current;
 
-    if (!popover || !button) {
+    if (!popover) {
       return;
     }
 
@@ -72,7 +79,7 @@ export default function Chat() {
     setText("");
   }, [text, room]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.addEventListener("resize", positionPopover);
     window.addEventListener("scroll", positionPopover, true);
 
