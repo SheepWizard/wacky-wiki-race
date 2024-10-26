@@ -73,6 +73,7 @@ export default function Select({
     if (!popover || !input) {
       return;
     }
+    input.scrollIntoView({ behavior: "smooth" });
     popover.showPopover();
     positionPopover();
   };
