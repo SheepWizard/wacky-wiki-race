@@ -1,7 +1,7 @@
 import express from "express";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
-import { watchStore } from "./keyStore.js";
+import { roomStore, watchStore } from "./keyStore.js";
 import {
   getSession,
   sessionMiddleware,
@@ -90,3 +90,17 @@ io.on("connection", (socket) => {
 server.listen(3001, () => {
   console.log("server running at http://localhost:3001");
 });
+
+app.get("/rooms", (_, res) => {
+  res.json({
+    count: roomStore.size,
+    rooms: Array.from(roomStore.entries()),
+  });
+});
+
+// app.get("/rooms", (_, res) => {
+//   res.json({
+//     count: roomStore.size,
+//     rooms: Array.from(roomStore.entries()),
+//   });
+// });
