@@ -1,7 +1,7 @@
 import { useState } from "preact/hooks";
-import Select from "./Select";
-import { wikiApiSearchForPage } from "../wiki";
 import { WikiPage } from "../types";
+import { wikiApiGetRandomPage, wikiApiSearchForPage } from "../wiki";
+import Select from "./Select";
 
 interface WikiSearchInputProps {
   value: string;
@@ -33,6 +33,21 @@ export function WikiSearchInput({
     }
   };
 
+  const handleRandomButtonClick = async () => {
+    try {
+      setLoading(true);
+      const randomPage = await wikiApiGetRandomPage();
+
+      onChange({
+        ...randomPage,
+        pageId: randomPage.pageId,
+      });
+    } catch {
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Select
       value={value}
@@ -49,6 +64,8 @@ export function WikiSearchInput({
       onSearchTextChange={handleSearchTextChange}
       loading={loading}
       disabled={disabled}
+      labelButton="🎲"
+      onLabelButtonClick={handleRandomButtonClick}
     />
   );
 }

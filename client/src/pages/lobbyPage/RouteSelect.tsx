@@ -1,11 +1,11 @@
 import { useEffect, useState } from "preact/hooks";
+import { css } from "../../../styled-system/css";
+import { vstack } from "../../../styled-system/patterns";
 import { WikiSearchInput } from "../../components/WikiSearchInput";
 import { useRoom } from "../../providers/RoomProvider";
 import { useSocket } from "../../providers/SessionProvider";
-import { wikiApiGetExtract } from "../../wiki";
-import { vstack } from "../../../styled-system/patterns";
-import { css } from "../../../styled-system/css";
 import { WikiPage } from "../../types";
+import { wikiApiGetExtract } from "../../wiki";
 
 export default function RouteSelect() {
   const { room } = useRoom();

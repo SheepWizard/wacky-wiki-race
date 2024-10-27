@@ -1,7 +1,8 @@
+import { useRef } from "preact/hooks";
 import { JSX } from "preact/jsx-runtime";
 import { css } from "../../styled-system/css";
 import { vstack } from "../../styled-system/patterns";
-import { useRef } from "preact/hooks";
+import InputLabel from "./InputLabel";
 
 interface InputProps {
   value: string;
@@ -32,7 +33,7 @@ export default function Input({
     <div
       class={vstack({ gap: "2px", width: "100%", alignItems: "flex-start" })}
     >
-      {labelValue && <p class={css({ ml: 1 })}>{labelValue}</p>}
+      {labelValue && <InputLabel labelValue={labelValue} />}
       <input
         ref={ref}
         class={css({

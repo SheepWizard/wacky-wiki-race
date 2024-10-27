@@ -18,7 +18,7 @@ export async function wikiApiGetRandomPage(): Promise<WikiPage> {
   const data = await result.json();
   const titles = data.query.random.map((x: any) => ({
     title: x.title.replaceAll(" ", "_"),
-    pageId: x.pageid,
+    pageId: x.id,
   }));
   return titles[0];
 }

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { css, cva } from "../../styled-system/css";
 import { flex, vstack } from "../../styled-system/patterns";
 import { useWindowChange } from "../hooks/useWindowChange";
+import InputLabel from "./InputLabel";
 
 interface SearchInputProps {
   value: string;
@@ -12,6 +13,8 @@ interface SearchInputProps {
   loading?: boolean;
   labelValue?: string;
   disabled?: boolean;
+  labelButton?: string;
+  onLabelButtonClick?: () => void;
 }
 
 const input = cva({
@@ -35,6 +38,8 @@ export default function Select({
   loading,
   labelValue,
   disabled,
+  labelButton,
+  onLabelButtonClick,
 }: SearchInputProps) {
   const popoverRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -63,7 +68,6 @@ export default function Select({
   }, []);
   useWindowChange(positionPopover);
 
-  //maybe add debounce
   const handleOnFocus = () => {
     setSearching(true);
     setSelectedIndex(0);
@@ -94,6 +98,13 @@ export default function Select({
   const handleItemClick = (item: string, index: number) => {
     onChange(item, index);
     setSearchText("");
+  };
+
+  const handleLabelButtonClick = () => {
+    if (disabled) {
+      return;
+    }
+    onLabelButtonClick?.();
   };
 
   useEffect(() => {
@@ -156,7 +167,13 @@ export default function Select({
     <div
       class={vstack({ gap: "2px", width: "100%", alignItems: "flex-start" })}
     >
-      {labelValue && <p class={css({ ml: 1 })}>{labelValue}</p>}
+      {labelValue && (
+        <InputLabel
+          labelValue={labelValue}
+          labelButton={labelButton}
+          onLabelButtonClick={handleLabelButtonClick}
+        />
+      )}
       <div class={flex({ flexDir: "column", width: "100%" })}>
         <input
           class={input()}
