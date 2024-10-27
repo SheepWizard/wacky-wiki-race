@@ -1,11 +1,11 @@
 import { useState } from "preact/hooks";
-import { useRoom } from "../../providers/RoomProvider";
+import { css } from "../../../styled-system/css";
 import { center, vstack } from "../../../styled-system/patterns";
+import Button from "../../components/Button";
 import Dialog from "../../components/Dialog";
 import { ToggleButton } from "../../components/ToggleButton";
+import { useRoom } from "../../providers/RoomProvider";
 import { useSocket } from "../../providers/SessionProvider";
-import Button from "../../components/Button";
-import { css } from "../../../styled-system/css";
 
 export default function Rules() {
   const [showRulesDialog, setShowRulesDialog] = useState(false);
@@ -71,6 +71,18 @@ export default function Rules() {
               }}
             >
               Disable nav boxes
+            </ToggleButton>
+            <ToggleButton
+              toggled={room.rules.disableChat}
+              onToggled={() => {
+                const updatedRules = {
+                  ...room.rules,
+                  disableChat: !room.rules.disableChat,
+                };
+                socket.emit("room:rules:updateRules", room.id, updatedRules);
+              }}
+            >
+              Disable chat
             </ToggleButton>
           </div>
           <div class={css({ alignSelf: "center", marginTop: 3 })}>

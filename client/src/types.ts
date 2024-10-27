@@ -38,6 +38,7 @@ export interface Room {
   rules: {
     noPageSearch: boolean;
     noNavBox: boolean;
+    disableChat: boolean;
   };
   chat: Array<RoomChatMessage | RoomSystemChatMessage>;
 }

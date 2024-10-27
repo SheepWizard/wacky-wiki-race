@@ -36,6 +36,7 @@ export interface Room {
   rules: {
     noPageSearch: boolean;
     noNavBox: boolean;
+    disableChat: boolean;
   };
   chat: Array<RoomChatMessage | RoomSystemChatMessage>;
   lastAccessed: Date;
@@ -70,6 +71,7 @@ export function roomCreate(user: User) {
     rules: {
       noPageSearch: false,
       noNavBox: false,
+      disableChat: false,
     },
     chat: [],
     lastAccessed: new Date(),
