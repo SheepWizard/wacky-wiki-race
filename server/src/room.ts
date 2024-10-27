@@ -33,6 +33,7 @@ export interface Room {
   startTime: Date;
   endTime: Date;
   winnerUserId?: string;
+  paused: boolean;
   rules: {
     noPageSearch: boolean;
     noNavBox: boolean;
@@ -58,6 +59,7 @@ export function roomCreate(user: User) {
     disconnectedUsers: [],
     state: "lobby",
     roomOwnerId: user.id,
+    paused: false,
     start: {
       title: "Dog",
       pageId: 4269567,
@@ -160,6 +162,7 @@ export function roomReset(socket: MySocket, room: Room) {
   room.state = "lobby";
   room.winnerUserId = "";
   room.disconnectedUsers = [];
+  room.paused = false;
   for (const user of room.users) {
     userClearRoutes(user);
     userReadyUp(user, false);
@@ -225,6 +228,16 @@ export function roomSystemChat(socket: MySocket, room: Room, message: string) {
   }
 
   socket.nsp.to(room.id).emit("room:chat:update", newMessage);
+}
+
+export function roomUpdatePause(socket: MySocket, room: Room, user: User) {
+  room.paused = !room.paused;
+  roomSendPartialUpdate(socket, room);
+  roomSystemChat(
+    socket,
+    room,
+    `${user.userName} ${room.paused ? "paused" : "unpaused"} the game`
+  );
 }
 
 export function roomSendPartialUpdate(socket: MySocket, room: Room) {

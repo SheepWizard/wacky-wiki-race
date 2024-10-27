@@ -11,12 +11,13 @@ import { Room } from "./types";
 export function App() {
   const { room } = useRoom();
 
+  const showHelp = !room || room.state === "lobby";
   return (
     <>
       <NotConnectedBanner />
       {getPage(room?.state)}
       {room && !room.rules.disableChat && <Chat />}
-      <Help />
+      {showHelp && <Help />}
     </>
   );
 }

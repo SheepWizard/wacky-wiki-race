@@ -12,6 +12,7 @@ import {
   handleRoomJoin,
   handleRoomLeave,
   handleRoomLobby,
+  handleRoomPause,
   handleRoomPlay,
   handleRoomReadyUp,
   handleRoomReJoin,
@@ -67,6 +68,7 @@ io.on("connection", (socket) => {
   socket.on("room:set:start", (...input) =>
     handleRoomSetStart(socket, ...input)
   );
+  socket.on("room:pause", (...input) => handleRoomPause(socket, ...input));
 
   socket.on("room:set:end", (...input) => handleRoomSetEnd(socket, ...input));
   socket.on("room:user:route", (...input) => handleUserRoute(socket, ...input));

@@ -11,6 +11,7 @@ export interface ClientToServerEvents {
   "room:create": (userName: string) => void;
   "room:join": (roomId: string, userName: string) => void;
   "room:play": (roomId: string) => void;
+  "room:pause": (roomId: string) => void;
   "room:set:start": (roomId: string, start: WikiPage) => void;
   "room:set:end": (roomId: string, end: WikiPage) => void;
   "room:user:route": (roomId: string, route: WikiPage) => void;

@@ -34,6 +34,7 @@ export interface Room {
   end: WikiPage;
   startTime: Date;
   endTime: Date;
+  paused: boolean;
   winnerUserId?: string;
   rules: {
     noPageSearch: boolean;

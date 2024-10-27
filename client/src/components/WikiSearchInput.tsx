@@ -34,6 +34,9 @@ export function WikiSearchInput({
   };
 
   const handleRandomButtonClick = async () => {
+    if (loading) {
+      return;
+    }
     try {
       setLoading(true);
       const randomPage = await wikiApiGetRandomPage();

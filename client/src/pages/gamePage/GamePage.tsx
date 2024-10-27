@@ -80,12 +80,21 @@ export default function GamePage() {
             <Button onClick={handleTryAgain}>Try again</Button>
           </div>
         )}
+        {room.paused && (
+          <div class={center({})}>
+            <p>Game paused</p>
+          </div>
+        )}
         <div
           data-loading={loading}
+          data-paused={room.paused}
           class={css({
             width: "min(1200px, 100% - 4em)",
             marginInline: "auto",
             "&[data-loading=true]": {
+              display: "none",
+            },
+            "&[data-paused=true]": {
               display: "none",
             },
           })}

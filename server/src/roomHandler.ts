@@ -14,6 +14,7 @@ import {
   roomSetEnd,
   roomSetStart,
   roomUpdateChat,
+  roomUpdatePause,
   roomUpdateRules,
   roomUserReadyUp,
   roomUserSurrender,
@@ -269,6 +270,10 @@ export function handleUserRoute(
     return;
   }
 
+  if (details.room.paused) {
+    return;
+  }
+
   userAddToRoute(details.user, route);
 
   const won = roomCheckWin(details.room, route);
@@ -404,6 +409,16 @@ export function handleRoomChat(
   }
 
   roomUpdateChat(socket, details.room, details.user, message);
+}
+
+export function handleRoomPause(socket: MySocket, roomId: string) {
+  const details = checkUserIsInRoom(roomId, socket.data.userId);
+
+  if (!details) {
+    return;
+  }
+
+  roomUpdatePause(socket, details.room, details.user);
 }
 
 function checkUserIsInRoom(roomId: string, userId: string) {

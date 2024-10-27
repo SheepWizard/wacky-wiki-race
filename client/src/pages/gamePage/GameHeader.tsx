@@ -23,6 +23,10 @@ export default function GameHeader() {
     socket.emit("room:user:surrender", room.id);
   };
 
+  const handleRoomPause = () => {
+    socket.emit("room:pause", room.id);
+  };
+
   const surrenderedCount = room.users.filter((x) => x.surrendered).length;
 
   return (
@@ -88,6 +92,9 @@ export default function GameHeader() {
           onClick={handleSurrender}
         >{`Surrender ${surrenderedCount}/${room.users.length}`}</Button>
         <Button onClick={handleRoomLeave}>Leave</Button>
+        <Button onClick={handleRoomPause}>
+          {room.paused ? "Unpause" : "Pause"}
+        </Button>
       </div>
       <div
         class={css({
@@ -103,6 +110,9 @@ export default function GameHeader() {
         >{`Surrender ${surrenderedCount}/${room.users.length}`}</Button>
         <Button size="small" onClick={handleRoomLeave}>
           Leave
+        </Button>
+        <Button size="small" onClick={handleRoomPause}>
+          {room.paused ? "Unpause" : "Pause"}
         </Button>
       </div>
     </div>
