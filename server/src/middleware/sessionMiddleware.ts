@@ -12,7 +12,7 @@ const nanoid = customAlphabet(
   16
 );
 
-const sessions: Map<string, SessionState> = new Map();
+export const sessions: Map<string, SessionState> = new Map();
 
 export function sessionMiddleware(
   socket: MySocket,

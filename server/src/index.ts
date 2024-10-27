@@ -5,6 +5,7 @@ import { roomStore, watchStore } from "./keyStore.js";
 import {
   getSession,
   sessionMiddleware,
+  sessions,
 } from "./middleware/sessionMiddleware.js";
 import {
   handleRoomChat,
@@ -27,6 +28,7 @@ import {
   ServerToClientEvents,
   SocketData,
 } from "./socket.js";
+import { users } from "./user.js";
 const app = express();
 
 const server = createServer(app);
@@ -95,6 +97,20 @@ app.get("/rooms", (_, res) => {
   res.json({
     count: roomStore.size,
     rooms: Array.from(roomStore.entries()),
+  });
+});
+
+app.get("/users", (_, res) => {
+  res.json({
+    count: users.size,
+    users: Array.from(users.entries()),
+  });
+});
+
+app.get("/sessions", (_, res) => {
+  res.json({
+    count: sessions.size,
+    sessions: Array.from(sessions.entries()),
   });
 });
 
