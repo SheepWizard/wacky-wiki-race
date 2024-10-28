@@ -13,5 +13,5 @@ export default function Timer() {
   const timerSeconds = seconds % 60;
   const sec = timerSeconds < 10 ? `${0}${timerSeconds}` : timerSeconds;
 
-  return <p>{`${minutes}:${sec}`}</p>;
+  return <h3>{`${minutes}:${sec}`}</h3>;
 }

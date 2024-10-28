@@ -1,6 +1,13 @@
 import { css } from "../../../styled-system/css";
 import { flex, vstack } from "../../../styled-system/patterns";
 import Button from "../../components/Button";
+import {
+  default as IconButton,
+  default as Iconbutton,
+} from "../../components/IconButton";
+import ExitIcon from "../../components/icons/ExitIcon";
+import PauseIcon from "../../components/icons/PauseIcon";
+import PlayButton from "../../components/icons/PlayButton";
 import Timer from "../../components/Timer";
 import { useRoom } from "../../providers/RoomProvider";
 import { useSession, useSocket } from "../../providers/SessionProvider";
@@ -49,36 +56,45 @@ export default function GameHeader() {
         },
       })}
     >
+      <Iconbutton onClick={handleRoomPause}>
+        {room.paused ? (
+          <PlayButton class={css({ w: 8, h: 8 })} />
+        ) : (
+          <PauseIcon class={css({ w: 8, h: 8 })} />
+        )}
+      </Iconbutton>
       <div
         class={vstack({
-          alignItems: "center",
-          gap: 1,
-          bg: "ww-blue",
-          borderRadius: "br-12",
-          padding: 3,
-          mdDown: {
-            padding: 1,
+          gap: 0.5,
+          bg: "ww-white",
+          borderRadius: "br-25",
+          border: "solid 2px",
+          borderColor: "ww-black",
+          p: 2,
+          boxShadow: "ww-mid",
+          position: "relative",
+          _after: {
+            content: '""',
+            position: "absolute",
+            w: 1,
+            left: "10%",
+            height: 10,
+            top: -10,
+            bg: "ww-black",
+          },
+          _before: {
+            content: '""',
+            position: "absolute",
+            w: 1,
+            left: "90%",
+            height: 10,
+            top: -10,
+            bg: "ww-black",
           },
         })}
       >
-        <h3>Time:</h3>
-        <Timer />
-      </div>
-      <div
-        class={vstack({
-          alignItems: "center",
-          gap: 1,
-          bg: "ww-blue",
-          borderRadius: "br-12",
-          padding: 3,
-          textAlign: "center",
-          mdDown: {
-            padding: 1,
-          },
-        })}
-      >
-        <h3>Article to find:</h3>
         <p>{room.end.title.replaceAll("_", " ")}</p>
+        <Timer />
       </div>
 
       <div
@@ -89,31 +105,13 @@ export default function GameHeader() {
         })}
       >
         <Button
+          style="secondary"
           onClick={handleSurrender}
         >{`Surrender ${surrenderedCount}/${room.users.length}`}</Button>
-        <Button onClick={handleRoomLeave}>Leave</Button>
-        <Button onClick={handleRoomPause}>
-          {room.paused ? "Unpause" : "Pause"}
-        </Button>
-      </div>
-      <div
-        class={css({
-          display: "flex",
-          gap: 2,
-          flexDir: "column",
-          md: { display: "none" },
-        })}
-      >
-        <Button
-          onClick={handleSurrender}
-          size="small"
-        >{`Surrender ${surrenderedCount}/${room.users.length}`}</Button>
-        <Button size="small" onClick={handleRoomLeave}>
-          Leave
-        </Button>
-        <Button size="small" onClick={handleRoomPause}>
-          {room.paused ? "Unpause" : "Pause"}
-        </Button>
+
+        <IconButton onClick={handleRoomLeave}>
+          <ExitIcon class={css({ w: 8, h: 8 })} />
+        </IconButton>
       </div>
     </div>
   );

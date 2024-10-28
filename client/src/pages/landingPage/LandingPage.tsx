@@ -1,12 +1,12 @@
 import { useRef, useState } from "preact/hooks";
-import { getFunnyName } from "../../util/funnyNames";
+import { css } from "../../../styled-system/css";
 import { flex } from "../../../styled-system/patterns";
-import Title from "../../components/Title";
-import Input from "../../components/Input";
 import Button from "../../components/Button";
 import GreenBox from "../../components/GreenBox";
-import { css } from "../../../styled-system/css";
+import Input from "../../components/Input";
+import Title from "../../components/Title";
 import { useSocket } from "../../providers/SessionProvider";
+import { getFunnyName } from "../../util/funnyNames";
 
 export default function LandingPage() {
   const socket = useSocket();

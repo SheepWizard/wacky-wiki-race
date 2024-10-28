@@ -5,7 +5,7 @@ interface ButtonProps {
   onClick: () => void;
   disabled?: boolean;
   stretch?: boolean;
-  style?: "default" | "secondary";
+  style?: "secondary";
   size?: "small";
   children: ComponentChildren;
 }
@@ -53,7 +53,7 @@ const button = cva({
     },
     style: {
       secondary: {
-        bg: "ww-purple",
+        bg: "ww-blue",
       },
     },
   },
@@ -65,6 +65,7 @@ export default function Button({
   disabled,
   size,
   children,
+  style,
 }: ButtonProps) {
   return (
     <button
@@ -72,6 +73,7 @@ export default function Button({
         visual: stretch ? "stretch" : undefined,
         state: disabled ? "disabled" : undefined,
         size: size === "small" ? "small" : undefined,
+        style,
       })}
       onClick={onClick}
       disabled={disabled}
