@@ -89,7 +89,7 @@ export default function GamePage() {
           data-loading={loading}
           data-paused={room.paused}
           class={css({
-            width: "min(1200px, 100% - 4em)",
+            width: "min(1600px, 100% - 2em)",
             marginInline: "auto",
             "&[data-loading=true]": {
               display: "none",
@@ -107,15 +107,19 @@ export default function GamePage() {
               lineHeight: "1.375",
               fontSize: "1.7em",
               mb: 2,
+              display: "flex",
+              justifyContent: "center",
             })}
           >
             {currentWiki.title.replaceAll("_", " ")}
           </h1>
           <div
             class="wiki-css lang-en"
-            style={{ display: loading ? "none" : "block" }}
+            style={{
+              display: loading ? "none" : "block",
+            }}
           >
-            <div class="content">
+            <div class="content" style={{ marginInline: "auto" }}>
               <div ref={ref} />
             </div>
           </div>

@@ -1,10 +1,5 @@
 import { cva } from "../../styled-system/css";
 
-interface IconbuttonProps {
-  children: React.ReactNode;
-  onClick: () => void;
-}
-
 const iconButton = cva({
   base: {
     display: "flex",
@@ -29,11 +24,34 @@ const iconButton = cva({
       outline: "solid blue",
     },
   },
+  variants: {
+    colour: {
+      red: {
+        bg: "ww-red",
+      },
+      blue: {
+        bg: "ww-blue",
+      },
+      purple: {
+        bg: "ww-purple",
+      },
+    },
+  },
 });
 
-export default function Iconbutton({ children, onClick }: IconbuttonProps) {
+interface IconbuttonProps {
+  children: React.ReactNode;
+  colour: "red" | "blue" | "purple";
+  onClick: () => void;
+}
+
+export default function Iconbutton({
+  children,
+  onClick,
+  colour,
+}: IconbuttonProps) {
   return (
-    <button class={iconButton()} onClick={onClick}>
+    <button class={iconButton({ colour })} onClick={onClick}>
       {children}
     </button>
   );

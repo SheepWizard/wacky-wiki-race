@@ -1,13 +1,13 @@
 import { css } from "../../../styled-system/css";
-import { flex, vstack } from "../../../styled-system/patterns";
-import Button from "../../components/Button";
+import { grid, vstack } from "../../../styled-system/patterns";
 import {
-  default as IconButton,
   default as Iconbutton,
+  default as IconButton,
 } from "../../components/IconButton";
 import ExitIcon from "../../components/icons/ExitIcon";
 import PauseIcon from "../../components/icons/PauseIcon";
 import PlayButton from "../../components/icons/PlayButton";
+import SurrenderIcon from "../../components/icons/SurrenderIcon";
 import Timer from "../../components/Timer";
 import { useRoom } from "../../providers/RoomProvider";
 import { useSession, useSocket } from "../../providers/SessionProvider";
@@ -38,41 +38,37 @@ export default function GameHeader() {
 
   return (
     <div
-      class={flex({
+      class={grid({
         height: 28,
-        backgroundColor: "ww-yellow",
-        display: "flex",
+        background:
+          "linear-gradient(180deg, rgba(224,255,210,1) 0%, rgba(0,212,255,0) 60%);",
         alignItems: "center",
-        justifyContent: "space-between",
+        justifyContent: "center",
         position: "sticky",
+        gridTemplateColumns: "auto 1fr auto",
         top: isConnected ? 0 : 10,
         zIndex: 5,
-        paddingInline: 20,
-        marginBottom: 3,
-        borderBottom: "solid 2px",
-        borderColor: "ww-black",
+        paddingInline: 8,
         mdDown: {
           paddingInline: 2,
         },
       })}
     >
-      <Iconbutton onClick={handleRoomPause}>
-        {room.paused ? (
-          <PlayButton class={css({ w: 8, h: 8 })} />
-        ) : (
-          <PauseIcon class={css({ w: 8, h: 8 })} />
-        )}
-      </Iconbutton>
       <div
         class={vstack({
           gap: 0.5,
           bg: "ww-white",
-          borderRadius: "br-25",
+          borderRadius: "br-12",
           border: "solid 2px",
           borderColor: "ww-black",
           p: 2,
           boxShadow: "ww-mid",
           position: "relative",
+          gridColumnStart: 2,
+          w: "fit-content",
+          justifySelf: "center",
+          alignSelf: "self-start",
+          marginTop: 5,
           _after: {
             content: '""',
             position: "absolute",
@@ -98,20 +94,71 @@ export default function GameHeader() {
       </div>
 
       <div
-        class={css({
-          display: "flex",
-          gap: 2,
-          mdDown: { display: "none", flexDir: "column" },
+        class={grid({
+          gridTemplateRows: "1fr 1fr 1fr",
+          gap: 4,
+          justifySelf: "end",
+          mt: 3,
         })}
       >
-        <Button
-          style="secondary"
-          onClick={handleSurrender}
-        >{`Surrender ${surrenderedCount}/${room.users.length}`}</Button>
-
-        <IconButton onClick={handleRoomLeave}>
-          <ExitIcon class={css({ w: 8, h: 8 })} />
-        </IconButton>
+        <div
+          class={css({
+            position: "relative",
+            _after: {
+              content: '""',
+              position: "absolute",
+              w: 1,
+              left: "calc(50% - 2px)",
+              height: 5,
+              top: -5,
+              bg: "ww-black",
+            },
+          })}
+        >
+          <IconButton onClick={handleRoomLeave} colour="red">
+            <ExitIcon class={css({ w: 8, h: 8 })} />
+          </IconButton>
+        </div>
+        <div
+          class={css({
+            position: "relative",
+            _after: {
+              content: '""',
+              position: "absolute",
+              w: 1,
+              left: "calc(50% - 4px)",
+              height: 5,
+              top: -5,
+              bg: "ww-black",
+            },
+          })}
+        >
+          <IconButton onClick={handleSurrender} colour="blue">
+            <SurrenderIcon class={css({ w: 8, h: 8 })} />
+          </IconButton>
+        </div>
+        <div
+          class={css({
+            position: "relative",
+            _after: {
+              content: '""',
+              position: "absolute",
+              w: 1,
+              left: "calc(50% - 4px)",
+              height: 5,
+              top: -5,
+              bg: "ww-black",
+            },
+          })}
+        >
+          <Iconbutton onClick={handleRoomPause} colour="purple">
+            {room.paused ? (
+              <PlayButton class={css({ w: 8, h: 8 })} />
+            ) : (
+              <PauseIcon class={css({ w: 8, h: 8 })} />
+            )}
+          </Iconbutton>
+        </div>
       </div>
     </div>
   );
