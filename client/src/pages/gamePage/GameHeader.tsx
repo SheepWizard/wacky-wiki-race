@@ -34,7 +34,7 @@ export default function GameHeader() {
     socket.emit("room:pause", room.id);
   };
 
-  const surrenderedCount = room.users.filter((x) => x.surrendered).length;
+  // const surrenderedCount = room.users.filter((x) => x.surrendered).length;
 
   return (
     <div
