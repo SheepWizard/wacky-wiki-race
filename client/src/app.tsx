@@ -1,12 +1,14 @@
+import { lazy, Suspense } from "preact/compat";
 import Chat from "./components/chat/Chat";
 import Help from "./components/help/Help";
 import NotConnectedBanner from "./components/NotConnectedBanner";
 import EndGamePage from "./pages/EndGamePage";
-import GamePage from "./pages/gamePage/GamePage";
-import LandingPage from "./pages/landingPage/LandingPage";
-import LobbyPage from "./pages/lobbyPage/LobbyPage";
 import { useRoom } from "./providers/RoomProvider";
 import { Room } from "./types";
+
+const LobbyPage = lazy(() => import("./pages/lobbyPage/LobbyPage"));
+const GamePage = lazy(() => import("./pages/gamePage/GamePage"));
+const LandingPage = lazy(() => import("./pages/landingPage/LandingPage"));
 
 export function App() {
   const { room } = useRoom();
@@ -28,10 +30,22 @@ function getPage(roomState?: Room["state"]) {
   }
   switch (roomState) {
     case "lobby":
-      return <LobbyPage />;
+      return (
+        <Suspense fallback={<div>loading...</div>}>
+          <LobbyPage />
+        </Suspense>
+      );
     case "inGame":
-      return <GamePage />;
+      return (
+        <Suspense fallback={<div>loading...</div>}>
+          <GamePage />
+        </Suspense>
+      );
     case "endGame":
-      return <EndGamePage />;
+      return (
+        <Suspense fallback={<div>loading...</div>}>
+          <EndGamePage />
+        </Suspense>
+      );
   }
 }
