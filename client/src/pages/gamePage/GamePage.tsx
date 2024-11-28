@@ -7,6 +7,7 @@ import { useSocket } from "../../providers/SessionProvider";
 import { anchorClickListen } from "../../util/wikiFormatter";
 import { wikiApiGetPage, wikiApiGetPageIdFromTitle } from "../../wiki";
 import GameHeader from "./GameHeader";
+import "./css/wiki.css";
 
 function scrollToTop() {
   window.scrollTo({
