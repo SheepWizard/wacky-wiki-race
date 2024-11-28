@@ -14,7 +14,7 @@ import { useSession, useSocket } from "../../providers/SessionProvider";
 
 export default function GameHeader() {
   const { room, setRoom } = useRoom();
-  const { isConnected } = useSession();
+  const { isConnected, userId } = useSession();
   const socket = useSocket();
 
   if (!room) {
@@ -34,7 +34,11 @@ export default function GameHeader() {
     socket.emit("room:pause", room.id);
   };
 
-  // const surrenderedCount = room.users.filter((x) => x.surrendered).length;
+  const userSurrendered = room.users.some(
+    (x) => x.id === userId && x.surrendered
+  );
+  const surrenderedCount = room.users.filter((x) => x.surrendered).length;
+  const surrenderLabel = surrenderedCount >= 10 ? "9+" : surrenderedCount;
 
   return (
     <div
@@ -54,6 +58,7 @@ export default function GameHeader() {
         },
       })}
     >
+      <div class={css({ w: "58px" })} />
       <div
         class={vstack({
           gap: 0.5,
@@ -89,7 +94,9 @@ export default function GameHeader() {
           },
         })}
       >
-        <p>{room.end.title.replaceAll("_", " ")}</p>
+        <p class={css({ textAlign: "center" })}>
+          {room.end.title.replaceAll("_", " ")}
+        </p>
         <Timer />
       </div>
 
@@ -133,9 +140,29 @@ export default function GameHeader() {
             },
           })}
         >
-          <IconButton onClick={handleSurrender} colour="blue">
-            <SurrenderIcon class={css({ w: 8, h: 8 })} />
-          </IconButton>
+          <div
+            data-surrender-count={surrenderLabel}
+            class={css({
+              pos: "relative",
+              _after: {
+                content: `attr(data-surrender-count)`,
+                pos: "absolute",
+                borderRadius: "full",
+                display: surrenderedCount ? "flex" : "none",
+                justifyContent: "center",
+                alignItems: "center",
+                width: 6,
+                height: 6,
+                bg: userSurrendered ? "ww-bright-green" : "ww-red",
+                left: -1,
+                top: -1,
+              },
+            })}
+          >
+            <IconButton onClick={handleSurrender} colour="blue">
+              <SurrenderIcon class={css({ w: 8, h: 8 })} />
+            </IconButton>
+          </div>
         </div>
         <div
           class={css({
