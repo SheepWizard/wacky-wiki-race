@@ -2,12 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { css } from "../../../styled-system/css";
 import { center, vstack } from "../../../styled-system/patterns";
 import Button from "../../components/Button";
+import "../../css/wiki.css";
 import { useRoom } from "../../providers/RoomProvider";
 import { useSocket } from "../../providers/SessionProvider";
 import { anchorClickListen } from "../../util/wikiFormatter";
 import { wikiApiGetPage, wikiApiGetPageIdFromTitle } from "../../wiki";
 import GameHeader from "./GameHeader";
-import "./css/wiki.css";
 
 function scrollToTop() {
   window.scrollTo({
