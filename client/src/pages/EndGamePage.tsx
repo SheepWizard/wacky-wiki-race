@@ -1,3 +1,4 @@
+import { css } from "../../styled-system/css";
 import { center, hstack, vstack } from "../../styled-system/patterns";
 import Button from "../components/Button";
 import { useRoom } from "../providers/RoomProvider";
@@ -28,6 +29,7 @@ export default function EndGamePage() {
   const otherUsers = room.users
     .filter((x) => x.id !== room.winnerUserId)
     .map((x) => ({
+      id: x.id,
       userName: x.userName,
       route: x.route,
     }));
@@ -55,14 +57,17 @@ export default function EndGamePage() {
         <ul
           class={hstack({
             overflowX: "auto",
-            overflowY: "hidden",
             scrollbar: "hidden",
             w: "full",
             gap: 3,
             flexGrow: 1,
             maxHeight: "600px",
+            overflowY: "auto",
           })}
         >
+          <li>
+            <div class={css({ w: "calc(100vw / 2 - 200px)", h: 1 })}></div>
+          </li>
           {users.map((user, i) => {
             return (
               <li
@@ -75,9 +80,16 @@ export default function EndGamePage() {
                   borderColor: "ww-black",
                   p: 6,
                   boxShadow: "ww-mid",
-                  h: "calc(100% - 20px)",
+                  h:
+                    winningUser?.id === user.id
+                      ? "calc(100% - 20px)"
+                      : "calc(100% - 80px)",
+                  minW: "min(90vw, 400px)",
+                  maxW: "min(90vw, 400px)",
+                  textAlign: "center",
                 })}
               >
+                {winningUser?.id === user.id && <h1>Winner</h1>}
                 <h2>{user.userName}</h2>
                 <ul class={vstack()}>
                   {user.route.map((pageTitle, index) => (
@@ -87,6 +99,9 @@ export default function EndGamePage() {
               </li>
             );
           })}
+          <li>
+            <div class={css({ w: "calc(100vw / 2 - 200px)", h: 1 })}></div>
+          </li>
         </ul>
         <div class={hstack({ gap: 4 })}>
           {isRoomOwner && <Button onClick={handleNewGame}>New game</Button>}
