@@ -27,13 +27,13 @@ const iconButton = cva({
   variants: {
     colour: {
       red: {
-        bg: "ww-red",
+        bg: "ww-primary-30",
       },
       blue: {
         bg: "ww-blue",
       },
       purple: {
-        bg: "ww-purple",
+        bg: "ww-primary-50",
       },
     },
   },

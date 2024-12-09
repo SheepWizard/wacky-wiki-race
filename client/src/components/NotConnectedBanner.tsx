@@ -27,7 +27,7 @@ export default function NotConnectedBanner() {
     <div
       class={center({
         h: 10,
-        bg: "ww-red",
+        bg: "ww-primary-30",
         w: "full",
         position: "fixed",
         top: 0,

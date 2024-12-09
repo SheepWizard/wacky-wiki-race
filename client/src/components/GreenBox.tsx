@@ -19,12 +19,11 @@ export default function GreenBox({ children }: GreenBoxProps) {
     >
       <div
         class={center({
-          bg: "ww-green",
+          bg: "ww-primary-20",
           rounded: "br-12",
           border: "solid 2px",
           borderColor: "ww-black",
           flexGrow: 1,
-          shadow: "ww-thicc",
           paddingY: 8,
           overflowX: "hidden",
         })}

@@ -37,7 +37,7 @@ export default function EndGamePage() {
   const users = winningUser ? [winningUser, ...otherUsers] : otherUsers;
 
   return (
-    <div class={center({ bg: "ww-yellow", h: "lvh" })}>
+    <div class={center({ bg: "ww-primary-10", h: "lvh" })}>
       <div
         class={vstack({
           gap: 2,
@@ -79,7 +79,6 @@ export default function EndGamePage() {
                   border: "solid 2px",
                   borderColor: "ww-black",
                   p: 6,
-                  boxShadow: "ww-mid",
                   h:
                     winningUser?.id === user.id
                       ? "calc(100% - 20px)"

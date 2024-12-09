@@ -131,7 +131,6 @@ export default function Chat() {
           maxWidth: "60%",
           width: "300px",
           bg: "ww-white",
-          shadow: "ww-mid",
           borderRadius: "br-12",
           height: "min(80%, 500px)",
           padding: 2,

@@ -63,10 +63,11 @@ export default function LobbyPage() {
     <>
       <div
         class={css({
-          bg: "ww-yellow",
+          bg: "ww-primary-10",
           h: "lvh",
           overflow: "hidden",
           paddingBlock: 2,
+          backgroundImage: "url('cloud.png')",
         })}
       >
         <GreenBox>
@@ -75,18 +76,19 @@ export default function LobbyPage() {
           <FriendInvite />
           <UserList />
           <RouteSelect />
-          <Rules />
+          <div class={hstack({ gap: 6, w: "100%" })}>
+            <Rules />
+            <Button onClick={handleReadyUp}>Ready Up</Button>
+            <Button onClick={handleRoomLeave}>Leave</Button>
+          </div>
 
           {isRoomOwner && (
             <Button
               onClick={handleStartGame}
               stretch
+              style="secondary"
             >{`Start game ${room.users.length}/100`}</Button>
           )}
-          <div class={hstack({ gap: 8, alignItems: "center" })}>
-            <Button onClick={handleReadyUp}>Ready Up</Button>
-            <Button onClick={handleRoomLeave}>Leave</Button>
-          </div>
         </GreenBox>
       </div>
     </>

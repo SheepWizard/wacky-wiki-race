@@ -17,7 +17,7 @@ export default function UserChatMessage({ chatMessage }: ChatMessageProps) {
       class={vstack({
         gap: 0.5,
         padding: 1,
-        bg: isMe ? "ww-pink" : "ww-blue",
+        bg: isMe ? "ww-primary-40" : "ww-blue",
         alignSelf: isMe ? "flex-end" : "flex-start",
         alignItems: isMe ? "flex-end" : "flex-start",
         maxWidth: "80%",

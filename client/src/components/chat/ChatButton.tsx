@@ -22,13 +22,12 @@ export default function ChatButton({
       class={center({
         width: 16,
         height: 16,
-        bg: "ww-purple",
+        bg: "ww-primary-50",
         borderRadius: "999999px",
         pos: "fixed",
         bottom: 5,
         right: 5,
         cursor: "pointer",
-        shadow: "ww-mid",
         border: "solid 2px",
         borderColor: "ww-black",
         mdDown: {

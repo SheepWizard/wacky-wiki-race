@@ -4,11 +4,10 @@ export default function Title() {
   return (
     <div
       class={center({
-        bg: "ww-blue",
+        bg: "white",
         border: "solid 4px",
         borderColor: "ww-black",
         rounded: "br-12",
-        shadow: "ww-mid",
         p: 6,
         textAlign: "center",
         width: "100%",

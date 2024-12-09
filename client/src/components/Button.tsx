@@ -15,7 +15,7 @@ const button = cva({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    bg: "ww-pink",
+    bg: "ww-primary-40",
     rounded: "br-12",
     borderX: "solid 2px",
     borderTop: "solid 2px",

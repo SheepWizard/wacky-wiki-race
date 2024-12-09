@@ -15,13 +15,12 @@ export default function HelpButton({ onClick, reff }: HelpButtonProps) {
       class={center({
         width: 10,
         height: 10,
-        bg: "ww-green",
+        bg: "ww-primary-20",
         borderRadius: "99999px",
         pos: "fixed",
         bottom: 5,
         left: 5,
         cursor: "pointer",
-        shadow: "ww-mid",
         border: "solid 2px",
         borderColor: "ww-black",
       })}

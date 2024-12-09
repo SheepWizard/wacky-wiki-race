@@ -34,7 +34,7 @@ export default function LandingPage() {
   const lobbyButtonDisabled = !roomCode;
 
   return (
-    <div class={css({ bg: "ww-yellow", h: "lvh", overflow: "hidden" })}>
+    <div class={css({ bg: "ww-primary-10", h: "lvh", overflow: "hidden" })}>
       <GreenBox>
         <Title />
         <Input

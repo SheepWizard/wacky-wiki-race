@@ -18,21 +18,9 @@ export default function Rules() {
 
   return (
     <>
-      <div
-        class={center({
-          paddingInline: 4,
-          paddingBlock: 2,
-          border: "solid 3px",
-          rounded: "br-12",
-          cursor: "pointer",
-          borderColor: "ww-black",
-          bg: "ww-purple",
-          alignSelf: "start",
-        })}
-        onClick={() => setShowRulesDialog(!showRulesDialog)}
-      >
+      <Button onClick={() => setShowRulesDialog(!showRulesDialog)}>
         <p>Rules</p>
-      </div>
+      </Button>
       <Dialog open={showRulesDialog} onClose={() => setShowRulesDialog(false)}>
         <div class={vstack({ gap: 2, alignItems: "start" })}>
           <div
@@ -42,7 +30,7 @@ export default function Rules() {
               border: "solid 3px",
               rounded: "br-12",
               borderColor: "ww-black",
-              bg: "ww-purple",
+              bg: "ww-primary-50",
             })}
           >
             <p>Rules</p>

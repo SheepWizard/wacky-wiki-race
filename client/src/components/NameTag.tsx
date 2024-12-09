@@ -17,7 +17,7 @@ export default function NameTag({ name, self, ready, isOwner }: NameTagProps) {
       class={center({
         padding: 1,
         gap: 1,
-        backgroundColor: "ww-red",
+        backgroundColor: "ww-primary-30",
         rounded: "br-25",
         border: "solid 2px",
         borderColor: "ww-black",
