@@ -27,7 +27,7 @@ export default function LobbyPage() {
     if (!isRoomOwner) {
       return;
     }
-
+    // move to server
     const getRandom = async () => {
       try {
         const randomStartPromise = wikiApiGetRandomPage();
@@ -59,6 +59,8 @@ export default function LobbyPage() {
     socket.emit("room:user:readyUp", room.id);
   };
 
+  const user = room.users.find((x) => x.id === userId);
+
   return (
     <>
       <div
@@ -67,7 +69,7 @@ export default function LobbyPage() {
           h: "lvh",
           overflow: "hidden",
           paddingBlock: 2,
-          backgroundImage: "url('cloud.png')",
+          backgroundImage: "url('/cloud.png')",
         })}
       >
         <GreenBox>
@@ -78,7 +80,9 @@ export default function LobbyPage() {
           <RouteSelect />
           <div class={hstack({ gap: 6, w: "100%" })}>
             <Rules />
-            <Button onClick={handleReadyUp}>Ready Up</Button>
+            <Button onClick={handleReadyUp}>
+              {user?.ready ? "Unready" : "Ready Up"}
+            </Button>
             <Button onClick={handleRoomLeave}>Leave</Button>
           </div>
 

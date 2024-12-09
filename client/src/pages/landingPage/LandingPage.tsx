@@ -70,7 +70,7 @@ export default function LandingPage() {
             Join lobby
           </Button>
         </div>
-        <Button onClick={handleCreateLobby} stretch>
+        <Button style="secondary" onClick={handleCreateLobby} stretch>
           Create lobby
         </Button>
       </GreenBox>

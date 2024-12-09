@@ -103,7 +103,11 @@ export default function EndGamePage() {
           </li>
         </ul>
         <div class={hstack({ gap: 4 })}>
-          {isRoomOwner && <Button onClick={handleNewGame}>New game</Button>}
+          {isRoomOwner && (
+            <Button style="secondary" onClick={handleNewGame}>
+              New game
+            </Button>
+          )}
           <Button onClick={handleRoomLeave}>Leave</Button>
         </div>
       </div>
