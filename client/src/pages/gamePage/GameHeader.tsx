@@ -45,7 +45,7 @@ export default function GameHeader() {
       class={grid({
         height: 28,
         background:
-          "linear-gradient(180deg, rgba(224,255,210,1) 0%, rgba(0,212,255,0) 60%);",
+          "linear-gradient(180deg, rgba(171, 150, 255, 1) 0%, rgba(205, 180, 219, 0) 60%);",
         alignItems: "center",
         justifyContent: "center",
         position: "sticky",

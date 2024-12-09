@@ -40,8 +40,6 @@ export default function GamePage() {
       const parse = await wikiApiGetPage(currentWiki.pageId);
       current.innerHTML = parse;
       await anchorClickListen(room.rules, async (pageTitle: string) => {
-        // add try catch
-
         const linkPageId = await wikiApiGetPageIdFromTitle(pageTitle);
 
         socket.emit("room:user:route", room.id, {
