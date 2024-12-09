@@ -13,7 +13,6 @@
     "socket.io-client": "^4.7.5"
   },
   "devDependencies": {
-    "@esbuild/darwin-arm64": "^0.24.0",
     "@pandacss/dev": "^0.41.0",
     "@preact/preset-vite": "^2.9.1",
     "typescript": "^5.2.2",
