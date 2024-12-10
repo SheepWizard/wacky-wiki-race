@@ -1,6 +1,7 @@
 import { css } from "../../styled-system/css";
 import { center, hstack, vstack } from "../../styled-system/patterns";
 import Button from "../components/Button";
+import Kawaii from "../components/Kawaii";
 import { useRoom } from "../providers/RoomProvider";
 import { useSession, useSocket } from "../providers/SessionProvider";
 
@@ -37,13 +38,15 @@ export default function EndGamePage() {
   const users = winningUser ? [winningUser, ...otherUsers] : otherUsers;
 
   return (
-    <div class={center({ bg: "ww-primary-10", h: "lvh" })}>
+    <div class={center({ bg: "ww-primary-10", h: "lvh", paddingBlock: 2 })}>
+      <Kawaii />
       <div
         class={vstack({
           gap: 2,
           h: "lvh",
           paddingBlock: 2,
           overflowX: "hidden",
+          pos: "relative",
         })}
       >
         {winningUser ? (

@@ -3,6 +3,7 @@ import { css } from "../../../styled-system/css";
 import { hstack } from "../../../styled-system/patterns";
 import Button from "../../components/Button";
 import GreenBox from "../../components/GreenBox";
+import Kawaii from "../../components/Kawaii";
 import Title from "../../components/Title";
 import { useRoom } from "../../providers/RoomProvider";
 import { useSession, useSocket } from "../../providers/SessionProvider";
@@ -69,9 +70,9 @@ export default function LobbyPage() {
           h: "lvh",
           overflow: "hidden",
           paddingBlock: 2,
-          backgroundImage: "url('/cloud.png')",
         })}
       >
+        <Kawaii />
         <GreenBox>
           <Title />
 

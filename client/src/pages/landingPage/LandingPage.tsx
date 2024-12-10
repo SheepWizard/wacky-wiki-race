@@ -4,6 +4,7 @@ import { flex } from "../../../styled-system/patterns";
 import Button from "../../components/Button";
 import GreenBox from "../../components/GreenBox";
 import Input from "../../components/Input";
+import Kawaii from "../../components/Kawaii";
 import Title from "../../components/Title";
 import { useSocket } from "../../providers/SessionProvider";
 import { getFunnyName } from "../../util/funnyNames";
@@ -34,46 +35,56 @@ export default function LandingPage() {
   const lobbyButtonDisabled = !roomCode;
 
   return (
-    <div class={css({ bg: "ww-primary-10", h: "lvh", overflow: "hidden" })}>
-      <GreenBox>
-        <Title />
-        <Input
-          value={userName}
-          onChange={setUserName}
-          labelValue="Friendly name"
-          placeholder={ref.current}
-          max={20}
-        />
-        <div
-          class={flex({
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            width: "100%",
-            gap: 4,
-            flexWrap: "wrap",
-            "& > *": {
-              flex: "1 1 200px",
-            },
-          })}
-        >
+    <>
+      <div
+        class={css({
+          bg: "ww-primary-10",
+          h: "lvh",
+          overflow: "hidden",
+          paddingBlock: 2,
+        })}
+      >
+        <Kawaii />
+        <GreenBox>
+          <Title />
           <Input
-            value={roomCode}
-            onChange={setRoomCode}
-            labelValue="Lobby code"
-            max={24}
+            value={userName}
+            onChange={setUserName}
+            labelValue="Friendly name"
+            placeholder={ref.current}
+            max={20}
           />
-          <Button
-            onClick={handleJoinLobby}
-            disabled={lobbyButtonDisabled}
-            stretch
+          <div
+            class={flex({
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+              width: "100%",
+              gap: 4,
+              flexWrap: "wrap",
+              "& > *": {
+                flex: "1 1 200px",
+              },
+            })}
           >
-            Join lobby
+            <Input
+              value={roomCode}
+              onChange={setRoomCode}
+              labelValue="Lobby code"
+              max={24}
+            />
+            <Button
+              onClick={handleJoinLobby}
+              disabled={lobbyButtonDisabled}
+              stretch
+            >
+              Join lobby
+            </Button>
+          </div>
+          <Button style="secondary" onClick={handleCreateLobby} stretch>
+            Create lobby
           </Button>
-        </div>
-        <Button style="secondary" onClick={handleCreateLobby} stretch>
-          Create lobby
-        </Button>
-      </GreenBox>
-    </div>
+        </GreenBox>
+      </div>
+    </>
   );
 }

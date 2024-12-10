@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "preact/compat";
+import { css } from "../styled-system/css";
 import Chat from "./components/chat/Chat";
 import Help from "./components/help/Help";
 import NotConnectedBanner from "./components/NotConnectedBanner";
@@ -31,19 +32,37 @@ function getPage(roomState?: Room["state"]) {
   switch (roomState) {
     case "lobby":
       return (
-        <Suspense fallback={<div>loading...</div>}>
+        <Suspense
+          fallback={
+            <div class={css({ bg: "ww-primary-10", h: "full" })}>
+              loading...
+            </div>
+          }
+        >
           <LobbyPage />
         </Suspense>
       );
     case "inGame":
       return (
-        <Suspense fallback={<div>loading...</div>}>
+        <Suspense
+          fallback={
+            <div class={css({ bg: "ww-primary-10", h: "full" })}>
+              loading...
+            </div>
+          }
+        >
           <GamePage />
         </Suspense>
       );
     case "endGame":
       return (
-        <Suspense fallback={<div>loading...</div>}>
+        <Suspense
+          fallback={
+            <div class={css({ bg: "ww-primary-10", h: "full" })}>
+              loading...
+            </div>
+          }
+        >
           <EndGamePage />
         </Suspense>
       );

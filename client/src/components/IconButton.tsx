@@ -26,14 +26,14 @@ const iconButton = cva({
   },
   variants: {
     colour: {
-      red: {
+      pink: {
+        bg: "ww-primary-20",
+      },
+      pinky: {
         bg: "ww-primary-30",
       },
-      blue: {
-        bg: "ww-blue",
-      },
       purple: {
-        bg: "ww-primary-50",
+        bg: "ww-primary-40",
       },
     },
   },
@@ -41,7 +41,7 @@ const iconButton = cva({
 
 interface IconbuttonProps {
   children: React.ReactNode;
-  colour: "red" | "blue" | "purple";
+  colour: "pink" | "pinky" | "purple";
   onClick: () => void;
 }
 

@@ -211,6 +211,7 @@ export default function Select({
                   class={css({
                     rounded: "br-12",
                     padding: 1,
+                    cursor: "pointer",
                     "&[data-selected=true]": {
                       bg: "ww-grey",
                     },

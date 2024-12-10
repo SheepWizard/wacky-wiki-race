@@ -45,7 +45,7 @@ export default function GameHeader() {
       class={grid({
         height: 28,
         background:
-          "linear-gradient(180deg, rgba(171, 150, 255, 1) 0%, rgba(205, 180, 219, 0) 60%);",
+          "linear-gradient(180deg, rgba(162,210,255,1) 0%, rgba(205,180,219,0.5) 50%, rgba(205,180,219,0) 100%)",
         alignItems: "center",
         justifyContent: "center",
         position: "sticky",
@@ -121,7 +121,7 @@ export default function GameHeader() {
             },
           })}
         >
-          <IconButton onClick={handleRoomLeave} colour="red">
+          <IconButton onClick={handleRoomLeave} colour="pink">
             <ExitIcon class={css({ w: 8, h: 8 })} />
           </IconButton>
         </div>
@@ -158,7 +158,7 @@ export default function GameHeader() {
               },
             })}
           >
-            <IconButton onClick={handleSurrender} colour="blue">
+            <IconButton onClick={handleSurrender} colour="pinky">
               <SurrenderIcon class={css({ w: 8, h: 8 })} />
             </IconButton>
           </div>
