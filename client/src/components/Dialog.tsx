@@ -52,7 +52,29 @@ export default function Dialog({ children, open, onClose }: DialogProps) {
         rounded: "br-12",
         bg: "ww-white",
         padding: 6,
-        shadow: "ww-mid",
+        opacity: 0,
+        transition:
+          "opacity 0.2s, overlay 0.2s allow-discrete, display 0.2s allow-discrete",
+        _open: {
+          opacity: 1,
+          _backdrop: {
+            opacity: 0.5,
+          },
+        },
+        _backdrop: {
+          bg: "ww-primary-10",
+          opacity: 0,
+          transition:
+            "opacity 0.2s, overlay 0.2s allow-discrete, display 0.2s allow-discrete",
+        },
+        _starting: {
+          _open: {
+            opacity: 0,
+            _backdrop: {
+              opacity: 0,
+            },
+          },
+        },
       })}
       ref={ref}
     >

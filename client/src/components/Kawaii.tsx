@@ -17,6 +17,9 @@ export default function Kawaii() {
           transform: "rotate(-30deg)",
           top: 0,
           opacity: 0.8,
+          smDown: {
+            display: "none",
+          },
         })}
         src="/cloud.png"
       />
