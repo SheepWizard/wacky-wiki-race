@@ -11,7 +11,6 @@ export default function HelpButton({ onClick, reff }: HelpButtonProps) {
     <div
       ref={reff}
       onClick={onClick}
-      popovertarget="help-popover"
       class={center({
         width: 10,
         height: 10,
