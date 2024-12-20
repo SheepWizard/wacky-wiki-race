@@ -25,16 +25,17 @@ export default function Rules() {
         <div class={vstack({ gap: 2, alignItems: "start" })}>
           <div
             class={center({
-              paddingInline: 4,
-              paddingBlock: 2,
-              border: "solid 3px",
-              rounded: "br-12",
+              bg: "white",
+              border: "solid 4px",
               borderColor: "ww-black",
-              bg: "ww-primary-50",
+              rounded: "br-12",
+              p: 3,
+              textAlign: "center",
             })}
           >
-            <p>Rules</p>
+            <h3>Rules</h3>
           </div>
+
           <div class={css({ display: "flex", flexWrap: "wrap", gap: 2 })}>
             <ToggleButton
               toggled={room.rules.noPageSearch}

@@ -50,7 +50,9 @@ export default function Dialog({ children, open, onClose }: DialogProps) {
         margin: "auto",
         marginInline: "auto",
         rounded: "br-12",
-        bg: "ww-white",
+        bg: "ww-primary-20",
+        border: "solid 2px",
+        borderColor: "ww-black",
         padding: 6,
         opacity: 0,
         transition:
