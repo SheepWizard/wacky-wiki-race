@@ -69,7 +69,6 @@ export default function LobbyPage() {
           bg: "ww-primary-10",
           h: "lvh",
           overflow: "hidden",
-          paddingBlock: 2,
         })}
       >
         <Kawaii />

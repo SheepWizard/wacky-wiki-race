@@ -39,7 +39,24 @@ export default function FriendInvite() {
         },
       })}
     >
-      <p class={css({ overflowWrap: "anywhere" })}>{room.id}</p>
+      <p
+        class={css({
+          overflowWrap: "anywhere",
+        })}
+      >
+        <span
+          class={css({
+            color: "transparent",
+            textShadow: "0 0 10px rgba(0,0,0,1)",
+            _hover: {
+              color: "inherit",
+              textShadow: "none",
+            },
+          })}
+        >
+          {room.id}
+        </span>
+      </p>
       <Button onClick={handleCopyInvite}>
         {copied ? "Link copied" : "Invite Friend"}
       </Button>
