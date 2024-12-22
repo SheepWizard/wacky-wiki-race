@@ -89,6 +89,7 @@ export default function EndGamePage() {
                   minW: "min(90vw, 400px)",
                   maxW: "min(90vw, 400px)",
                   textAlign: "center",
+                  overflowX: "auto",
                 })}
               >
                 {winningUser?.id === user.id && <h1>Winner</h1>}
