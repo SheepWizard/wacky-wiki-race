@@ -13,7 +13,7 @@ export default function Title() {
         width: "100%",
       })}
     >
-      <h1>WACKY WIKI RACES</h1>
+      <h1>WACKY WIKI RACE</h1>
     </div>
   );
 }
