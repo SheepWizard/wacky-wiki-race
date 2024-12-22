@@ -45,10 +45,7 @@ export interface Room {
 
 export interface RoomPartial extends Omit<Room, "chat" | "disconnectedUsers"> {}
 
-const nanoid = customAlphabet(
-  "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM",
-  8
-);
+const nanoid = customAlphabet("1234567890QWERTYUIOPASDFGHJKLZXCVBNM", 8);
 
 export function roomCreate(user: User) {
   const roomId = nanoid();

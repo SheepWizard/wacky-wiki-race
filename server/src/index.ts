@@ -39,7 +39,7 @@ const io = new Server<
   SocketData
 >(server, {
   cors: {
-    origin: ["http://localhost:5173", "https://wiki.sheepwizard.com"], //change me
+    origin: ["http://localhost:5173", "https://wackywikiraces.com"], //change me
     methods: ["GET", "POST"],
   },
   pingInterval: 3000,
