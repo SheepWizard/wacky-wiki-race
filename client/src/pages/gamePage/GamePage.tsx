@@ -4,7 +4,7 @@ import { center, vstack } from "../../../styled-system/patterns";
 import Button from "../../components/Button";
 import "../../css/wiki.css";
 import { useRoom } from "../../providers/RoomProvider";
-import { useSocket } from "../../providers/SessionProvider";
+import { useSession, useSocket } from "../../providers/SessionProvider";
 import { anchorClickListen } from "../../util/wikiFormatter";
 import { wikiApiGetPage, wikiApiGetPageIdFromTitle } from "../../wiki";
 import GameHeader from "./GameHeader";
@@ -20,13 +20,24 @@ function scrollToTop() {
 export default function GamePage() {
   const socket = useSocket();
   const ref = useRef<HTMLDivElement>(null);
+  const { userId } = useSession();
   const { room } = useRoom();
 
   if (!room) {
     return null;
   }
 
-  const [currentWiki, setCurrentWiki] = useState(room.start);
+  const [currentWiki, setCurrentWiki] = useState(() => {
+    const currentUser = room.users.find((x) => x.id === userId);
+    if (!currentUser) {
+      return room.start;
+    }
+    const route = currentUser.route.at(-1);
+    if (route) {
+      return route;
+    }
+    return room.start;
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -67,6 +78,16 @@ export default function GamePage() {
     setError(false);
     displayWiki();
   };
+
+  useEffect(() => {
+    window.onbeforeunload = () => {
+      return "Do you want to leave the game?";
+    };
+
+    return () => {
+      window.onbeforeunload = null;
+    };
+  });
 
   return (
     <>
