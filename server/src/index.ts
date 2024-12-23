@@ -20,6 +20,7 @@ import {
   handleRoomSetEnd,
   handleRoomSetStart,
   handleRoomSurrender,
+  handleUpdateAdminRules,
   handleUpdateRules,
   handleUserRoute,
 } from "./roomHandler.js";
@@ -82,6 +83,9 @@ io.on("connection", (socket) => {
   );
   socket.on("room:rules:updateRules", (...input) =>
     handleUpdateRules(socket, ...input)
+  );
+  socket.on("room:rules:updateAdminRules", (...input) =>
+    handleUpdateAdminRules(socket, ...input)
   );
   socket.on("room:chat", (...input) => handleRoomChat(socket, ...input));
   socket.on("room:lobby", (...input) => handleRoomLobby(socket, ...input));

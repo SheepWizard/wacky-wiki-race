@@ -18,6 +18,10 @@ export interface ClientToServerEvents {
   "room:user:readyUp": (roomId: string) => void;
   "room:user:surrender": (roomId: string) => void;
   "room:rules:updateRules": (roomId: string, rules: Room["rules"]) => void;
+  "room:rules:updateAdminRules": (
+    roomId: string,
+    rules: Room["adminRules"]
+  ) => void;
   "room:lobby": (roomId: string) => void;
   "room:chat": (roomId: string, message: string) => void;
   "room:leave": () => void;

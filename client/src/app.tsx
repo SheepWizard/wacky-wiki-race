@@ -19,7 +19,7 @@ export function App() {
     <>
       <NotConnectedBanner />
       {getPage(room?.state)}
-      {room && !room.rules.disableChat && <Chat />}
+      {room && !room.adminRules.lockChat && <Chat />}
       {showHelp && <Help />}
     </>
   );

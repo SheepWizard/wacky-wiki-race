@@ -40,6 +40,9 @@ export default function GameHeader() {
   const surrenderedCount = room.users.filter((x) => x.surrendered).length;
   const surrenderLabel = surrenderedCount >= 10 ? "9+" : surrenderedCount;
 
+  const isRoomOwner = room.roomOwnerId === userId;
+  const lockPause = !isRoomOwner && room.adminRules.lockPause;
+
   return (
     <div
       class={grid({
@@ -163,28 +166,30 @@ export default function GameHeader() {
             </IconButton>
           </div>
         </div>
-        <div
-          class={css({
-            position: "relative",
-            _after: {
-              content: '""',
-              position: "absolute",
-              w: 1,
-              left: "calc(50% - 4px)",
-              height: 5,
-              top: -5,
-              bg: "ww-black",
-            },
-          })}
-        >
-          <Iconbutton onClick={handleRoomPause} colour="purple">
-            {room.paused ? (
-              <PlayButton class={css({ w: 8, h: 8 })} />
-            ) : (
-              <PauseIcon class={css({ w: 8, h: 8 })} />
-            )}
-          </Iconbutton>
-        </div>
+        {!lockPause && (
+          <div
+            class={css({
+              position: "relative",
+              _after: {
+                content: '""',
+                position: "absolute",
+                w: 1,
+                left: "calc(50% - 4px)",
+                height: 5,
+                top: -5,
+                bg: "ww-black",
+              },
+            })}
+          >
+            <Iconbutton onClick={handleRoomPause} colour="purple">
+              {room.paused ? (
+                <PlayButton class={css({ w: 8, h: 8 })} />
+              ) : (
+                <PauseIcon class={css({ w: 8, h: 8 })} />
+              )}
+            </Iconbutton>
+          </div>
+        )}
       </div>
     </div>
   );

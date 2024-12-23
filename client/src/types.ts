@@ -34,14 +34,20 @@ export interface Room {
   end: WikiPage;
   startTime: Date;
   endTime: Date;
-  paused: boolean;
   winnerUserId?: string;
+  paused: boolean;
   rules: {
     noPageSearch: boolean;
     noNavBox: boolean;
-    disableChat: boolean;
+  };
+  adminRules: {
+    lockSelect: boolean;
+    lockRules: boolean;
+    lockPause: boolean;
+    lockChat: boolean;
   };
   chat: Array<RoomChatMessage | RoomSystemChatMessage>;
+  lastAccessed: Date;
 }
 
 export interface RoomPartial extends Omit<Room, "chat" | "disconnectedUsers"> {}

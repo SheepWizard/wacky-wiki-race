@@ -3,12 +3,13 @@ import { css } from "../../../styled-system/css";
 import { vstack } from "../../../styled-system/patterns";
 import { WikiSearchInput } from "../../components/WikiSearchInput";
 import { useRoom } from "../../providers/RoomProvider";
-import { useSocket } from "../../providers/SessionProvider";
+import { useSession, useSocket } from "../../providers/SessionProvider";
 import { WikiPage } from "../../types";
 import { wikiApiGetExtract } from "../../wiki";
 
 export default function RouteSelect() {
   const { room } = useRoom();
+  const { userId } = useSession();
   const socket = useSocket();
   const [startExtract, setStartExtract] = useState("");
   const [endExtract, setEndExtract] = useState("");
@@ -54,6 +55,9 @@ export default function RouteSelect() {
     getEndExtract();
   }, [endId]);
 
+  const isRoomOwner = room.roomOwnerId === userId;
+  const lockSelect = !isRoomOwner && room.adminRules.lockSelect;
+
   return (
     <>
       <div className={vstack({ gap: 1, w: "full" })}>
@@ -61,7 +65,7 @@ export default function RouteSelect() {
           labelValue="Start"
           value={startTitle}
           onChange={handleSetStart}
-          // disabled={inputsDisabled}
+          disabled={lockSelect}
         />
         <div className={css({ color: "ww-grey-dark" })}>{startExtract}</div>
       </div>
@@ -70,7 +74,7 @@ export default function RouteSelect() {
           labelValue="Finish"
           value={endTitle}
           onChange={handleSetEnd}
-          // disabled={inputsDisabled}
+          disabled={lockSelect}
         />
         <div className={css({ color: "ww-grey-dark" })}>{endExtract}</div>
       </div>

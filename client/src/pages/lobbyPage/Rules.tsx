@@ -61,18 +61,6 @@ export default function Rules() {
             >
               Disable nav boxes
             </ToggleButton>
-            <ToggleButton
-              toggled={room.rules.disableChat}
-              onToggled={() => {
-                const updatedRules = {
-                  ...room.rules,
-                  disableChat: !room.rules.disableChat,
-                };
-                socket.emit("room:rules:updateRules", room.id, updatedRules);
-              }}
-            >
-              Disable chat
-            </ToggleButton>
           </div>
           <div class={css({ alignSelf: "center", marginTop: 3 })}>
             <Button onClick={() => setShowRulesDialog(false)}>Close</Button>

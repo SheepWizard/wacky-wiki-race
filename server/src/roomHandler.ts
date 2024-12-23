@@ -13,6 +13,7 @@ import {
   roomReset,
   roomSetEnd,
   roomSetStart,
+  roomUpdateAdminRules,
   roomUpdateChat,
   roomUpdatePause,
   roomUpdateRules,
@@ -195,9 +196,13 @@ export function handleRoomSetStart(
     return;
   }
 
-  // if (room.roomOwnerId !== user.id) {
-  //   return;
-  // }
+  if (
+    details.room.adminRules.lockSelect &&
+    details.room.roomOwnerId !== details.user.id
+  ) {
+    return;
+  }
+
   roomSetStart(socket, details.room, start);
 }
 
@@ -232,9 +237,12 @@ export function handleRoomSetEnd(
     return;
   }
 
-  // if (room.roomOwnerId !== user.id) {
-  //   return;
-  // }
+  if (
+    details.room.adminRules.lockSelect &&
+    details.room.roomOwnerId !== details.user.id
+  ) {
+    return;
+  }
 
   roomSetEnd(socket, details.room, end);
 }
@@ -381,7 +389,43 @@ export function handleUpdateRules(
     return;
   }
 
+  if (
+    details.room.adminRules.lockRules &&
+    details.room.roomOwnerId !== details.user.id
+  ) {
+    return;
+  }
+
   roomUpdateRules(socket, details.room, rules);
+}
+
+export function handleUpdateAdminRules(
+  socket: MySocket,
+  roomId: string,
+  adminRules: Room["adminRules"]
+) {
+  const validator = z.custom<Room["adminRules"]>();
+  const result = validator.safeParse({ roomId, adminRules });
+  if (!result.success) {
+    console.log(result.error);
+    return;
+  }
+
+  const details = checkUserIsInRoom(roomId, socket.data.userId);
+
+  if (!details) {
+    return;
+  }
+
+  if (details.room.state !== "lobby") {
+    return;
+  }
+
+  if (details.room.roomOwnerId !== details.user.id) {
+    return;
+  }
+
+  roomUpdateAdminRules(socket, details.room, adminRules);
 }
 
 export function handleRoomChat(
@@ -415,6 +459,13 @@ export function handleRoomPause(socket: MySocket, roomId: string) {
   const details = checkUserIsInRoom(roomId, socket.data.userId);
 
   if (!details) {
+    return;
+  }
+
+  if (
+    details.room.adminRules.lockPause &&
+    details.room.roomOwnerId !== details.user.id
+  ) {
     return;
   }
 

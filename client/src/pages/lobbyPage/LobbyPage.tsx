@@ -8,6 +8,7 @@ import Title from "../../components/Title";
 import { useRoom } from "../../providers/RoomProvider";
 import { useSession, useSocket } from "../../providers/SessionProvider";
 import { wikiApiGetRandomPage } from "../../wiki";
+import Admin from "./Admin";
 import FriendInvite from "./FriendInvite";
 import RouteSelect from "./RouteSelect";
 import Rules from "./Rules";
@@ -61,6 +62,7 @@ export default function LobbyPage() {
   };
 
   const user = room.users.find((x) => x.id === userId);
+  const lockRules = !isRoomOwner && room.adminRules.lockRules;
 
   return (
     <>
@@ -78,8 +80,9 @@ export default function LobbyPage() {
           <FriendInvite />
           <UserList />
           <RouteSelect />
-          <div class={hstack({ gap: 6, w: "100%" })}>
-            <Rules />
+          <div class={hstack({ gap: 6, w: "100%", flexWrap: "wrap" })}>
+            {isRoomOwner && <Admin />}
+            {!lockRules && <Rules />}
             <Button onClick={handleReadyUp}>
               {user?.ready ? "Unready" : "Ready Up"}
             </Button>

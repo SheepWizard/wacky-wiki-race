@@ -37,7 +37,12 @@ export interface Room {
   rules: {
     noPageSearch: boolean;
     noNavBox: boolean;
-    disableChat: boolean;
+  };
+  adminRules: {
+    lockSelect: boolean;
+    lockRules: boolean;
+    lockPause: boolean;
+    lockChat: boolean;
   };
   chat: Array<RoomChatMessage | RoomSystemChatMessage>;
   lastAccessed: Date;
@@ -70,7 +75,12 @@ export function roomCreate(user: User) {
     rules: {
       noPageSearch: false,
       noNavBox: false,
-      disableChat: false,
+    },
+    adminRules: {
+      lockPause: false,
+      lockRules: false,
+      lockSelect: false,
+      lockChat: false,
     },
     chat: [],
     lastAccessed: new Date(),
@@ -187,6 +197,15 @@ export function roomUpdateRules(
   rules: Room["rules"]
 ) {
   room.rules = rules;
+  roomSendPartialUpdate(socket, room);
+}
+
+export function roomUpdateAdminRules(
+  socket: MySocket,
+  room: Room,
+  rules: Room["adminRules"]
+) {
+  room.adminRules = rules;
   roomSendPartialUpdate(socket, room);
 }
 
