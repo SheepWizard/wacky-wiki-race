@@ -452,6 +452,10 @@ export function handleRoomChat(
     return;
   }
 
+  if (details.room.adminRules.lockChat) {
+    return;
+  }
+
   roomUpdateChat(socket, details.room, details.user, message);
 }
 
