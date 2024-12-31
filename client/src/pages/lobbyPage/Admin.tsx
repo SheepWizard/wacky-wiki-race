@@ -19,7 +19,7 @@ export default function Admin() {
   return (
     <>
       <Button onClick={() => setShowAdminDialog(!showAdminDialog)}>
-        <p>Admin</p>
+        Admin
       </Button>
       <Dialog open={showAdminDialog} onClose={() => setShowAdminDialog(false)}>
         <div class={vstack({ gap: 2, alignItems: "start" })}>

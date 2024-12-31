@@ -19,7 +19,7 @@ export default function Rules() {
   return (
     <>
       <Button onClick={() => setShowRulesDialog(!showRulesDialog)}>
-        <p>Rules</p>
+        Rules
       </Button>
       <Dialog open={showRulesDialog} onClose={() => setShowRulesDialog(false)}>
         <div class={vstack({ gap: 2, alignItems: "start" })}>

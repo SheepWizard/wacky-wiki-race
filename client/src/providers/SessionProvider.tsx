@@ -54,6 +54,7 @@ export default function SessionProvider({ children }: SessionProviderProps) {
 
     const handleDisconnect = () => {
       setIsConnected(false);
+      socket.connect();
     };
 
     const handleConnect = () => {
@@ -83,7 +84,7 @@ export default function SessionProvider({ children }: SessionProviderProps) {
     }
 
     const timeout = setTimeout(() => {
-      socket.connect();
+      socket.disconnect();
     }, 1000);
 
     return () => clearTimeout(timeout);
