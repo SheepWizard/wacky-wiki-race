@@ -76,12 +76,11 @@ export default function Help() {
       >
         <h2>How to play</h2>
         <p>
-          Wacky Wiki Race is a fun challenge where players navigate from one
-          Wikipedia article to another using only the links within the articles.
-          Starting with a chosen article, the goal is to reach a target article
-          in the shortest time. Players must follow only internal links (no
-          external sites, search bars, or typing) and can compete alone or with
-          others.
+          Wiki Race is a fun challenge where players navigate from one Wikipedia
+          article to another using only the links within the articles. Starting
+          with a chosen article, the goal is to reach a target article in the
+          shortest time. Players must follow only internal links (no external
+          sites, search bars, or typing) and can compete alone or with others.
         </p>
       </div>
       <HelpButton reff={buttonRef} onClick={handleOpenClick} />
