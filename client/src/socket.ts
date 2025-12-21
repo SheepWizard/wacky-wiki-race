@@ -39,5 +39,5 @@ export type MySocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
 export const URL =
   import.meta.env.PROD === true
-    ? "https://api.wackywikirace.com"
+    ? "https://api.wiki-race.wiki"
     : "http://localhost:3001";

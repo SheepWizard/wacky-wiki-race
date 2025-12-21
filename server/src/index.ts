@@ -40,7 +40,7 @@ const io = new Server<
   SocketData
 >(server, {
   cors: {
-    origin: ["http://localhost:5173", "https://wackywikirace.com"], //change me
+    origin: ["http://localhost:5173", "https://wiki-race.wiki"],
     methods: ["GET", "POST"],
   },
   pingInterval: 3000,
@@ -118,9 +118,3 @@ app.get("/sessions", (_, res) => {
   });
 });
 
-// app.get("/rooms", (_, res) => {
-//   res.json({
-//     count: roomStore.size,
-//     rooms: Array.from(roomStore.entries()),
-//   });
-// });
